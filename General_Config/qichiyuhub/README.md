@@ -8,4 +8,4 @@
 
 | 文件名 (Filename) | 大小 (Size) | 在线查看 (Link) |
 | :--- | :--- | :--- |
-| **config.yaml** | 12.7 KB | [查看配置](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/qichiyuhub/config.yaml) |
+| **config.yaml** | 12.8 KB | [查看配置](https://github.com/HenryChiao/mihomo_yamls/blob/main/General_Config/qichiyuhub/config.yaml) |

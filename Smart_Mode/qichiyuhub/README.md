@@ -8,4 +8,4 @@
 
 | 文件名 (Filename) | 大小 (Size) | 在线查看 (Link) |
 | :--- | :--- | :--- |
-| **smart.yaml** | 12.9 KB | [查看配置](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/qichiyuhub/smart.yaml) |
+| **smart.yaml** | 13.1 KB | [查看配置](https://github.com/HenryChiao/mihomo_yamls/blob/main/Smart_Mode/qichiyuhub/smart.yaml) |
