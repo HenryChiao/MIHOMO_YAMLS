@@ -1,0 +1,8 @@
+blank_issues_enabled: false  # 禁止创建空白 Issue，强制使用模板
+contact_links:
+  - name: 💬 Telegram Discussion / 交流群组
+    url: https://t.me/qiao_blog # 如果有 TG 群可以填，没有则删除此段
+    about: Please ask general questions here. / 通用闲聊与讨论请移步这里。
+  - name: 📖 Metacubex Wiki
+    url: https://wiki.metacubex.one/
+    about: Official documentation for Clash Meta. / 遇到配置参数问题，请先查阅官方 Wiki。
