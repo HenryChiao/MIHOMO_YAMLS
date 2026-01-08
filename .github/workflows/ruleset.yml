@@ -1,0 +1,644 @@
+name: Generate RULE-SET (Mihomo & Stash Only)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 23 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set variables
+        run: |
+          echo "update_version=$(date -d '+8 hours' +%Y-%m-%d)" >> ${GITHUB_ENV}
+          echo "mihomo_domains=meta-rules/geo/geosite/classical" >> ${GITHUB_ENV}
+          echo "mihomo_ipcidr=meta-rules/geo/geoip/classical" >> ${GITHUB_ENV}
+          echo "bm7_surge=bm7-rules/rule/Surge" >> ${GITHUB_ENV}
+        shell: bash
+
+      - name: Checkout Repo
+        uses: actions/checkout@v6
+
+      - name: Checkout "MetaCubeX/meta-rules-dat"
+        uses: actions/checkout@v6
+        with:
+          repository: "MetaCubeX/meta-rules-dat"
+          ref: meta
+          path: "meta-rules"
+          sparse-checkout: |
+            geo/geosite/classical
+            geo/geoip/classical
+
+      - name: Checkout "blackmatrix7/ios_rule_script"
+        uses: actions/checkout@v6
+        with:
+          repository: "blackmatrix7/ios_rule_script"
+          ref: master
+          path: "bm7-rules"
+          sparse-checkout: |
+            rule/Surge
+
+      - name: Checkout "Loyalsoldier/geoip"
+        uses: actions/checkout@v6
+        with:
+          repository: "Loyalsoldier/geoip"
+          path: ls-geoip
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: ./ls-geoip/go.mod
+          cache-dependency-path: ./ls-geoip/go.sum
+
+      - name: Run go build geoip
+        run: |
+          cd ls-geoip || exit 1
+          rm -f convert.go init.go list.go lookup.go
+          go build -o ../geoip
+
+      - name: Make directories
+        run: |
+          # 仅创建必要的中间文件夹和目标文件夹
+          mkdir -p download/meta
+          mkdir -p download/surge
+          mkdir -p download/special
+          
+          # Mihomo 目录结构
+          mkdir -p meta/domain
+          mkdir -p meta/ipcidr
+          mkdir -p meta/classical
+          
+          # Stash 目录
+          mkdir -p stash/domain
+          mkdir -p stash/ipcidr
+          mkdir -p stash/classical
+          
+          mkdir -p push
+
+      # --- 下载与合并流程 (保持不变，因为这是核心数据源) ---
+
+      - name: Download meta ruleset
+        run: |
+          domain_lists=('category-ads-all' 'category-httpdns-cn' 'apple' 'microsoft@cn' 'onedrive' 'microsoft' 'github' 'gitlab' 'gitee' 'gitbook' 'apple-intelligence' 'category-ai-!cn' 'amazon' 'shopify' 'category-ecommerce' 'paypal' 'wise' 'category-cryptocurrency' 'category-game-accelerator-cn' 'category-game-platforms-download@cn' 'category-games@cn' 'category-game-platforms-download' 'category-games-!cn' 'category-forums' 'talkatone' 'discord' 'line' 'telegram' 'twitter' 'signal' 'meta' 'tiktok' 'bilibili' 'googlefcm' 'youtube' 'google' 'spotify' 'twitch' 'bahamut' 'hbo' 'disney' 'primevideo' 'netflix' 'hulu' 'abema' 'dmm' 'niconico' 'apple-tvplus' 'dazn' 'mytvsuper' 'speedtest' 'test-ipv6@cn' 'test-ipv6' 'tld-!cn' 'category-public-tracker' 'tracker' 'category-pt@!cn' 'category-pt' 'category-anticensorship' 'gfw' 'private' 'nga' 'xiaohongshu' 'sina' 'zhihu' 'douban' 'coolapk')
+
+          for list in "${domain_lists[@]}"; do
+              cp "${mihomo_domains}/${list}.list" "download/meta/${list}.list"
+          done
+
+          ipcidr_lists=('facebook' 'telegram' 'twitter' 'google' 'netflix' 'private')
+
+          for list in "${ipcidr_lists[@]}"; do
+              echo >> "download/meta/${list}.list"
+              cat "${mihomo_ipcidr}/${list}.list" >> "download/meta/${list}.list"
+          done
+
+          files=(
+              'iplocation-reject.list https://github.com/SunsetMkt/anti-ip-attribution/raw/refs/heads/main/generated/rule-set-reject.list'
+              'iplocation-direct.list https://github.com/SunsetMkt/anti-ip-attribution/raw/refs/heads/main/generated/rule-set-direct.list'
+              'iplocation-proxy.list https://github.com/SunsetMkt/anti-ip-attribution/raw/refs/heads/main/generated/rule-set-proxy.list'
+              'crypto.list https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Ruleset/Crypto.list'
+              'ai.list
+              https://github.com/ACL4SSR/ACL4SSR/raw/refs/heads/master/Clash/Ruleset/AI.list'
+              'DMCA.list https://github.com/LM-Firefly/Rules/raw/refs/heads/master/Special/DMCA-Sensitive.list'
+              'SpeedTest.list https://github.com/LM-Firefly/Rules/raw/refs/heads/master/SpeedTest.list'
+              'DouYin.list https://github.com/LM-Firefly/Rules/raw/refs/heads/master/Domestic-Services/ByteDance.list'
+              'Game.list https://github.com/LM-Firefly/Rules/raw/refs/heads/master/Game.list'
+          )
+
+          for file in "${files[@]}"; do
+              set -- $file
+              curl -fsSL "$2" > "download/meta/$1" || { echo "Download Failed: $1"; exit 1; }
+          done
+
+          sed -n '/## >> 抖音/,/##/{//!p}' "download/meta/DouYin.list" > tmp.list && mv tmp.list "download/meta/douyin.list"
+
+          for file in download/meta/*.list; do
+              awk '{ gsub(/[[:cntrl:]]/, "", $0) } { gsub(/[^:]\/\/.*/, "", $0) } { gsub(/,\s+/, ",", $0) } /^\s*[#;]/ { next } /^$/ { next } { print $0 } END { print "" }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+      - name: Download surge ruleset
+        run: |
+          surge_lists=('AppleProxy' 'Download' 'OneDrive' 'Microsoft' 'GitHub' 'GitLab' 'Gitee' 'GitBook' 'Amazon' 'eBay' 'Shopee' 'Shopify' 'PayPal' 'Crypto' 'Cryptocurrency' 'SteamCN' 'Game' 'Reddit' 'Discord' 'Whatsapp' 'Line' 'Threads' 'Instagram' 'Facebook' 'Twitter' 'TikTok' 'BiliBili' 'GoogleFCM' 'YouTube' 'Google' 'Spotify' 'Twitch' 'Bahamut' 'HBO' 'Disney' 'PrimeVideo' 'Netflix' 'Hulu' 'Abema' 'DMM' 'Niconico' 'AppleTV' 'DAZN' 'myTVSUPER' 'Speedtest' 'Lan' 'NGA' 'XiaoHongShu' 'Weibo' 'Zhihu' 'DouBan' 'Coolapk' 'DouYin')
+
+          for list in "${surge_lists[@]}"; do
+              cp "${bm7_surge}/${list}/${list}.list" "download/surge/${list}.list"
+          done
+
+          surge_game_lists=('GameDownloadCN' 'GameDownload')
+
+          for list in "${surge_game_lists[@]}"; do
+              cp "${bm7_surge}/Game/${list}/${list}.list" "download/surge/${list}.list"
+          done
+
+          surge_all_src_names=('Apple' 'Proxy' 'Global')
+          surge_all_dst_names=('Apple' 'GFW' 'Proxy')
+
+          for i in "${!surge_all_dst_names[@]}"; do
+              src_file="${bm7_surge}/${surge_all_src_names[i]}/${surge_all_src_names[i]}_All.list"
+              dst_file="download/surge/${surge_all_dst_names[i]}.list"
+              cp "$src_file" "$dst_file"
+          done
+
+          files=(
+              'Apple-Proxy.list https://github.com/Elysian-Realme/FuGfConfig/raw/refs/heads/main/ConfigFile/Loon/Apple/no-cn-cdn-domain.list'
+              'Global.list https://github.com/SukkaW/Surge/raw/refs/heads/master/Source/non_ip/global.conf'
+              'AI.list https://github.com/ConnersHua/RuleGo/raw/refs/heads/master/Surge/Ruleset/Extra/AI.list'
+              'Adrules.list https://github.com/Cats-Team/AdRules/raw/refs/heads/main/adrules-surge.conf'
+              'HTTPDNS.list https://github.com/VirgilClyne/GetSomeFries/raw/refs/heads/main/ruleset/HTTPDNS.Block.list'
+              'PCDN.list https://github.com/uselibrary/PCDN/raw/refs/heads/main/pcdn.list'
+              'AWAvenueAds.list https://github.com/TG-Twilight/AWAvenue-Ads-Rule/raw/refs/heads/main/Filters/AWAvenue-Ads-Rule-Surge-RULE-SET.list'
+              'AntiAD.list https://github.com/LOWERTOP/Shadowrocket-First/raw/refs/heads/main/AntiAD.list'
+              'Talkatone.list https://github.com/LOWERTOP/Shadowrocket-First/raw/refs/heads/main/TalkatoneProxy.list'
+              'LocRedBook.list https://github.com/fmz200/wool_scripts/raw/refs/heads/main/Loon/rule/RedBook.list'
+              'LocDouyin.list https://github.com/fmz200/wool_scripts/raw/refs/heads/main/Loon/rule/Douyin.list'
+              'LocKuaiShou.list https://github.com/fmz200/wool_scripts/raw/refs/heads/main/Loon/rule/KuaiShou.list'
+          )
+
+          for file in "${files[@]}"; do
+              set -- $file
+              curl -fsSL "$2" > "download/surge/$1" || { echo "Download Failed: $1"; exit 1; }
+          done
+
+          for file in download/surge/*.list; do
+              awk '{ gsub(/[[:cntrl:]]/, "", $0) } { gsub(/[^:]\/\/.*/, "", $0) } { gsub(/,\s+/, ",", $0) } /^\s*[#;]/ { next } /^$/ { next } { print $0 } END { print "" }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+      - name: Download special ruleset
+        run: |
+          files=(
+              'cdn-domains.list https://ruleset.skk.moe/Clash/domainset/cdn.txt'
+              'download-domains.list https://ruleset.skk.moe/Clash/domainset/download.txt'
+              'speedtest-domains.list https://ruleset.skk.moe/Clash/domainset/speedtest.txt'
+              'ai-surge.list https://ruleset.skk.moe/List/non_ip/ai.conf'
+              'cdn-surge.list https://ruleset.skk.moe/List/non_ip/cdn.conf'
+              'download-surge.list https://ruleset.skk.moe/List/non_ip/download.conf'
+              'apple-cn-surge.list https://ruleset.skk.moe/List/non_ip/apple_cn.conf'
+              'cn-cidr.list https://github.com/NobyDa/geoip/raw/refs/heads/release/text/cn.txt'
+              'apple-china.list https://github.com/felixonmars/dnsmasq-china-list/raw/refs/heads/master/apple.china.conf'
+              'accelerated-china.list https://github.com/felixonmars/dnsmasq-china-list/raw/refs/heads/master/accelerated-domains.china.conf'
+              'applications-classical-yaml.list https://github.com/Loyalsoldier/clash-rules/raw/refs/heads/release/applications.txt'
+              'proxy-data.list https://github.com/Loyalsoldier/v2ray-rules-dat/raw/refs/heads/release/proxy-list.txt'
+              'tiktok-host.list https://github.com/jmdugan/blocklists/raw/refs/heads/master/corporations/tiktok/all'
+              'XIU2-trackers.list https://github.com/XIU2/TrackersListCollection/raw/refs/heads/master/all.txt'
+              'ngosang-trackers.list https://github.com/ngosang/trackerslist/raw/refs/heads/master/trackers_all.txt'
+              'fake-ip-filter-sc.list https://github.com/juewuy/ShellCrash/raw/refs/heads/dev/public/fake_ip_filter.list'
+              'fake-ip-filter-oc.list https://github.com/vernesong/OpenClash/raw/refs/heads/master/luci-app-openclash/root/etc/openclash/custom/openclash_custom_fake_filter.list'
+          )
+
+          for file in "${files[@]}"; do
+              set -- $file
+              curl -fsSL "$2" > "download/special/$1" || { echo "Download Failed: $1"; exit 1; }
+          done
+
+          for file in download/special/*.list; do
+              awk '{ gsub(/[[:cntrl:]]/, "", $0) } { gsub(/[^:]\/\/.*/, "", $0) } { gsub(/,\s+/, ",", $0) } /^\s*[#;]/ { next } /^$/ { next } { print $0 } END { print "" }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-domains.list; do
+              awk '/_.*\.skk\.moe/ { next } /^+\./ { sub(/^+\./, "DOMAIN-SUFFIX,"); print; next } /^\w/ { print "DOMAIN," $0 }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-surge.list; do
+              awk '!/_.*\.skk\.moe/' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-cidr.list; do
+              awk '/:/ { print "IP-CIDR6," $0 ",no-resolve"; next } { print "IP-CIDR," $0 ",no-resolve" }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-china.list; do
+              awk '{ sub(/^server=\//, "DOMAIN-SUFFIX,"); sub(/\/114\.114\.114\.114$/, ""); print }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-yaml.list; do
+              awk '!/^payload/ { sub(/^\s*-\s*/, "", $0); print }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-data.list; do
+              awk '
+                  /^full:/   { sub(/^full:/, "DOMAIN,"); print; next }
+                  /^regexp:/ { sub(/^regexp:/, "DOMAIN-REGEX,"); print; next }
+                  /^\w/ { print "DOMAIN-SUFFIX," $0 }
+              ' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-host.list; do
+              awk '{ sub(/^0\.0\.0\.0\s+/, "DOMAIN-SUFFIX,"); print }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+          for file in download/special/*-trackers.list; do
+              awk -F '://|/' '{
+                  if ($2 ~ /^\[/) {
+                      sub(/\[/, "", $2);
+                      sub(/\]:[0-9]+/, "", $2);
+                      print "IP-CIDR6," $2 "/128,no-resolve";
+                      next;
+                  }
+                  else if ($2 ~ /([0-9]{1,3}\.){3}[0-9]{1,3}/) {
+                      sub(/:[0-9]+/, "", $2);
+                      print "IP-CIDR," $2 "/32,no-resolve";
+                      next;
+                  }
+                  else if ($2 ~ /([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}/) {
+                      sub(/:[0-9]+/, "", $2);
+                      print "DOMAIN-SUFFIX," $2;
+                      next;
+                  }
+              }' "$file" > tmp.list && mv tmp.list "${file}"
+          done
+
+      - name: Copy single files
+        run: |
+          src_dir="download/meta"
+          dst_dir="meta"
+
+          src_names=('iplocation-direct' 'microsoft@cn' 'tld-!cn')
+          dst_names=('iplocation-direct' 'microsoft-cn' 'tld-proxy')
+
+          for i in "${!dst_names[@]}"; do
+              src_file="$src_dir/${src_names[i]}.list"
+              dst_file="$dst_dir/${dst_names[i]}.list"
+              cp "$src_file" "$dst_file"
+          done
+
+          cp "download/special/cn-cidr.list" "meta/cncidr.list"
+          cp "custom/apns.list" "meta/apns.list"
+
+      - name: Merge files
+        run: |
+          src1_dir="download/meta"
+          src2_dir="download/surge"
+          dst_dir="meta"
+
+          src1_names=('talkatone' 'onedrive' 'paypal' 'bilibili' 'googlefcm' 'youtube' 'google' 'spotify' 'twitch' 'bahamut' 'hbo' 'disney' 'primevideo' 'netflix' 'hulu' 'abema' 'dmm' 'niconico' 'apple-tvplus' 'dazn' 'mytvsuper' 'douyin' 'private')
+
+          src2_names=('Talkatone' 'OneDrive' 'PayPal' 'BiliBili' 'GoogleFCM' 'YouTube' 'Google' 'Spotify' 'Twitch' 'Bahamut' 'HBO' 'Disney' 'PrimeVideo' 'Netflix' 'Hulu' 'Abema' 'DMM' 'Niconico' 'AppleTV' 'DAZN' 'myTVSUPER' 'DouYin' 'Lan')
+
+          dst_names=('talkatone' 'onedrive' 'paypal' 'bilibili' 'googlefcm' 'youtube' 'google' 'spotify' 'twitch' 'bahamut' 'hbo' 'disney' 'primevideo' 'netflix' 'hulu' 'abema' 'dmm' 'niconico' 'apple-tv' 'dazn' 'mytvsuper' 'douyin' 'private')
+
+          for i in "${!dst_names[@]}"; do
+              src1_file="$src1_dir/${src1_names[i]}.list"
+              src2_file="$src2_dir/${src2_names[i]}.list"
+              dst_file="$dst_dir/${dst_names[i]}.list"
+
+              cat "$src1_file" "$src2_file" > "$dst_file"
+          done
+
+      - name: Merge httpdns file
+        run: |
+          cat 'download/meta/category-httpdns-cn.list' \
+              'download/meta/iplocation-reject.list' \
+              'download/surge/HTTPDNS.list' \
+          > meta/httpdns.list
+
+      - name: Merge adrules file
+        run: |
+          cat 'download/surge/Adrules.list' \
+              'download/surge/AWAvenueAds.list' \
+              'download/surge/AntiAD.list' \
+              'download/surge/PCDN.list' \
+              'download/meta/category-ads-all.list' \
+              'meta/httpdns.list' \
+              | \
+              grep -vxF -f 'custom/reject-need-to-remove.list' \
+          > meta/adrules.list
+
+      - name: Merge iplocation-proxy file
+        run: |
+          cat 'download/meta/iplocation-proxy.list' \
+              'download/surge/LocRedBook.list' \
+              'download/surge/LocDouyin.list' \
+              'download/surge/LocKuaiShou.list' \
+              | \
+              grep -vxF -f 'meta/httpdns.list' \
+          > meta/iplocation-proxy.list
+
+      - name: Merge apple-proxy file
+        run: |
+          cat 'custom/apple-intelligence.list' \
+              'download/meta/apple-intelligence.list' \
+              'download/surge/Apple-Proxy.list' \
+              'download/surge/AppleProxy.list' \
+          > meta/apple-proxy.list
+
+      - name: Merge apple-cn file
+        run: |
+          cat 'download/special/apple-cn-surge.list' \
+              'download/special/apple-china.list' \
+          > meta/apple-cn.list
+
+      - name: Merge apple file
+        run: |
+          cat 'custom/apple.list' \
+              'meta/apple-proxy.list' \
+              'download/meta/apple.list' \
+              'download/surge/Apple.list' \
+          > meta/apple.list
+
+      - name: Merge microsoft file
+        run: |
+          cat 'custom/microsoft.list' \
+              'download/meta/microsoft.list' \
+              'download/surge/Microsoft.list' \
+          > meta/microsoft.list
+
+      - name: Merge games-cn file
+        run: |
+          cat 'download/meta/category-game-accelerator-cn.list' \
+              'download/meta/category-game-platforms-download@cn.list' \
+              'download/meta/category-games@cn.list' \
+              'download/surge/SteamCN.list' \
+              'download/surge/GameDownloadCN.list' \
+          > meta/games-cn.list
+
+      - name: Merge games file
+        run: |
+          cat 'meta/games-cn.list' \
+              'download/meta/category-game-platforms-download.list' \
+              'download/meta/category-games-!cn.list' \
+              'download/meta/Game.list' \
+              'download/surge/Game.list' \
+              'download/surge/GameDownload.list' \
+          > meta/games.list
+
+      - name: Merge gits file
+        run: |
+          cat 'download/surge/GitHub.list' \
+              'download/surge/GitLab.list' \
+              'download/surge/Gitee.list' \
+              'download/surge/GitBook.list' \
+              'download/meta/github.list' \
+              'download/meta/gitlab.list' \
+              'download/meta/gitee.list' \
+              'download/meta/gitbook.list' \
+          > meta/gits.list
+
+      - name: Merge ai file
+        run: |
+          cat 'custom/apple-intelligence.list' \
+              'download/surge/AI.list' \
+              'download/special/ai-surge.list' \
+              'download/meta/apple-intelligence.list' \
+              'download/meta/category-ai-!cn.list' \
+              'download/meta/ai.list' \
+          > meta/ai.list
+
+      - name: Merge ecommerce file
+        run: |
+          cat 'download/surge/Amazon.list' \
+              'download/surge/eBay.list' \
+              'download/surge/Shopee.list' \
+              'download/surge/Shopify.list' \
+              'download/meta/category-ecommerce.list' \
+              'download/meta/amazon.list' \
+              'download/meta/shopify.list' \
+              | \
+              grep -vxF -f 'meta/primevideo.list' \
+          > meta/ecommerce.list
+
+      - name: Merge crypto file
+        run: |
+          cat 'custom/crypto.list' \
+              'download/surge/Crypto.list' \
+              'download/surge/Cryptocurrency.list' \
+              'download/meta/crypto.list' \
+              'download/meta/category-cryptocurrency.list' \
+              'download/meta/wise.list' \
+          > meta/crypto.list
+
+      - name: Merge socialmedia-cn file
+        run: |
+          cat 'download/surge/NGA.list' \
+              'download/surge/XiaoHongShu.list' \
+              'download/surge/Weibo.list' \
+              'download/surge/Zhihu.list' \
+              'download/surge/DouBan.list' \
+              'download/surge/Coolapk.list' \
+              'download/meta/nga.list' \
+              'download/meta/xiaohongshu.list' \
+              'download/meta/sina.list' \
+              'download/meta/zhihu.list' \
+              'download/meta/douban.list' \
+              'download/meta/coolapk.list' \
+          > meta/socialmedia-cn.list
+
+      - name: Merge socialmedia file
+        run: |
+          cat 'custom/telegram.list' \
+              'download/surge/Discord.list' \
+              'download/surge/Whatsapp.list' \
+              'download/surge/Line.list' \
+              'download/surge/Threads.list' \
+              'download/surge/Instagram.list' \
+              'download/surge/Facebook.list' \
+              'download/surge/Twitter.list' \
+              'download/meta/discord.list' \
+              'download/meta/line.list' \
+              'download/meta/telegram.list' \
+              'download/meta/twitter.list' \
+              'download/meta/signal.list' \
+              'download/meta/meta.list' \
+          > meta/socialmedia.list
+
+      - name: Merge tiktok file
+        run: |
+          cat 'download/surge/TikTok.list' \
+              'download/meta/tiktok.list' \
+              'download/special/tiktok-host.list' \
+          > meta/tiktok.list
+
+      - name: Merge forum file
+        run: |
+          cat 'download/surge/Reddit.list' \
+              'download/meta/category-forums.list' \
+          > meta/forum.list
+
+      - name: Merge cdn file
+        run: |
+          cat 'download/special/cdn-domains.list' \
+              'download/special/download-domains.list' \
+              'download/special/cdn-surge.list' \
+              'download/special/download-surge.list' \
+              'custom/cdn.list' \
+          > meta/cdn.list
+
+      - name: Merge speedtest file
+        run: |
+          cat 'custom/speedtest.list' \
+              'download/special/speedtest-domains.list' \
+              'download/meta/speedtest.list' \
+              'download/meta/SpeedTest.list' \
+              'download/meta/test-ipv6.list' \
+              'download/surge/Speedtest.list' \
+              | \
+              grep -vxF -f 'download/meta/test-ipv6@cn.list' \
+          > meta/speedtest.list
+
+      - name: Merge gfw file
+        run: |
+          cat 'download/meta/category-anticensorship.list' \
+              'download/meta/gfw.list' \
+              'download/surge/GFW.list' \
+          > meta/gfw.list
+
+      - name: Merge proxy file
+        run: |
+          cat 'meta/crypto.list' \
+              'meta/tiktok.list' \
+              'meta/gfw.list' \
+              'download/surge/Global.list' \
+              'download/surge/Proxy.list' \
+              'download/special/proxy-data.list' \
+              'custom/proxy.list' \
+              | \
+              grep -vxF -f 'meta/tld-proxy.list' -f 'meta/adrules.list' \
+          > meta/proxy.list
+
+      - name: Merge dmca file
+        run: |
+          cat 'download/special/XIU2-trackers.list' \
+              'download/special/ngosang-trackers.list' \
+              'download/special/applications-classical-yaml.list' \
+              'download/meta/DMCA.list' \
+              'download/meta/category-public-tracker.list' \
+              'download/meta/tracker.list' \
+              'download/meta/category-pt.list' \
+              'download/surge/Download.list' \
+              | \
+              grep -vxF -f 'download/meta/category-pt@!cn.list' \
+          > meta/dmca.list
+
+      - name: Merge fake-ip-filter file
+        run: |
+          source scripts/ruleset_process.sh
+
+          cat 'download/special/fake-ip-filter-sc.list' \
+              'download/special/fake-ip-filter-oc.list' \
+              'custom/domain/fake-ip-filter.list' \
+              | \
+              clash_domain_to_classical \
+          > meta/fake-ip-filter.list
+
+      - name: Deduplicate ruleset
+        run: |
+          source scripts/ruleset_process.sh
+
+          for file in meta/*.list ; do
+              if grep -q '^IP-CIDR' "${file}"; then
+                  awk -F, '/^IP-CIDR/ { print $2; next }' "${file}" | ./geoip merge | awk '/:/ { print "IP-CIDR6," $0 ",no-resolve"; next } { print "IP-CIDR," $0 ",no-resolve" }' > tmp_cidr.list
+
+                  format_ruleset_no_cidr "${file}" | domain_dedupe > tmp_no_cidr.list
+
+                  cat tmp_cidr.list tmp_no_cidr.list | ruleset_sort > "${file}"
+              else
+                  format_ruleset_no_cidr "${file}" | domain_dedupe | ruleset_sort > tmp.list && mv tmp.list "${file}"
+              fi
+          done
+
+          dedupe_classical_to_clash_domain 'meta/fake-ip-filter.list' > 'meta/domain/fake-ip-filter.list'
+
+          grep -vxF -f 'meta/adrules.list' 'download/special/accelerated-china.list' > 'cn.list'
+          sort 'custom/direct-need-to-remove.list' 'meta/tld-proxy.list' 'meta/cdn.list' 'meta/proxy.list' | uniq > tmp_remove.list
+          sort 'cn.list' 'tmp_remove.list' 'custom/direct.list' | uniq | domain_dedupe | grep -vxF -f 'tmp_remove.list' | ruleset_sort > 'meta/cn.list'
+
+          awk '{ sub(/,no-resolve$/, ""); print }' meta/cncidr.list > meta/cncidr-resolve.list
+
+      # --- 生成 Mihomo (.mrs) 和 Stash 规则 ---
+
+      - name: Generate meta domains
+        run: |
+          for file in meta/*.list; do
+              filename=$(basename "$file" .list)
+
+              awk -v output="meta/domain/${filename}.list" '
+                  /^DOMAIN,|^DOMAIN-SUFFIX,/ {
+                      sub(/^DOMAIN-SUFFIX,/, "+.");
+                      sub(/^DOMAIN,/, "");
+                      print > output;
+                  }
+              ' "$file"
+          done
+
+      - name: Generate meta ipcidr
+        run: |
+          for file in meta/*.list; do
+              filename=$(basename "$file" .list)
+
+              awk -v output="meta/ipcidr/${filename}.list" '
+                  /^IP-CIDR6?,/ {
+                      sub(/^IP-CIDR6?,/, "");
+                      sub(/,no-resolve$/, "");
+                      print > output;
+                  }
+              ' "$file"
+          done
+          mv meta/ipcidr/cncidr.list meta/ipcidr/cn.list
+          rm -f meta/ipcidr/*-resolve.list
+
+      - name: Generate meta classical ruleset
+        run: |
+          awk '!/^DOMAIN,|^DOMAIN-SUFFIX,|^IP-CIDR6?,/ { print }' meta/adrules.list > meta/classical/adrules.list
+          awk '!/^DOMAIN,|^DOMAIN-SUFFIX,|^IP-CIDR6?,/ { print }' meta/cdn.list > meta/classical/cdn.list
+          awk '!/^DOMAIN,|^DOMAIN-SUFFIX,|^IP-CIDR6?,/ { print }' meta/dmca.list > meta/classical/dmca.list
+          awk '!/^DOMAIN,|^DOMAIN-SUFFIX,|^IP-CIDR6?,/ { print }' meta/speedtest.list > meta/classical/speedtest.list
+
+      - name: Download and unzip `mihomo core`
+        run: |
+          mihomo_version=$(curl -fsSL https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/version.txt)
+
+          wget "https://github.com/MetaCubeX/mihomo/releases/download/Prerelease-Alpha/mihomo-linux-amd64-v3-${mihomo_version}.gz" -O - | gzip -d > ./mihomo
+
+          chmod +x ./mihomo
+
+      - name: Generate mihomo mrs
+        run: |
+          for file in meta/domain/*.list ; do
+              ./mihomo convert-ruleset domain text "${file}" "${file%.list}.mrs"
+          done
+
+          for file in meta/ipcidr/*.list ; do
+              ./mihomo convert-ruleset ipcidr text "${file}" "${file%.list}.mrs"
+          done
+
+      - name: Generate stash ruleset
+        run: |
+          cp -r meta/. stash/
+          rm -f stash/domain/fake-ip-filter*
+
+      - name: Move files to push directory
+        run: |
+          cp -r meta/ push/
+          cp -r stash/ push/
+
+      - name: Git push assets to "ruleset" branch
+        run: |
+          cd push || exit 1
+          git init
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b ruleset
+          git add .
+          git commit -m "Auto Update Ruleset ${update_version}"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f origin ruleset
+
+      - name: Purge jsdelivr CDN
+        run: |
+          cd push || exit 1
+          for file in $(ls); do
+              curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@ruleset/${file}"
+          done
+
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 3
+          keep_minimum_runs: 1
