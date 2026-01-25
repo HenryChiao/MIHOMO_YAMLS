@@ -3,7 +3,7 @@
 # 规则：部分MetaCubeX/meta-rules-dat、秋风去广告、自用补充(FCM、人机验证、fake-ip_add、ai_add、webrtc)
 # 图标：lipis/flag-icons、Vbaethon/HOMOMIX
 # GITHUB加速：gh-proxy
-# FCM hosts规则推荐: yangFenTuoZi/fcm-hosts
+# FCM hosts规则推荐: Mice-Tailor-Infra/fcm-hosts-next
 
 providers: &providers { type: http, interval: 86400, proxy: DIRECT, health-check: { enable: true, url: 'https://8.8.8.8/generate_204', expected-status: 204,  interval: 600, timeout: 3000, max-failed-times: 2, lazy: false }, exclude-filter: '(?i)套餐|剩余|流量|到期|重置|频道|订阅|官网|禁止|客户端|有效|联系|测试|节点|日期|群组|加入|通知|维护|网址|地址|下载|更新|APP|登录|严禁|海外' }
 proxy-providers:
