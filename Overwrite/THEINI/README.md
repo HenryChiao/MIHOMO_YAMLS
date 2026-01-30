@@ -2,7 +2,11 @@
 
 > 🔄 自动同步的 SubConverter/Clash 远程配置 (INI)
 
-本目录包含自动分类的 INI 远程配置文件。
+## 分类索引
+
+- **🛡️ ACL4SSR 系列**: 基于 ACL4SSR 项目的经典规则集 (31 个)
+- **✈️ 机场定制版**: 各大机场提供的专属定制配置 (29 个)
+- **📋 通用配置**: 社区维护的其他通用规则配置 (60 个)
 
 ## 🛡️ ACL4SSR 系列
 > 基于 ACL4SSR 项目的经典规则集
@@ -58,23 +62,23 @@
 | **jklolixxs** | `SJ.ini` | [Source](https://gist.github.com/jklolixxs/6ff6e7658033e9b535e24ade072cf374/raw/SJ.ini) |
 | **jklolixxs** | `ImmTelecom.ini` | [Source](https://gist.github.com/jklolixxs/24f4f58bb646ee2c625803eb916fe36d/raw/ImmTelecom.ini) |
 | **jklolixxs** | `AmyTelecom.ini` | [Source](https://gist.github.com/jklolixxs/b53d315cd1cede23af83322c26ce34ec/raw/AmyTelecom.ini) |
-| **subweb.s3.fr-par.scw.cloud** | `convenience.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/convenience.ini) |
+| **subweb** | `convenience.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/convenience.ini) |
 | **jklolixxs** | `Miaona.ini` | [Source](https://gist.github.com/jklolixxs/ff8ddbf2526cafa568d064006a7008e7/raw/Miaona.ini) |
 | **jklolixxs** | `Foo&Friends.ini` | [Source](https://gist.github.com/jklolixxs/df8fda1aa225db44e70c8ac0978a3da4/raw/Foo&Friends.ini) |
 | **jklolixxs** | `ABCloud.ini` | [Source](https://gist.github.com/jklolixxs/b1f91606165b1df82e5481b08fd02e00/raw/ABCloud.ini) |
 | **subconverter-config** | `xianyu.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/customized/xianyu.ini) |
-| **subweb.oss-cn-hongkong.aliyuncs.com** | `convenience.ini` | [Source](https://subweb.oss-cn-hongkong.aliyuncs.com/RemoteConfig/customized/convenience.ini) |
+| **subweb** | `convenience.ini` | [Source](https://subweb.oss-cn-hongkong.aliyuncs.com/RemoteConfig/customized/convenience.ini) |
 | **airports** | `SSRcloud.ini` | [Source](https://raw.githubusercontent.com/Mazeorz/airports/master/Clash/SSRcloud.ini) |
 | **airports** | `V2Pro.ini` | [Source](https://raw.githubusercontent.com/Mazeorz/airports/master/Clash/V2Pro.ini) |
 | **airports** | `Stitch.ini` | [Source](https://raw.githubusercontent.com/Mazeorz/airports/master/Clash/Stitch.ini) |
 | **airports** | `Stitch-Balance.ini` | [Source](https://raw.githubusercontent.com/Mazeorz/airports/master/Clash/Stitch-Balance.ini) |
 | **subconverter-config** | `maying.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/customized/maying.ini) |
-| **subweb.s3.fr-par.scw.cloud** | `ytoo.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/ytoo.ini) |
+| **subweb** | `ytoo.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/ytoo.ini) |
 | **subconverter-config** | `nyancat.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/customized/nyancat.ini) |
-| **subweb.s3.fr-par.scw.cloud** | `nexitally.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/nexitally.ini) |
+| **subweb** | `nexitally.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/nexitally.ini) |
 | **subconverter-config** | `socloud.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/customized/socloud.ini) |
 | **subconverter-config** | `ark.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/customized/ark.ini) |
-| **subweb.s3.fr-par.scw.cloud** | `flower.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/flower.ini) |
+| **subweb** | `flower.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/customized/flower.ini) |
 
 ## 📋 通用配置
 > 社区维护的其他通用规则配置
@@ -108,7 +112,7 @@
 | **ClashRule** | `GeneralClashRule.ini` | [Source](https://raw.githubusercontent.com/cutethotw/ClashRule/main/GeneralClashRule.ini) |
 | **merlinclash_clash_related** | `ZHANG.ini` | [Source](https://raw.githubusercontent.com/flyhigherpi/merlinclash_clash_related/master/Rule_config/ZHANG.ini) |
 | **cool** | `complex.ini` | [Source](https://raw.githubusercontent.com/xiaoshenxian233/cool/rule/complex.ini) |
-| **subweb.s3.fr-par.scw.cloud** | `phaors.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/special/phaors.ini) |
+| **subweb** | `phaors.ini` | [Source](https://subweb.s3.fr-par.scw.cloud/RemoteConfig/special/phaors.ini) |
 | **merlinclash_clash_related** | `ZHANG_Area_Fallback.ini` | [Source](https://raw.githubusercontent.com/flyhigherpi/merlinclash_clash_related/master/Rule_config/ZHANG_Area_Fallback.ini) |
 | **merlinclash_clash_related** | `ZHANG_Area_Urltest.ini` | [Source](https://raw.githubusercontent.com/flyhigherpi/merlinclash_clash_related/master/Rule_config/ZHANG_Area_Urltest.ini) |
 | **merlinclash_clash_related** | `ZHANG_Area_NoAuto.ini` | [Source](https://raw.githubusercontent.com/flyhigherpi/merlinclash_clash_related/master/Rule_config/ZHANG_Area_NoAuto.ini) |
@@ -121,22 +125,22 @@
 | **tindy2013** | `lhie1_clash.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/lhie1_clash.ini) |
 | **tindy2013** | `lhie1_dler.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/lhie1_dler.ini) |
 | **tindy2013** | `ehpo1_main.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/ehpo1_main.ini) |
-| **raw.nameless13.com** | `white.ini` | [Source](https://raw.nameless13.com/api/public/dl/ROzQqi2S/white.ini) |
-| **raw.nameless13.com** | `mayinggfw.ini` | [Source](https://raw.nameless13.com/api/public/dl/ptLeiO3S/mayinggfw.ini) |
-| **raw.nameless13.com** | `easy3.ini` | [Source](https://raw.nameless13.com/api/public/dl/FWSh3dXz/easy3.ini) |
-| **raw.nameless13.com** | `youtube.ini` | [Source](https://raw.nameless13.com/api/public/dl/L_-vxO7I/youtube.ini) |
-| **raw.nameless13.com** | `easy.ini` | [Source](https://raw.nameless13.com/api/public/dl/zKF9vFbb/easy.ini) |
-| **raw.nameless13.com** | `easy2.ini` | [Source](https://raw.nameless13.com/api/public/dl/E69bzCaE/easy2.ini) |
-| **raw.nameless13.com** | `ipip.ini` | [Source](https://raw.nameless13.com/api/public/dl/XHr0miMg/ipip.ini) |
-| **raw.nameless13.com** | `MAYINGVIP.ini` | [Source](https://raw.nameless13.com/api/public/dl/BBnfb5lD/MAYINGVIP.ini) |
+| **raw** | `white.ini` | [Source](https://raw.nameless13.com/api/public/dl/ROzQqi2S/white.ini) |
+| **raw** | `mayinggfw.ini` | [Source](https://raw.nameless13.com/api/public/dl/ptLeiO3S/mayinggfw.ini) |
+| **raw** | `easy3.ini` | [Source](https://raw.nameless13.com/api/public/dl/FWSh3dXz/easy3.ini) |
+| **raw** | `youtube.ini` | [Source](https://raw.nameless13.com/api/public/dl/L_-vxO7I/youtube.ini) |
+| **raw** | `easy.ini` | [Source](https://raw.nameless13.com/api/public/dl/zKF9vFbb/easy.ini) |
+| **raw** | `easy2.ini` | [Source](https://raw.nameless13.com/api/public/dl/E69bzCaE/easy2.ini) |
+| **raw** | `ipip.ini` | [Source](https://raw.nameless13.com/api/public/dl/XHr0miMg/ipip.ini) |
+| **raw** | `MAYINGVIP.ini` | [Source](https://raw.nameless13.com/api/public/dl/BBnfb5lD/MAYINGVIP.ini) |
 | **tindy2013** | `nzw9314_custom.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/nzw9314_custom.ini) |
 | **tindy2013** | `maicoo-l_custom.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/maicoo-l_custom.ini) |
 | **tindy2013** | `dlercloud_lige_platinum.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/dlercloud_lige_platinum.ini) |
 | **tindy2013** | `dlercloud_lige_gold.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/dlercloud_lige_gold.ini) |
 | **tindy2013** | `dlercloud_lige_silver.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/dlercloud_lige_silver.ini) |
-| **unpkg.com** | `clash.ini` | [Source](https://unpkg.com/proxy-script/config/Clash/clash.ini) |
+| **unpkg** | `clash.ini` | [Source](https://unpkg.com/proxy-script/config/Clash/clash.ini) |
 | **UlinoyaPed** | `ShellClash.ini` | [Source](https://github.com/UlinoyaPed/ShellClash/raw/master/rules/ShellClash.ini) |
-| **raw.nameless13.com** | `w8ves.ini` | [Source](https://raw.nameless13.com/api/public/dl/M-We_Fn7/w8ves.ini) |
+| **raw** | `w8ves.ini` | [Source](https://raw.nameless13.com/api/public/dl/M-We_Fn7/w8ves.ini) |
 | **tindy2013** | `n3ro_optimized.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/n3ro_optimized.ini) |
 | **tindy2013** | `scholar_optimized.ini` | [Source](https://gist.githubusercontent.com/tindy2013/1fa08640a9088ac8652dbd40c5d2715b/raw/scholar_optimized.ini) |
 | **subconverter-config** | `netease.ini` | [Source](https://raw.githubusercontent.com/SleepyHeeead/subconverter-config/master/remote-config/special/netease.ini) |
