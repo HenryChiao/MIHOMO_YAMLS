@@ -1,268 +1,339 @@
 <div align="center">
 
-# 🐱 𝕄𝕀ℍ𝕆𝕄𝕆 的千种配置
+# 📖 配置分类与使用指南  
+### Configuration Categories & Usage Guide
 
-**Mihomo / Clash Meta 核心专用配置精选合集**
+**如果你不知道该选哪个配置，这份 README 就是为你准备的。**
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/HenryChiao/mihomo_yamls/main.yml?label=Auto-Update&style=flat-square)](https://github.com/HenryChiao/mihomo_yamls/actions)
-[![Repo Size](https://img.shields.io/github/repo-size/HenryChiao/mihomo_yamls?style=flat-square&color=blue)](https://github.com/HenryChiao/mihomo_yamls)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
-
-[![Stars](https://img.shields.io/github/stars/HenryChiao/mihomo_yamls?style=social)](https://github.com/HenryChiao/mihomo_yamls/stargazers)
-[![Forks](https://img.shields.io/github/forks/HenryChiao/mihomo_yamls?style=social)](https://github.com/HenryChiao/mihomo_yamls/network/members)
-![Visitor Count](https://visitor-badge.laobi.icu/badge?page_id=HenryChiao.mihomo_yamls&left_color=gray&right_color=orange)
-
-<p>
-  每日自动抓取更新 · 严格分类整理 · 纯净开箱即用
-</p>
-
-[⬇️ 下载客户端](#-mihomo-客户端与核心清单-clients) • [📖 如何使用](#-如何使用-usage) • [📂 查看配置](#-配置分类导航-categories)
+[🔙 返回项目主页](../README.md)
 
 </div>
 
 ---
 
-> [!CAUTION]
-> **禁止任何形式的转载或发布至🇨🇳大陆平台**
->
-> Any form of reprinting or posting to the 🇨🇳 mainland platform is prohibited.
+## 🧭 我该选哪个配置？（先看这里）
 
-> [!WARNING]
-> **中国大陆用户使用请遵守本国法律法规**
->
-> Mainland China users please abide by the laws and regulations of your country.
+> **核心原则**：  
+> **新手不建议从"自己写配置"开始。成熟方案才是正确起点。**
+
+### 🔑 三句话快速结论
+
+- **不知道自己用什么内核** → ✅ [通用进阶配置](#2️⃣-通用进阶配置--general-config--推荐)  
+- **Smart 内核用户** → 🧠 [Smart Mode](#3️⃣-smart--路由专用--smart-mode)  
+- **不想折腾规则** → 🧩 [INI 订阅转换](#-ini-配置仓库-theini)
+- **OpenClash 用户** → ⚙️ [OpenClash 覆写](#-openclash-专用配置-theopenclash)
+
+### 🧭 快速决策表
+
+| 使用场景 / 条件 | 推荐选择 | 说明 |
+|----------------|----------|------|
+| 完全新手 / 第一次使用 Clash 系 | ✅ 通用进阶配置 | 分流、去广告、策略组已配置完成 |
+| 想学习配置结构 / 二次魔改 | 📖 官方与基础示例 | 仅用于参考，不建议直接使用 |
+| 使用 Smart / SmartDNS / 软路由 | 🧠 Smart Mode 分类 | Smart 内核必须使用对应配置 |
+| OpenClash 插件用户 | ⚙️ THEOPENCLASH | 一键导入的覆写配置文件 |
+| 路由器 / 旁路由常驻运行 | 🧠 Smart Mode 或 General Config | 是否选 Smart 取决于理解程度 |
+| 只想用订阅，不想研究规则 | 🧩 `.ini` 生成配置 (THEINI) | 交给订阅转换工具自动处理 |
+| 安卓 ROOT 模块用户 | 📱 Mobile Modules | 仅适用于模块环境 |
+| 想从零手写完整配置 | ❌ 不推荐 | 成本高、易踩坑、收益有限 |
 
 ---
 
-## 📂 配置分类导航 (Categories)
+## 🗂️ 仓库目录结构速览
 
-> 请点击卡片标题进入对应文件夹查看详细列表。
+```
+
+📦 本项目
+├── 📁 THEYAMLS/               # YAML 原始配置文件
+│   ├── 📁 Official_Examples/  # 官方示例
+│   ├── 📁 General_Config/     # 通用进阶配置 [推荐]
+│   ├── 📁 Smart_Mode/         # Smart 内核专用
+│   └── 📁 Mobile_Modules/     # Android ROOT 模块
+│
+├── 📁 Overwrite/
+│   ├── 📁 THEINI/             # INI 订阅转换配置
+│   │   ├── 📁 ACL4Category/   # ACL4SSR 规则系
+│   │   ├── 📁 Airport/        # 机场定制
+│   │   ├── 📁 Ordinary/       # 通用配置
+│   │   └── 📄 README.md       # INI 总览
+│   │
+│   └── 📁 THEOPENCLASH/       # OpenClash 覆写配置
+│       ├── 📁 General_Config/
+│       ├── 📁 Smart_Mode/
+│       └── 📄 README.md       # OpenClash 总览
+│
+└── 📁 THEDOC/                 # 文档目录
+├── 📄 THE_REAL_README.md  # 本文件
+├── 📄 CLIENTS.md          # 客户端下载
+├── 📄 CREDITS.md          # 致谢名单
+└── 📄 RULESET_README.md   # 规则集说明
+```
+
+---
+
+## 🧠 重要认知说明（建议阅读）
+
+### 1️⃣ 新手不推荐自己写配置
+
+- Clash / Meta / Mihomo 配置学习成本高  
+- 常见问题包括：
+  - 分流不完整  
+  - 策略组设计不合理  
+  - DNS / IPv6 / Fake-IP 配置错误  
+  - 出现问题难以定位  
+- **成熟配置 ≠ 低级配置**
+
+👉 正确路径：  
+**先使用 → 再理解 → 再修改 → 最后才是自己写**
+
+### 2️⃣ 根据「内核类型」选择配置
+
+| 使用内核 | 推荐配置路径 |
+|--------|----------|
+| 原版 / Meta / Mihomo（非 Smart） | `THEYAMLS/General_Config/` |
+| Smart 内核 | `THEYAMLS/Smart_Mode/` **(仅限)** |
+| 不确定内核类型 | `THEYAMLS/General_Config/` |
+
+### 3️⃣ Smart 内核不建议混用规则
+
+- Smart 是 **自动决策系统**，不是普通规则集合  
+- ❌ 不建议：
+  - 与普通规则混写  
+  - 强行加入大量自定义规则  
+- ✅ 推荐：
+  - 使用 `THEYAMLS/Smart_Mode/` 内的成套方案  
+  - 给足时间收集样本
+
+### 4️⃣ OpenClash 用户的捷径
+
+如果你使用 OpenClash 插件，无需手动下载 YAML：
+- 直接前往 `Overwrite/THEOPENCLASH/`
+- 选择对应分类的 `.conf` 文件
+- 复制 Raw 链接填入 OpenClash 订阅
+- 设置环境变量 `EN_KEY1` 为你的机场订阅链接即可
+
+### 5️⃣ 不想折腾？`.ini` 是最省心方案
+
+如果你：
+- 只维护一个订阅链接  
+- 不关心规则细节  
+- 希望配置随上游自动更新  
+
+👉 **直接使用 `Overwrite/THEINI/` 中的配置**
+
+流程示例：  
+机场订阅 ↓ 订阅转换（选择 THEINI 中的 .ini 文件） ↓ 生成配置 ↓ 导入客户端
+
+---
+
+## 🔍 如何判断自己当前使用的内核？
+
+### 方法一：客户端查看（推荐）
+
+**OpenClash：**
+
+运行状态 → 内核信息
+
+| 显示内容 | 实际内核 | 对应配置路径 |
+|--------|----------|-------------|
+| clash | 原版 | `THEYAMLS/General_Config/` |
+| clash_meta / meta | Meta | `THEYAMLS/General_Config/` |
+| mihomo | Mihomo | `THEYAMLS/General_Config/` |
+| mihomo-smart / smart | **Smart 内核** | `THEYAMLS/Smart_Mode/` **(必须)** |
+
+**桌面 / 手机客户端：**
+
+- 设置 → About / 关于  
+- 日志第一行  
+
+关键词判断：
+
+| 关键词 | 内核 | 配置路径 |
+|------|------|---------|
+| Meta | Clash Meta | `THEYAMLS/General_Config/` |
+| Mihomo | Mihomo | `THEYAMLS/General_Config/` |
+| Smart | **Smart** | `THEYAMLS/Smart_Mode/` |
+
+> ❗ **不确定 ≠ Smart**  
+> 默认结论：使用 `THEYAMLS/General_Config/`
+
+---
+
+## 📂 YAML 配置分类详解（THEYAMLS）
+
+### 1️⃣ 官方与基础示例 · Official Examples
+> **📂 路径**：[`../THEYAMLS/Official_Examples`](../THEYAMLS/Official_Examples)
+
+- 🎓 **适合人群**：开发者、从零学习者、偏好自行定制的用户  
+- ✨ **配置特点**：  
+  - 完整收录 Wiki 标准 `rule-set`  
+  - 原生 `geox` 模板示例  
+- 🌱 **定位说明**：  
+  最纯净、最权威的参考样本，不包含任何额外魔改规则  
+  👉 **用于学习与参考，不建议直接长期使用**
+
+### 2️⃣ 通用进阶配置 · General Config  🔥 **推荐**
+> **📂 路径**：[`../THEYAMLS/General_Config`](../THEYAMLS/General_Config)
+
+- 💻 **适合人群**：Windows / macOS / Android / iOS 日常用户  
+- 🚀 **配置特点**：  
+  - 集成 HenryChiao、666OS、JohnsonRan 等成熟方案  
+  - 默认开启分流、去广告、自动策略与故障转移  
+- 🔥 **推荐理由**：  
+  **主力使用首选**，性能、稳定性与易用性之间的最佳平衡  
+  👉 **完全新手也可直接使用**
+
+### 3️⃣ Smart / 路由专用 · Smart Mode
+> **📂 路径**：[`../THEYAMLS/Smart_Mode`](../THEYAMLS/Smart_Mode)
+
+- 🏠 **适合人群**：  
+  OpenClash / 软路由 / SmartDNS / 常驻旁路由用户
+- 🛠️ **配置特点**：  
+  - 深度 DNS 优化  
+  - 底层流量接管  
+  - 类 Surge 的自动策略体系
+- 🧠 **核心机制说明**：  
+  > 基于 Vernesong（V 佬）提出的 Smart 策略  
+  > 针对每个顶级域名或 IP，动态计算并选择 **权重最高的节点**  
+  >
+  > ⚠️ **注意事项**：  
+  > - 初期因样本不足可能出现 IP 波动  
+  > - 样本积累完成后将趋于稳定  
+  > - 无法规避服务端 403 / 风控类问题  
+  >
+  > 👉 **Smart 内核请仅使用 Smart Mode 分类配置**
+
+### 4️⃣ 安卓模块 · Mobile Modules
+> **📂 路径**：[`../THEYAMLS/Mobile_Modules`](../THEYAMLS/Mobile_Modules)
+
+- 📱 **适合人群**：Magisk / KernelSU / APatch 用户  
+- 🧩 **配置来源**：  
+  提取自 Surfing、Box 等透明代理模块内置规则
+- 🔌 **使用建议**：  
+  - 仅推荐配合 ROOT 模块使用  
+  - ❌ 不建议直接导入 Clash / Meta / GUI 客户端
+
+---
+
+## 🧩 INI 配置仓库（THEINI）
+
+> [!NOTE]
+> **自动同步说明**  
+> 以下配置由 GitHub Actions **每日北京时间 08:00**  
+> 自动从上游拉取并按类别归档至 `Overwrite/THEINI/`
 
 <table width="100%">
-  <tr>
-    <td width="50%" valign="top">
-      <h3>1️⃣ <a href="./Official_Examples">官方与基础示例</a></h3>
-      <p><b>📂 <a href="./Official_Examples">Official Examples</a></b></p>
-      <ul>
-        <li>🎓 <b>适合</b>: 开发者、从零学习者</li>
-        <li>✨ <b>特点</b>: 收录 Wiki 标准 <code>rule-set</code> 和 <code>geox</code> 模板。</li>
-        <li>🌱 <b>用途</b>: 最纯净的参考标准，适合魔改。</li>
-      </ul>
-    </td>
-    <td width="50%" valign="top">
-      <h3>2️⃣ <a href="./General_Config">通用进阶配置 (推荐)</a></h3>
-      <p><b>📂 <a href="./General_Config">General Config</a></b></p>
-      <ul>
-        <li>💻 <b>适合</b>: PC / Mac / 手机日常用户</li>
-        <li>🚀 <b>特点</b>: 包含 HenryChiao, 666OS, JohnsonRan 等大佬作品。</li>
-        <li>🔥 <b>用途</b>: 主力推荐，含分流、去广告、故障转移。</li>
-      </ul>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" valign="top">
-      <h3>3️⃣ <a href="./Smart_Mode">Smart / 路由专用</a></h3>
-      <p><b>📂 <a href="./Smart_Mode">Smart Mode</a></b></p>
-      <ul>
-        <li>🏠 <b>适合</b>: OpenClash、软路由、SmartDNS</li>
-        <li>🛠️ <b>特点</b>: 侧重 DNS 优化与底层网络接管。</li>
-        <li>🧠 <b>机制</b>: <i>类 Surge 策略，自动择优。</i></li>
-      </ul>
-      <details>
-        <summary><b>ℹ️ 关于 Smart 策略 (点击展开)</b></summary>
-        <p style="font-size: 12px; color: gray;">
-          基于 V 佬 (Vernesong) 的描述：<br>
-          1. <b>机制</b>: 针对每个顶级域名或 IP 计算最高权重节点（类似 Surge）。<br>
-          2. <b>学习期</b>: 前期会因收集样本数据存在 IP 乱跳，样本足够后会固定。<br>
-          3. <b>局限</b>: 只能改善连接质量（延迟/速度），<b>无法解决 403/风控</b>等问题。
-        </p>
-      </details>
-    </td>
-    <td width="50%" valign="top">
-      <h3>4️⃣ <a href="./Mobile_Modules">安卓手机模块</a></h3>
-      <p><b>📂 <a href="./Mobile_Modules">Mobile Modules</a></b></p>
-      <ul>
-        <li>📱 <b>适合</b>: Magisk / KernelSU 模块用户</li>
-        <li>🧩 <b>特点</b>: 提取自 Surfing, Box 等透明代理模块。</li>
-        <li>🔌 <b>用途</b>: 配合 ROOT 模块使用的内置配置。</li>
-      </ul>
-    </td>
-  </tr>
+<tr>
+<td width="33%" align="center">
+
+### 🦄 ACL4SSR 分类  
+基于 ACL4SSR 及其衍生版本  
+适合规则洁癖与精细化分流用户
+
+<a href="../Overwrite/THEINI/ACL4Category">
+<img src="https://img.shields.io/badge/浏览-ACL_Rules-7057ff?style=for-the-badge&logo=github">
+</a>
+
+</td>
+<td width="33%" align="center">
+
+### 🛫 机场定制分类  
+机场 / 订阅转换专属规则  
+包含 jklolixxs 等定制方案
+
+<a href="../Overwrite/THEINI/Airport">
+<img src="https://img.shields.io/badge/浏览-Airport_Rules-0366d6?style=for-the-badge&logo=github">
+</a>
+
+</td>
+<td width="33%" align="center">
+
+### 🧩 通用 / 其他分类  
+ShellCrash、DustinWin 等方案  
+适配大多数使用场景
+
+<a href="../Overwrite/THEINI/Ordinary">
+<img src="https://img.shields.io/badge/浏览-General_Rules-2ea44f?style=for-the-badge&logo=github">
+</a>
+
+</td>
+</tr>
 </table>
-
----
-
-## 🚀 Mihomo 客户端与核心清单 (Clients)
-
-此处整理了各平台适配 **Mihomo (Clash Meta)** 核心的图形化客户端。
-
-| 平台 | 客户端名称 | 推荐度 | 核心特点/优势 | 说明/缺点 | 链接 |
-|---|---|---|---|---|---|
-| **核心** | **Mihomo Core** | 🟢 | 官方核心，无界面。支持 Rule-set, GeoX 等所有新特性。 | 所有 GUI 的基础。适合开发者、Linux 服务器或手搓配置党。 | [Github](https://github.com/MetaCubeX/mihomo/releases) |
-| **核心** | **Mihomo (Smart)** | 🟢 | **Vernesong 修改版**。支持 Smart 策略组逻辑。 | 具备类 Surge 的自动择优策略，需配合特定配置使用。 | [Github](https://github.com/vernesong/mihomo/releases) |
-|  |  |  |  |  |  |
-| **MacOS** | **FlClash** | 🟢 | 状态栏切换节点，多端同步，对 Meta 配置可视化极佳。 | 窗口管理比 Verge 更适合 Mac，Flutter 开发。 | [Github](https://github.com/chen08209/FlClash/releases) |
-| **MacOS** | **Sparkle** | 🟢 | 原生感极强，支持状态栏切换，核心成员开发。 | 暂无明显缺点，Swift 开发。 | [Github](https://github.com/xishang0128/sparkle/releases) |
-| **MacOS** | **Clash Verge Rev** | 🟢 | 功能强大，覆写设置丰富。 | 与 Mac 状态栏融合度一般，不如前两者丝滑。 | [Github](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
-| **MacOS** | Clash Party | 🟡 | 丝滑度高，原 Mihomo Party 分支。 | 存在项目所有权变更风险，目前迭代较快。 | [Github](https://github.com/mihomo-party-org/mihomo-party/releases) |
-| **MacOS** | ClashMac | 🟡 | SwiftUI 开发，美观轻量，类 ClashX Meta 逻辑。 | 对闭源过敏症来说是部分闭源项目。 | [Github](https://github.com/666OS/ClashMac) |
-| **MacOS** | ClashX Meta | 🟡 | 官方维护，稳定性尚可。 | UI 审美较为独特，易与其他 App 冲突，已不再是首选。 | [Github](https://github.com/MetaCubeX/ClashX.Meta/releases) |
-|  |  |  |  |  |  |
-| **Windows** | **FlClash** | 🟢 | 极度轻量，更新极其勤快，功能全。 | UI 风格偏移动端 (Material Design)。 | [Github](https://github.com/chen08209/FlClash/releases) |
-| **Windows** | **Clash Verge Rev** | 🟢 | 目前主流，内存占用少，功能最全。 | 2.0+ 版本架构变动大，UI 设计中规中矩。 | [Github](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
-| **Windows** | **Sparkle** | 🟢 | 核心成员作品，对 Meta 原生写法适配最好。 | 软件体积较大，更新频率随缘。 | [Github](https://github.com/xishang0128/sparkle/releases) |
-| **Windows** | Clash Party | 🟡 | 原 Mihomo Party 分支。 | 继任者为利益相关方，有潜在风险。 | [Github](https://github.com/mihomo-party-org/mihomo-party/releases) |
-| **Windows** | GUI.for.Clash | 🟡 | 插件化设计，鼠标点选生成配置。 | 适合极简/小白用户，功能自定义程度低。 | [Github](https://github.com/GUI-for-Cores/GUI.for.Clash/releases) |
-| **Windows** | Clash Nyanpasu | 🟠 | 界面二次元化。 | 更新随缘。 | [Github](https://github.com/keiko233/clash-nyanpasu/releases) |
-|  |  |  |  |  |  |
-| **Linux** | **Mihomo** (裸核) | 🟢 | 利用 nftables 以 `auto_redirect` TUN 模式运行。 | 部署简便、性能较强。适合服务器/极客。 | [Github](https://github.com/MetaCubeX/mihomo/releases) |
-| **Linux** | **FlClash** | 🟢 | Linux 桌面端首选 GUI，体验一致。 | AppImage 格式，开箱即用。 | [Github](https://github.com/chen08209/FlClash/releases) |
-| **Linux** | Clash Verge Rev | 🟢 | 传统的 Linux GUI 客户端。 | 支持 Deb/Rpm/AppImage。 | [Github](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
-|  |  |  |  |  |  |
-| **SteamOS** | **ToMoon** | 🟢 | Steam Deck 专用插件，基于 Mihomo 核心。 | 掌机模式下直接管理。 | [Github](https://github.com/YukiCoco/ToMoon) |
-| **SteamOS** | DeckyClash | 🟢 | Steam Deck 插件，基于 Mihomo 核心。 | 需要 Decky Loader。 | [Github](https://github.com/NotGlop/DeckyClash) |
-|  |  |  |  |  |  |
-| **Android** | **FlClash** | 🟢 | 仿 Surfboard 界面，全协议，更省电。 | 覆写选项比 CMFA 略少。 | [Github](https://github.com/chen08209/FlClash/releases) |
-| **Android** | **Clash Meta (CMFA)** | 🟢 | 官方分支，设置选项最全，兼容性最好。 | UI 交互逻辑一般，已停止大版本更新(但仍好用)。 | [Github](https://github.com/MetaCubeX/ClashMetaForAndroid/releases) |
-| **Android** | Clash Mi | 🟡 | KaringX 作者新作，全协议支持。 | 新项目，处于早期阶段。 | [Github](https://github.com/KaringX/clashmi) |
-| **Android** | YumeBox | 🟡 | UI 美观，集成 Sub-Store 和 Smart 策略组。 | 策略组切换操作较繁琐。 | [Github](https://github.com/YumeLira/YumeBox) |
-| **HarmonyOS** | **ClashBox** | 🟢 | (原 ClashNEXT) 基于安卓端 FlClash 二次开发。 | 需切换海外 App 商店下载，适配纯血鸿蒙。 | [Github](https://github.com/xiaobaigroup/ClashBox) |
-|  |  |  |  |  |  |
-| **Magisk/KSU** | **Surfing** | 🟠 | (Root) 模块化透明代理，集成配置，开箱即用。 | 需 Magisk/KernelSU 环境，无独立 App 界面。 | [Github](https://github.com/GitMetaio/Surfing) |
-| **Magisk/KSU** | **AkashaProxy** | 🟠 | (Root) 基于 Shell 的透明代理管理工具。 | 功能强大但门槛较高。 | [Github](https://github.com/akashaProxy/akashaProxy) |
-| **Magisk/KSU** | **ClashMix** | 🟠 | (Root) 经典的 Clash 模块封装。 | 适合老用户。 | [Github](https://github.com/AXEVO/Clash-MIX) |
-| **Magisk/KSU** | **BoxProxy** | 🟠 | (Root) 全能核心 (Mihomo/Sing-box等)。 | 命令行/模块，有界面，新手劝退，仅telegram频道发布。 | [Github](https://github.com/boxproxy/box) |
-|  |  |  |  |  |  |
-| **iOS** | **Stash** ($5.99) | 🟢 | 强大的分流与重写，集成 MitM。 | 配置文件与标准 Mihomo 不完全互通，新协议跟进慢。 | [App Store](https://apps.apple.com/app/stash/id1596063349) |
-| **iOS** | **Pharos Pro** ($2.99) | 🟢 | 一份配置通杀全平台，兼容性好。 | 佛系更新，缺席极个别 2025 新协议。 | [App Store](https://apps.apple.com/us/app/pharos-pro/id1456610173) |
-| **iOS** | Clash Mi | 🟢 | 免费/TestFlight，全协议支持。 | KaringX 新项目。 | [Github](https://github.com/KaringX/clashmi) |
-|  |  |  |  |  |  |
-| **路由器** | **OpenClash** | 🟢 | (OpenWrt) 功能最全，设置极其丰富。 | 启动慢，界面臃肿，吃 CPU 性能。 | [Github](https://github.com/vernesong/OpenClash) |
-| **路由器** | **Nikki** | 🟢 | (OpenWrt) 轻量化，启动快，依赖 nftables。 | 原 MihomoTProxy，适合现代 OpenWrt。 | [Github](https://github.com/nikkinikki-org/OpenWrt-nikki) |
-| **路由器** | ShellCrash | 🟢 | (小米/SSH) 性能强，通过 SSH 管理。 | 无 Web UI (或仅有简单面板)。 | [Github](https://github.com/juewuy/ShellCrash) |
-|  |  |  |  |  |  |
-| **华硕路由器** | MerlinClash/MerlinClash2 | 🟢 | (华硕) 梅林固件首选，精简重构。 | 不支持老旧 CPU 型号。 | [Telegram](https://t.me/merlinclashcat) |
-| **华硕路由器** | MerlinClashlite | 🟢 | (华硕) 梅林固件首选，精简重构。 | 不支持老旧 CPU 型号。 | [TELEGRAM](https://t.me/MerlinClashLite) |
-| **华硕路由器** | fancyss | 🟢 | (华硕) 梅林固件首选，精简重构。 | 不支持老旧 CPU 型号。 | [github](https://github.com/hq450/fancyss) |
-|  |  |  |  |  |  |
-| **NAS（docker）** | easy-mihomo | 🟢 | fnos的首选。 | 新星软件依赖docker | [TELEGRAM](https://github.com/wlaosj/easy-mihomo) |
-|  |  |  |  |  |  |
-| **光猫shell**  | clash-for-gigabit | 🟢 | armv7a首选。 | 新星软件，天才想法 | [github](https://github.com/linmontfurry/clash-for-gigabit) |
-|  |  |  |  |  |  |
-| **多平台shell**  | mihomo-tui-dashboard | 🟢 | 实验产品。 | 新星软件，天才想法 | [github](https://github.com/xream/mihomo-tui-dashboard) |
-
----
-
-## 📖 如何使用 (Usage)
-
-1.  点击上方 **分类导航** 中的标题，进入子文件夹。
-2.  在子页面的表格中，浏览并找到你需要的 `.yaml` 配置。
-3.  点击对应行的 **"查看配置"** 链接。
-4.  在文件详情页，点击右上角的 `Raw` 按钮获取直链，或者直接复制内容到你的客户端中。
-
-### 🚫 广告拦截效果测试 (AdBlock Test)
-如果使用了去广告配置，可访问以下网站测试拦截效果：
-* [AdBlock Tester](https://adblock-tester.com)
-* [Block Ads! Adblock test](https://blockads.fivefilters.org/)
-* [Ad Blocker Test](https://adblock.turtlecute.org/)
-
----
-
-## ⚖️ 免责申明 (Disclaimer)
-
-> [!IMPORTANT]
-> **任何以任何方式查看此项目的人或直接或间接使用该项目的使用者都应仔细阅读此声明。**
->
-> 1.  本项目涉及的文件仅用于资源共享和学习研究，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断。
-> 2.  **请勿将本项目的任何内容用于商业或非法目的，否则后果自负。**
-> 3.  一旦使用并复制了该项目的任何文件，则视为您已接受此免责声明。
-> 4.  保留随时更改或补充此免责声明的权利。
-
----
-
-## 📈 趋势与统计 (Trends)
 
 <div align="center">
 
-<a href="https://star-history.com/#HenryChiao/mihomo_yamls&Date">
- <img src="https://api.star-history.com/svg?repos=HenryChiao/mihomo_yamls&type=Date" alt="Star History Chart">
+**👇 或直接浏览完整 INI 文件树 👇**
+
+<a href="../Overwrite/THEINI">
+<img src="https://img.shields.io/badge/📂_进入_THEINI_根目录-Browse_All_Files-black?style=flat&logo=github&labelColor=gray">
 </a>
 
 </div>
 
 ---
 
-## 🔗 致谢与来源 (Credits)
+## ⚙️ OpenClash 专用配置（THEOPENCLASH）
 
-本仓库文件自动聚合自以下开源项目，特别感谢以下作者的无私分享。
-**请大家给原作者的项目点个 Star 🌟 支持！**
+> **专为 OpenClash 插件用户生成的覆写配置文件**
 
-<details>
-<summary><strong>👉 点击展开查看完整致谢列表 (Click to expand)</strong></summary>
+如果你使用 OpenClash，这是最省心的方式：
 
-### ✍️ 配置作者 (Config Authors)
+| 步骤 | 操作 |
+|-----|------|
+| 1 | 进入 `Overwrite/THEOPENCLASH/` 选择对应分类 |
+| 2 | 点击 `.conf` 文件，复制 **Raw** 链接 |
+| 3 | 在 OpenClash → 配置订阅 → 添加订阅 URL |
+| 4 | 设置环境变量 `EN_KEY1` 为你的机场订阅链接 |
+| 5 | 保存并更新，OpenClash 将自动下载对应 YAML |
 
-> 以下链接直达作者的原项目仓库，Star 数据实时获取。
+**目录结构**：
+- `THEOPENCLASH/General_Config/` - 通用配置覆写
+- `THEOPENCLASH/Smart_Mode/` - Smart 内核覆写
+- `THEOPENCLASH/Mobile_Modules/` - 移动端覆写
 
-* **HenryChiao** (MIHOMO_AIO)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/HenryChiao/MIHOMO_AIO?style=social)](https://github.com/HenryChiao/MIHOMO_AIO)
-* **666OS** (YYDS)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/666OS/YYDS?style=social)](https://github.com/666OS/YYDS)
-* **JohnsonRan** (CRules)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/JohnsonRan/CRules?style=social)](https://github.com/JohnsonRan/CRules)
-* **yiteei** (Share)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/yiteei/Share?style=social)](https://github.com/yiteei/Share)
-* **liandu2024** (Little)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/liandu2024/little?style=social)](https://github.com/liandu2024/little)
-* **Lanlan13-14** (Rules)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/Lanlan13-14/Rules?style=social)](https://github.com/Lanlan13-14/Rules)
-* **yyhhyyyyyy** (SelfProxy)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/yyhhyyyyyy/selfproxy?style=social)](https://github.com/yyhhyyyyyy/selfproxy)
-* **echs-top** (Proxy)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/echs-top/proxy?style=social)](https://github.com/echs-top/proxy)
-* **qichiyuhub** (Rule)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/qichiyuhub/rule?style=social)](https://github.com/qichiyuhub/rule)
-* **iKeLee** (Source: luestr/ProxyResource)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/luestr/ProxyResource?style=social)](https://github.com/luestr/ProxyResource)
-* **Fᴜғᴜ** (Source: sunfing/iNg)
-    <br>
-    [![Stars](https://img.shields.io/github/stars/sunfing/iNg?style=social)](https://github.com/sunfing/iNg)
-
-### 📱 模块来源 (Mobile Modules)
-
-* **Surfing**
-    <br>
-    [![Stars](https://img.shields.io/github/stars/GitMetaio/Surfing?style=social)](https://github.com/GitMetaio/Surfing)
-* **AkashaProxy**
-    <br>
-    [![Stars](https://img.shields.io/github/stars/akashaProxy/akashaProxy?style=social)](https://github.com/akashaProxy/akashaProxy)
-* **ClashMix**
-    <br>
-    [![Stars](https://img.shields.io/github/stars/AXEVO/Clash-MIX?style=social)](https://github.com/AXEVO/Clash-MIX)
-* **BoxProxy**
-    <br>
-    [![Stars](https://img.shields.io/github/stars/boxproxy/box?style=social)](https://github.com/boxproxy/box)
-
-### 📚 参考文档
-* [Metacubex Wiki](https://wiki.metacubex.one/)
-
-</details>
+<a href="../Overwrite/THEOPENCLASH">
+<img src="https://img.shields.io/badge/📂_浏览_THEOPENCLASH-OpenClash_Configs-orange?style=for-the-badge&logo=ovh">
+</a>
 
 ---
 
-> [!TIP]
-> **Life is a two-way street. This is a simple, profound, and undeniable truth.**
->
-> 如果你在使用过程中遇到问题或有任何建议，欢迎指出。请确保你的帖子包含对他人有用的细节与信息，并通过 GitHub 社区分享你的发现。
->
-> If you find this project helpful, please click ⭐Star in the upper-right corner to support us — and help more people discover and use it.
+## 📖 使用方法 · How to Use
+
+### 方式一：直接使用 YAML（通用）
+1. 根据上方 [决策表](#-快速决策表) 确定所需分类
+2. 点击分类标题进入 `THEYAMLS/` 对应目录
+3. 选择作者子目录下的 `.yaml` 文件
+4. 点击右上角 `Raw` 获取直链，或复制内容导入客户端
+
+### 方式二：订阅转换（THEINI）
+1. 准备好你的机场订阅链接
+2. 前往 `Overwrite/THEINI/` 选择适合的 `.ini` 文件
+3. 在订阅转换网站（如 subconverter）中：
+   - 远程配置：填入 `.ini` 文件的 Raw 链接
+   - 订阅链接：填入你的机场订阅
+4. 生成并导入最终配置
+
+### 方式三：OpenClash 覆写（THEOPENCLASH）
+1. 进入 `Overwrite/THEOPENCLASH/` 选择分类
+2. 复制 `.conf` 文件的 Raw 链接
+3. 在 OpenClash 中添加配置文件订阅，URL 填入上面的链接
+4. 在覆写设置中添加环境变量 `EN_KEY1=你的订阅链接`
+5. 更新配置即可自动拉取对应 YAML
+
+---
+
+## 🛡️ 广告拦截效果测试 · AdBlock Test
+
+使用包含去广告规则的配置后，可通过以下站点验证效果：
+
+- [AdBlock Tester](https://adblock-tester.com) —— 综合测试  
+- [Block Ads!](https://blockads.fivefilters.org/) —— 五层过滤  
+- [Ad Blocker Test](https://adblock.turtlecute.org/) —— 轻量测试
+
+---
+
+<div align="center">
+
+**内容完整、逻辑闭环，适合长期维护型项目。**  
+**如有问题，欢迎 [提交 Issue](../issues) 或 [查看致谢名单](./CREDITS.md)！**
+
+</div>
