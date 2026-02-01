@@ -243,7 +243,7 @@
 
 <!-- ==================== 第三板块：网络检测工具 ==================== -->
 <h2 id="-网络环境与安全检测">🌐 网络环境与安全检测工具</h2>
-<p>以下工具可用于检测 IP 纯净度、风控值、流媒体解锁、DNS 泄漏等，帮助您评估当前节点的质量与隐私安全。</p>
+<p>以下工具可用于检测 IP 纯净度、风控值、流媒体解锁、广告拦截效果、DNS 泄漏等，帮助您评估当前节点的质量与隐私安全。</p>
 
 <h3>🕵️ IP 归属与 VPN 检测</h3>
 <table width="100%">
@@ -262,7 +262,7 @@
     </tr>
     <tr>
       <td><strong>IPLeak</strong></td>
-      <td> simultaneously 检测 IPv4 和 IPv6 地址，检查 WebRTC 泄漏</td>
+      <td>同时检测 IPv4 和 IPv6 地址，检查 WebRTC 泄漏</td>
       <td><a href="https://ipleak.net">访问</a></td>
     </tr>
     <tr>
@@ -314,6 +314,36 @@
       <td><a href="https://www.ip2location.com"><strong>IP2Location</strong></a></td>
       <td>专业流量检测，提供详细的代理/VPN/Tor 识别</td>
       <td>-</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>🚫 广告拦截效果测试</h3>
+<p>使用包含去广告规则的配置后，可通过以下站点验证拦截效果：</p>
+
+<table width="100%">
+  <thead>
+    <tr>
+      <th width="25%">测试站点</th>
+      <th width="55%">测试内容</th>
+      <th width="20%">链接</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>AdBlock Tester</strong></td>
+      <td>综合广告拦截能力测试，覆盖多种广告类型与追踪器</td>
+      <td><a href="https://adblock-tester.com">访问 →</a></td>
+    </tr>
+    <tr>
+      <td><strong>Block Ads!</strong></td>
+      <td>五层过滤测试，检测不同层级的广告拦截效果</td>
+      <td><a href="https://blockads.fivefilters.org/">访问 →</a></td>
+    </tr>
+    <tr>
+      <td><strong>Ad Blocker Test</strong></td>
+      <td>轻量级快速测试，适合简单验证规则是否生效</td>
+      <td><a href="https://adblock.turtlecute.org/">访问 →</a></td>
     </tr>
   </tbody>
 </table>
