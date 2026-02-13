@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Setup Go环境
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ inputs.go_version }}
           cache: false
