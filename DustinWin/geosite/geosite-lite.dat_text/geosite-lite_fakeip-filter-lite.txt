@@ -1,0 +1,13 @@
+ntp.org.cn
+pool.ntp.org
+time.edu.cn
+full:adguardteam.github.io
+full:adrules.top
+full:anti-ad.net
+full:local.adguard.org
+full:static.adtidy.org
+full:time-ios.apple.com
+full:time1.cloud.tencent.com
+keyword:ntp
+keyword:stun
+keyword:time
