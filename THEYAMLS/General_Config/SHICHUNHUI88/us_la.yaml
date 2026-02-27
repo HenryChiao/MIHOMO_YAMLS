@@ -92,7 +92,8 @@ dns:
   direct-nameserver-follow-policy: true
   fake-ip-filter-mode: blacklist
   fake-ip-ttl: 60
-  fake-ip-filter: ["localhost","+.lan","+.local","+.arpa","pool.ntp.org","+.ntp.org","captive.apple.com","connectivitycheck.gstatic.com","msftconnecttest.com","msftncsi.com","openai.com","+.openai.com","+.srv.nintendo.net","+.stun.playstation.net","+.xboxlive.com","report-v2.samsung.japps.cn","rule-set:private"]
+  fake-ip-filter: ["localhost","+.lan","+.local","+.arpa","+.ntp.org","captive.apple.com","connectivitycheck.gstatic.com","msftconnecttest.com","msftncsi.com","+.openai.com","+.srv.nintendo.net","+.stun.playstation.net","+.xboxlive.com","report-v2.samsung.japps.cn"]
+  ignore-resolve-fail: true
   direct-nameserver: ["system"]
   default-nameserver: ["223.5.5.5", "119.29.29.29", "114.114.114.114", "180.76.76.76"]
   nameserver: ["https://dns.alidns.com/dns-query", "https://1.1.1.1/dns-query", "https://doh.pub/dns-query", "https://dns.google/dns-query", "https://dns.quad9.net/dns-query", "https://dns.adguard.com/dns-query", "tls://cloudflare-dns.com:853", "tls://dns.google:853"]
@@ -103,6 +104,7 @@ dns:
     "rule-set:abroad_dns_cdn": *global-dns
     "rule-set:Google-zj": *global-dns
     "rule-set:OpenAI-zj": *global-dns
+    "rule-set:Claude-zj": *global-dns
     "rule-set:Telegram-zj": *global-dns
     "rule-set:Microsoft": *global-dns
     "rule-set:gfw": *global-dns
@@ -202,6 +204,7 @@ rules:
   - RULE-SET,douyin-zj,🎷抖音
   - RULE-SET,Google-zj,🌐Google服务
   - RULE-SET,OpenAI-zj,🧠OpenAI
+  - RULE-SET,Claude-zj,🧠OpenAI
   - RULE-SET,Telegram-zj,💻Telegram
   - RULE-SET,GitHub-zj,😊微软服务
   - RULE-SET,Microsoft,😊微软服务
@@ -279,6 +282,7 @@ rule-providers:
   WildRift-zj: {<<: *class-yaml, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/clash/Wildrift.yaml"}
   Agora-zj: {<<: *domain-yaml, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/clash/agora.yaml"}
   GitHub-zj: {<<: *domain-yaml, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/clash/GitHub.yaml"}
+  Claude-zj: {<<: *class-yaml, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/clash/Claude.yaml"}
   icloud: {<<: *mrs-domain, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/remote-mrs/Loy-icloud_domain.mrs"}
   Apple: {<<: *mrs-domain, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/remote-mrs/Loy-Apple_domain.mrs"}
   Microsoft: {<<: *mrs-domain, url: "https://cdn.jsdelivr.net/gh/SHICHUNHUI88/vps-net-optimize@main/remote-mrs/bx7-Microsoft_domain.mrs"}
