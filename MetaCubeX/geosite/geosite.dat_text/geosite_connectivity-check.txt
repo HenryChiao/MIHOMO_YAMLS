@@ -1,0 +1,14 @@
+full:ping.archlinux.org
+full:redirect.archlinux.org
+full:connectivitycheck.platform.hihonorcloud.com
+full:connectivitycheck.platform.hicloud.com
+full:connect.rom.miui.com
+full:connectivity-check.ubuntu.com
+msftconnecttest.com
+msftncsi.com
+captive.apple.com
+cp.cloudflare.com
+network-test.debian.org
+detectportal.firefox.com
+connectivitycheck.gstatic.com
+networkcheck.kde.org
