@@ -1,15 +1,15 @@
 # 📁 General_Config/liandu2024
 
-此目录为新版 OpenClash 覆写模块（YAML 格式）。
-文件内容全部注释，不会影响原始配置，按需取消注释启用。
+新版 OpenClash 覆写模块（[YAML] 块格式）。
+所有内容默认注释，不影响现有配置，取消注释即启用。
 
-| 文件名 | 包含的 proxy-providers | Raw 链接 |
+| 文件名 | proxy-providers | Raw 链接 |
 | :--- | :--- | :--- |
-| **clash-all-fallback.yaml** | 机场名称 | [查看/下载](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-all-fallback.yaml) |
-| **clash-fallback-all.yaml** | 机场名称 | [查看/下载](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-all.yaml) |
-| **clash-fallback-dialer.yaml** | 机场名称 | [查看/下载](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-dialer.yaml) |
-| **clash-fallback-std.yaml** | 机场名称 | [查看/下载](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-std.yaml) |
-| **clash-fallback.yaml** | 机场名称 | [查看/下载](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback.yaml) |
+| **clash-all-fallback.yaml** | 机场名称 | [下载/查看](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-all-fallback.yaml) |
+| **clash-fallback-all.yaml** | 机场名称 | [下载/查看](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-all.yaml) |
+| **clash-fallback-dialer.yaml** | 机场名称 | [下载/查看](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-dialer.yaml) |
+| **clash-fallback-std.yaml** | 机场名称 | [下载/查看](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback-std.yaml) |
+| **clash-fallback.yaml** | 机场名称 | [下载/查看](https://raw.githubusercontent.com/ChiaoYenta/THE_HNERYCHIAO_MIHOMO_YAMLS/main/Overwrite/THENEWOPENCLASH/General_Config/liandu2024/clash-fallback.yaml) |
 
 ---
 [🔙 返回总览](../README.md)
