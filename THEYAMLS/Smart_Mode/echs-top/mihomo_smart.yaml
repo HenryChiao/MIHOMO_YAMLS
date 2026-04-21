@@ -1,4 +1,4 @@
-# update: 2026-04-15
+# update: 2026-04-22
 # 简介: https://github.com/echs-top/proxy
 
 
@@ -28,8 +28,8 @@ disable-keep-alive: false
 keep-alive-interval: 15
 keep-alive-idle: 300
 etag-support: true
-# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.49 Mobile Safari/537.36'
-# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.56 Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.55 Mobile Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.7680.201 Safari/537.36'
 # external-controller: 127.0.0.1:9090
 # secret: '密码'
 # external-ui: ./zashboard
@@ -91,33 +91,48 @@ rule-providers:
   direct_ip: { <<: *ip, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_ip.mrs', path: ./rules/direct_ip.mrs }
   cn_ip: { <<: *ip, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/cn_ip.mrs', path: ./rules/cn_ip.mrs }
 rules:
-  - DST-PORT,5228-5230,直接连接
+  - DST-PORT,5228-5230,FCM服务
+  - AND,((NETWORK,UDP),(DST-PORT,1337/2710/6881-6999/7777)),代理UDP
   - DST-PORT,1337/2710/6881-6999/7777,TRACKER
   - RULE-SET,private_ip,直接连接,no-resolve
   - RULE-SET,AWAvenue-Ads,REJECT
   - RULE-SET,private,直接连接
-  - RULE-SET,fcm,直接连接
+  - RULE-SET,fcm,FCM服务
+  - AND,((NETWORK,UDP),(RULE-SET,captcha)),代理UDP
   - RULE-SET,captcha,人机验证
+  - AND,((NETWORK,UDP),(RULE-SET,ai)),代理UDP
   - RULE-SET,ai,国外AI
+  - AND,((NETWORK,UDP),(RULE-SET,telegram)),代理UDP
   - RULE-SET,telegram,TELEGRAM
+  - AND,((NETWORK,UDP),(RULE-SET,github)),代理UDP
   - RULE-SET,github,GITHUB
+  - AND,((NETWORK,UDP),(RULE-SET,media)),代理UDP
   - RULE-SET,media,国外媒体
+  - AND,((NETWORK,UDP),(RULE-SET,google)),代理UDP
   - RULE-SET,google,GOOGLE
+  - AND,((NETWORK,UDP),(RULE-SET,trackerslist)),代理UDP
   - RULE-SET,trackerslist,TRACKER
   - RULE-SET,apple-cn,直接连接
   - RULE-SET,microsoft-cn,直接连接
   - RULE-SET,games-cn,直接连接
+  - AND,((NETWORK,UDP),(RULE-SET,proxy_domain)),代理UDP
   - RULE-SET,proxy_domain,代理连接
   - RULE-SET,direct_domain,直接连接
+  - AND,((NETWORK,UDP),(RULE-SET,proxy)),代理UDP
   - RULE-SET,proxy,代理连接
   - RULE-SET,cn,直接连接
+  - AND,((NETWORK,UDP),(RULE-SET,telegram_ip)),代理UDP
   - RULE-SET,telegram_ip,TELEGRAM
+  - AND,((NETWORK,UDP),(RULE-SET,media_ip)),代理UDP
   - RULE-SET,media_ip,国外媒体
+  - AND,((NETWORK,UDP),(RULE-SET,google_ip)),代理UDP
   - RULE-SET,google_ip,GOOGLE
   - RULE-SET,enhanced-FaaS-in-China_ip,直接连接
+  - AND,((NETWORK,UDP),(RULE-SET,proxy_ip)),代理UDP
   - RULE-SET,proxy_ip,代理连接
   - RULE-SET,direct_ip,直接连接
   - RULE-SET,cn_ip,直接连接
+  - NETWORK,UDP,代理UDP
   # 激进的bt/tracker兜底
   - DST-PORT,10000-65535,TRACKER
   - MATCH,代理连接
@@ -147,7 +162,7 @@ dns:
   fake-ip-filter:
     - RULE-SET,AWAvenue-Ads,fake-ip
     - RULE-SET,private,real-ip
-    - RULE-SET,fcm,real-ip
+    - RULE-SET,fcm,fake-ip
     - RULE-SET,captcha,fake-ip
     - RULE-SET,ai,fake-ip
     - RULE-SET,telegram,fake-ip
@@ -188,14 +203,16 @@ dns:
   direct-nameserver: *direct-dns
   direct-nameserver-follow-policy: true
 sniffer: { enable: true, force-dns-mapping: true, parse-pure-ip: true, override-destination: false, sniff: { HTTP: { ports: [80,8080-8880] }, TLS: { ports: [443,8443] }, QUIC: { ports: [443,8443] } }, skip-domain: ['rule-set:private'], skip-src-address: ['rule-set:private_ip'], skip-dst-address: ['rule-set:private_ip'] }
-proxies: [{ name: 禁用UDP, type: direct, udp: false, ip-version: dual },{ name: IPV4优先, type: direct, udp: true, ip-version: ipv4-prefer },{ name: IPV6优先, type: direct, udp: true, ip-version: ipv6-prefer },{ name: 仅IPV4, type: direct, udp: true, ip-version: ipv4 },{ name: 仅IPV6, type: direct, udp: true, ip-version: ipv6 }]
+proxies: [{ name: IPV4优先, type: direct, udp: true, ip-version: ipv4-prefer },{ name: IPV6优先, type: direct, udp: true, ip-version: ipv6-prefer },{ name: 仅IPV4, type: direct, udp: true, ip-version: ipv4 },{ name: 仅IPV6, type: direct, udp: true, ip-version: ipv6 }]
 smart: &smart { type: smart, strategy: sticky-sessions, uselightgbm: true, collectdata: false, sample-rate: 1, prefer-asn: false, <<: *use, hidden: true }
 zl: &zl { type: select, proxies: [直接连接,代理连接,最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,PASS,REJECT], include-all-providers: true }
 dl: &dl { type: select, proxies: [代理连接,直接连接,最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,PASS,REJECT], include-all-providers: true }
 proxy-groups:
   - { name: 代理连接, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择], include-all-providers: true, icon: 'https://mihomo.echs.top/img/icon/Global.webp' }
-  - { name: 直接连接, type: select, proxies: [DIRECT,禁用UDP,IPV4优先,IPV6优先,仅IPV4,仅IPV6], icon: 'https://mihomo.echs.top/img/icon/DIRECT.webp' }
+  - { name: 代理UDP, type: select, proxies: [PASS,REJECT], icon: 'https://mihomo.echs.top/img/icon/Network_2.webp' }
+  - { name: 直接连接, type: select, proxies: [DIRECT,IPV4优先,IPV6优先,仅IPV4,仅IPV6], icon: 'https://mihomo.echs.top/img/icon/DIRECT.webp' }
   - { name: 代理DNS, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/Server.webp' }
+  - { name: FCM服务, <<: *zl, icon: 'https://mihomo.echs.top/img/icon/FCM_Firebase_Cloud_Messaging.webp' }
   - { name: 人机验证, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/CloudFlare.webp' }
   - { name: 国外AI, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/AI.webp' }
   - { name: TELEGRAM, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/Telegram.webp' }
@@ -215,4 +232,4 @@ proxy-groups:
   - { name: 英国|智能选择, <<: *smart, filter: '(?i)🇬🇧|英国|\bUK\b|\bGB\b|\bunitedkingdom\b|\bunited\s?kingdom\b', icon: 'https://mihomo.echs.top/img/flags/gb.svg' }
   - { name: 法国|智能选择, <<: *smart, filter: '(?i)🇫🇷|法国|\bFR\b', icon: 'https://mihomo.echs.top/img/flags/fr.svg' }
   - { name: 荷兰|智能选择, <<: *smart, filter: '(?i)🇳🇱|荷兰|\bNL\b|\bnetherlands?\b', icon: 'https://mihomo.echs.top/img/flags/nl.svg' }
-  - { name: GLOBAL, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,代理连接,直接连接,代理DNS,人机验证,国外AI,TELEGRAM,GITHUB,国外媒体,GOOGLE,TRACKER], include-all-providers: true, hidden: true, icon: 'https://mihomo.echs.top/img/icon/Globefish.webp' }
+  - { name: GLOBAL, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,代理连接,代理UDP,直接连接,代理DNS,FCM服务,人机验证,国外AI,TELEGRAM,GITHUB,国外媒体,GOOGLE,TRACKER], include-all-providers: true, hidden: true, icon: 'https://mihomo.echs.top/img/icon/Globefish.webp' }

@@ -1,6 +1,6 @@
 # 名称： Seven1_fallback_Geo
-# 版本： V2026.3.31
-# 日期： 2026年3月31日
+# 版本： V2026.4.20
+# 日期： 2026年4月20日
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①本文件适用于Mihomo核心的工具使用，如：OpenWrt（Clash/Nikki 插件）、Clashmi、FlClash、Clash Meta ……（支持仅内核使用）； ②使用前需补充完整 “订阅链接” 与 “机场名”，并将 “nameserver” 修改为运营商提供的 DNS 地址; ③已隐藏“故障转移”、“延迟自选”这两个策略组，使用时手动选取对应地区节点即可。
@@ -123,8 +123,8 @@ dns:
     - "rule-set:add_direct_domain"                                      # 真实解析  大陆冷门域名
     - geosite:cn                                                        # 真实解析  大陆域 GeoSite 数据
   nameserver:                                                           # 解析服务  请使用运营商提供的 DNS
-    - 116.116.116.116
-    - 221.5.88.88
+    - 114.114.114.114
+    - 223.5.5.5
 
 
 
