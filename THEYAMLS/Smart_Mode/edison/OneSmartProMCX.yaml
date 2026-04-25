@@ -1,78 +1,94 @@
-# >>=====================================<<
-# ||                                     ||
-# ||      ██████╗  ██████╗  ██████╗      ||
-# ||     ██╔════╝ ██╔════╝ ██╔════╝      ||
-# ||     ███████╗ ███████╗ ███████╗      ||
-# ||     ██╔═══██╗██╔═══██╗██╔═══██╗     ||
-# ||     ╚██████╔╝╚██████╔╝╚██████╔╝     ||
-# ||      ╚═════╝  ╚═════╝  ╚═════╝      ||
-# ||                                     ||
-# >>=====================================<<
+# >>=========================================================<<
+# ||                                                         ||
+# ||   ███████╗ ██████╗  ██╗ ███████╗  ██████╗  ███╗   ██╗   ||
+# ||   ██╔════╝ ██╔══██╗ ██║ ██╔════╝ ██╔═══██╗ ████╗  ██║   ||
+# ||   █████╗   ██║  ██║ ██║ ███████╗ ██║   ██║ ██╔██╗ ██║   ||
+# ||   ██╔══╝   ██║  ██║ ██║ ╚════██║ ██║   ██║ ██║╚██╗██║   ||
+# ||   ███████╗ ██████╔╝ ██║ ███████║ ╚██████╔╝ ██║ ╚████║   ||
+# ||   ╚══════╝ ╚═════╝  ╚═╝ ╚══════╝  ╚═════╝  ╚═╝  ╚═══╝   ||
+# ||                                                         ||
+# >>=========================================================<<
 # 名称: OneSmartPro
 # 修改: Edison
-# 更新: 2026 年 4 月 13 日
+# 更新: 2026 年 4 月 22 日
 # 覆盖AI、流媒体、TikTok等应用场景，提供多种监听协议支持
-# 配合故障转移or均衡负载，手选节点+故转Smart算法自动选择最优节点和节点可用性保证
-# YAML模板作者: YYDS666 | 频道: https://t.me/Pinched666 | Github地址: https://github.com/666OS/YYDS
+# 配合手选节点+故转Smart算法智能选择最优节点和节点可用性保证
+# YAML模板原作者: YYDS666 | 频道: https://t.me/Pinched666 | Github地址: https://github.com/666OS/YYDS
 
 
-# ==================== 锚点配置 ====================
-# 代理提供者模板 - 订阅源基础配置
+# === 锚点配置 ====
+# 节点筛选正则表达式 - 基于地理位置和关键词过滤
 BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
  exclude-filter: '(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|剩余|重置|套餐|距离)' }
 
-# 策略组类型模板 - 定义不同的策略组基础配置
-BaseFB: &BaseFB       {type: fallback, interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204'}
-BaseLB: &BaseLB       {type: load-balance, interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204'}
-BaseSmart: &BaseSmart {type: smart, interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true}
 
+# 策略组基础配置模板
+BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true }
+BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true }
+BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204' }
+BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204' }
 
-# =========================
-# 节点筛选正则（前置模板）
-# --- 常用地区节点 ---
-FilterHK: &FilterHK { filter: '^(?i).*(港|🇭🇰|Hong|HKG|HK[-_ ]?\d*).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
-FilterSG: &FilterSG { filter: '^(?i).*(坡|🇸🇬|Sing|SIN|SG[-_ ]?\d*|XSP).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
-FilterJP: &FilterJP { filter: '^(?i)(?!.*尼日).*(日|🇯🇵|JP|JP[-_ ]?\d*|Japan|NRT|HND|KIX|CTS|FUK).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
-FilterUS: &FilterUS { filter: '^(?i)(?!.*南美).*(美|🇺🇸|US|US[-_ ]?\d*|USA|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
-FilterTW: &FilterTW { filter: '^(?i)(?!.*(烟台|平台)).*(台|🇼🇸|🇹🇼|TW|TW[-_ ]?\d*|tai|TPE|TSA|KHH).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png' }
-# --- 冷门节点 ---
-FilterEU: &FilterEU { filter: '^(?i)(?!.*(🇭🇰|香港|hong\s?kong|HK[-_ ]?\d*|🇸🇬|新加坡|singapore|SG[-_ ]?\d*|🇯🇵|日本|japan|JP[-_ ]?\d*|🇹🇼|台湾|taiwan|TW[-_ ]?\d*|🇺🇸|美国|united\s?states|usa|US[-_ ]?\d*|剩余|重置|套餐|距离|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入)).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/European_Union.png' } 
-# --- 倍率节点筛选 ---
-FilterLR: &FilterLR { filter: '^(?i).*(0\.01|0\.[1-8]|下载|实验).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png' } # 低倍率
-FilterHR: &FilterHR { filter: '^(?i).*(?<![0-9.])(x(1\.[5-9]\d*|[2-9](\.\d+)?|10(\.0+)?)|(1\.[5-9]\d*|[2-9](\.\d+)?|10(\.0+)?|高级)x).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png' } # 高倍率
-# --- 全部节点 ---
+# 策略组代理列表锚点
+SelectAL: &SelectAL { type: select, proxies: [香港-故转, 香港-智能, 日本-故转, 日本-智能, 狮城-故转, 狮城-智能, 美国-故转, 美国-智能, 台湾-故转, 台湾-智能, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
+OneSmart: &OneSmart { type: select, proxies: [香港-智能, 日本-智能, 狮城-智能, 台湾-智能, 美国-智能, 低倍率-智能, 冷门节点-智能, 全部节点-手选, 国内直连] } # 智能节点组
+SelectHQ: &SelectHQ { type: select, proxies: [香港-手选, 日本-手选, 狮城-手选, 台湾-手选, 美国-手选, 低倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 手选节点组 
+SelectFB: &SelectFB { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 台湾-故转, 美国-故转, 低倍率-故转, 全部节点-手选, 国内直连] } # 故转节点组 
+SelectLR: &SelectLR { type: select, proxies: [国内直连, 低倍率-故转, 全部节点-手选] } # 低倍率节点组
+SelectHR: &SelectHR { type: select, proxies: [国内直连, 高倍率-手选, 全部节点-手选] } # 高倍率节点组
+SelectDC: &SelectDC { type: select, proxies: [国内直连] } # 国内直连
+
+# 节点筛选正则表达式
+# --- 全部/冷门节点 ---
 FilterAL: &FilterAL { filter: '^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Global.png' }
+FilterEU: &FilterEU { filter: '^(?i)(?!.*(🇭🇰|香港|hong\s?kong|HK[-_ ]?\d*|🇸🇬|新加坡|singapore|SG[-_ ]?\d*|🇯🇵|日本|japan|JP[-_ ]?\d*|🇹🇼|台湾|taiwan|TW[-_ ]?\d*|🇺🇸|美国|united\s?states|usa|US[-_ ]?\d*|剩余|重置|套餐|距离|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入)).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/European_Union.png' } 
+
+# --- 倍率筛选节点 ---
+FilterHR: &FilterHR { filter: '^(?i).*(?<![0-9.])(x(1\.[5-9]\d*|[2-9](\.\d+)?|10(\.0+)?)|(1\.[5-9]\d*|[2-9](\.\d+)?|10(\.0+)?|高级)x).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png' } # 高倍率节点
+FilterLR: &FilterLR { filter: '^(?i).*(0\.01|0\.[1-8]|下载|实验).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png' } # 低倍率节点
+
+# --- 常用地区节点 ---
+FilterUS: &FilterUS { filter: '^(?i)(?!.*南美).*(美|🇺🇸|united\s?states|(?<![a-zA-Z])(US[-_ ]?\d*|USA)|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
+FilterJP: &FilterJP { filter: '^(?i)(?!.*尼日).*(日|🇯🇵|JP|JP[-_ ]?\d*|Japan|NRT|HND|KIX|CTS|FUK).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
+FilterTW: &FilterTW { filter: '^(?i)(?!.*(烟台|平台)).*(台|🇼🇸|🇹🇼|TW|TW[-_ ]?\d*|tai|TPE|TSA|KHH).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png' }
+FilterSG: &FilterSG { filter: '^(?i).*(坡|🇸🇬|Sing|SIN|SG[-_ ]?\d*|XSP).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
+FilterHK: &FilterHK { filter: '^(?i).*(港|🇭🇰|Hong|HKG|HK[-_ ]?\d*).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
+
+# Smart 优先级权重
+PriorityLR: &PriorityLR ['0.01:8', '0.1:7', '0.2:6', '实验:6', '0.3:5', '0.4:4', '0.5:3', '0.6:2', '0.7:1', '0.8:0.5'] # 低倍率优先级
+PriorityNR: &PriorityNR ['优:3', '中:2', '次:1', '备:0.5'] # 按订阅质量排序优先级
+
+# 规则集行为模板
+RuleIntv: &RuleIntv 86400  # 外部规则统一更新时间
+DmnMrs: &DmnMrs { type: http, behavior: domain,    format: mrs,  interval: *RuleIntv }
+DmnYml: &DmnYml { type: http, behavior: domain,    format: yaml, interval: *RuleIntv }
+IpcMrs: &IpcMrs { type: http, behavior: ipcidr,    format: mrs,  interval: *RuleIntv }
+ClsTxt: &ClsTxt { type: http, behavior: classical, format: text, interval: *RuleIntv }
+ClsYml: &ClsYml { type: http, behavior: classical, format: yaml, interval: *RuleIntv }
+# 命名逻辑：Dmn=Domain, Ipc=IPCIDR, Cls=Classical | Mrs=MRS, Yml=YAML, Txt=Text
 
 
-# =========================
-# 策略组代理列表前置模板 - 预定义的代理节点优先级排序
-SelectAL: &SelectAL {type: select, proxies: [香港-智能, 香港-故转, 日本-智能, 日本-故转, 狮城-智能, 狮城-故转, 美国-智能, 美国-故转, 台湾-智能, 台湾-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连]} #全部节点组
-OneSmart: &OneSmart {type: select, proxies: [香港-智能, 日本-智能, 狮城-智能, 台湾-智能, 美国-智能, 冷门节点-智能, 全部节点-手选, 国内直连]} #智能节点组
-SelectFB: &SelectFB {type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 低倍率-故转, 全部节点-手选, 国内直连]}   #故转节点组 
-SelectHQ: &SelectHQ {type: select, proxies: [香港-手选, 日本-手选, 狮城-手选, 台湾-手选, 美国-手选, 冷门节点-手选, 全部节点-手选]}          #手选节点组 
-SelectLR: &SelectLR {type: select, proxies: [国内直连, 低倍率-故转, 全部节点-手选]}                                                      #低倍率节点组
-SelectHR: &SelectHR {type: select, proxies: [国内直连, 高倍率-手选, 全部节点-手选]}                                                      #高倍率节点组
-SelectDC: &SelectDC {type: select, proxies: [国内直连]}                                                                                #国内直连
-
-
-# ==================== 代理提供者 ====================
+# ==================== 机场订阅链接 =====================
 proxy-providers:
 
-  #节点A - 优质节点集合，使用时请修改
-  优质服务商: {<<: *BaseProvider, url: '你的优质机场订阅链接', override: {additional-suffix: ' [优]'}}
+  #优质订阅源 - 优质节点集合，使用时请修改
+  优质服务商: {<<: *BaseProvider, url: '填写你的优质机场订阅链接', override: {additional-suffix: ' [优]'}}
 
   # 次优质订阅源 - 次优节点集合，使用时请修改
-  次优服务商: {<<: *BaseProvider, url: '你的次优质机场订阅链接', override: {additional-suffix: ' [次]'}}
+  次优服务商: {<<: *BaseProvider, url: '填写你的次优质机场订阅链接', override: {additional-suffix: ' [次]'}}
 
   # 备用订阅源 - 次优节点集合，使用时请修改
-  备用服务商: {<<: *BaseProvider, url: '你的备用机场订阅链接', override: {additional-suffix: ' [备]'}}
+  备用服务商: {<<: *BaseProvider, url: '填写你的备用机场订阅链接', override: {additional-suffix: ' [备]'}}
 
   # 落地订阅源 - 落地服务连接，使用时请修改
-  落地服务商: {<<: *BaseProvider, url: '落地订阅源地址', override: {additional-suffix: ' [中]', dialer-proxy: 中转服务}}
+  落地服务商: {<<: *BaseProvider, url: '填写你的落地订阅源地址', override: {additional-suffix: ' [中]', dialer-proxy: 中转服务}}
+  
+
+# ==================== 自建代理节点 =====================
+proxies:
 
 
 
-# ==================== 监听器 ====================
+# ======================  监听器 ========================
 listeners:
   # Shadowsocks监听器 - 代理节点 玩法：远程连接家庭网络，端口和密码，使用时请修改
   - {name: SS-IN,  type: shadowsocks, listen: '::', port: 10000, udp: true, password: Xf3#Lp9WqZ, cipher: aes-256-gcm}
@@ -217,51 +233,52 @@ dns:
 # ==================== 代理策略组 ====================
 proxy-groups:
   # 应用策略层 - Select手动选择，支持多场景应用优化，使用时默认，也可修改
-  - {name: Proxy,       <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Proxy.png}
-  - {name: AI,          <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png}
-  - {name: ProxyGame,   <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Game.png}
-  - {name: Streaming,   <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/DomesticMedia.png}
-  - {name: Google,      <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Google_Search.png}
-  - {name: Microsoft,   <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
-  - {name: TikTok,      <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/TikTok_1.png}
-  - {name: Crypto,      <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cryptocurrency_3.png}
-  - {name: 漏网之鱼,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
-  - {name: Emby,        <<: *SelectLR, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
-  - {name: Tracker,     <<: *SelectLR, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Download.png}
-  - {name: Apple,       <<: *SelectDC, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
-  - {name: 国内直连,     type: select, proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
+  - {name: Proxy,         <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Proxy.png}
+  - {name: AI,            <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png}
+  - {name: ProxyGame,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Game.png}
+  - {name: Streaming,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/DomesticMedia.png}
+  - {name: Google,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Google_Search.png}
+  - {name: Microsoft,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
+  - {name: TikTok,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/TikTok_1.png}
+  - {name: Crypto,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Cryptocurrency_3.png}
+  - {name: PayPal,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/PayPal.png}  
+  - {name: 漏网之鱼,       <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
+  - {name: Emby,          <<: *SelectLR, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
+  - {name: Tracker,       <<: *SelectLR, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Download.png}
+  - {name: Apple,         <<: *SelectDC, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
+  - {name: 国内直连,       type: select,  proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
 
-    # 中转服务层 - LoadBalance负载均衡，提供中转服务提升连通性，选用一个或多个服务商做中转，比如 优质服务商，可通过正则表达式，过滤掉不需要的节点，使用时请修改
-  - {name: 中转服务,   <<: *BaseLB, use: [优质服务商], filter: 'HK|TW', hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png}
+  # 中转服务层 - LoadBalance负载均衡，提供中转服务提升连通性，选用一个或多个服务商做中转，比如 优质服务商，可通过正则表达式，过滤掉不需要的节点，使用时请修改
+  - { name: 中转服务,      <<: *BaseLB, use: [优质服务商], filter: 'HK|TW', hidden: true, icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png' }
 
-    # 线路特性层 - Fallback故障转移，（适合不想节点总是被切换或者对固定IP有要求，若手动选择节点飘红 会自动切到智能策略组，保证节点可用性）,（不需要该策略可以在组名上添加 # 注释）
-  - {name: 香港-故转,  <<: *BaseFB, proxies: [香港-手选, 香港-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png}
-  - {name: 台湾-故转,  <<: *BaseFB, proxies: [台湾-手选, 台湾-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png}
-  - {name: 日本-故转,  <<: *BaseFB, proxies: [日本-手选, 日本-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png}
-  - {name: 狮城-故转,  <<: *BaseFB, proxies: [狮城-手选, 狮城-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png}
-  - {name: 美国-故转,  <<: *BaseFB, proxies: [美国-手选, 美国-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png}
-  - {name: 低倍率-故转,  <<: *BaseFB, proxies: [低倍率-手选, 低倍率-智能 ], icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
+  # 线路特性层 - Fallback故障转移，（适合不想节点总是被切换或者对固定IP有要求，若手动选择节点飘红 会自动切到智能策略组，保证节点可用性）,（不需要该策略可以在组名上添加 # 注释）
+  - { name: 香港-故转,     <<: *BaseFB, proxies: [香港-手选, 香港-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
+  - { name: 台湾-故转,     <<: *BaseFB, proxies: [台湾-手选, 台湾-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png' }
+  - { name: 日本-故转,     <<: *BaseFB, proxies: [日本-手选, 日本-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
+  - { name: 狮城-故转,     <<: *BaseFB, proxies: [狮城-手选, 狮城-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
+  - { name: 美国-故转,     <<: *BaseFB, proxies: [美国-手选, 美国-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
+  - { name: 低倍率-故转,    <<: *BaseFB, proxies: [低倍率-手选, 低倍率-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png' }
+
+  # 线路策略层 - Smart智能选择，政策权重数值越大优先级越高，修改为关键词节点，比如 优:2;中:1;备:0.5，默认为1，优>中>备，使用时请修改
+  - { name: 香港-智能,     <<: [*BaseST, *FilterHK], include-all: true, policy-priority: *PriorityNR }
+  - { name: 台湾-智能,     <<: [*BaseST, *FilterTW], include-all: true, policy-priority: *PriorityNR }
+  - { name: 日本-智能,     <<: [*BaseST, *FilterJP], include-all: true, policy-priority: *PriorityNR }
+  - { name: 狮城-智能,     <<: [*BaseST, *FilterSG], include-all: true, policy-priority: *PriorityNR }
+  - { name: 美国-智能,     <<: [*BaseST, *FilterUS], include-all: true, policy-priority: *PriorityNR }
+  - { name: 低倍率-智能,    <<: [*BaseST, *FilterLR], include-all: true, policy-priority: *PriorityLR }
+  - { name: 冷门节点-智能,   <<: [*BaseST, *FilterEU], include-all: true, policy-priority: *PriorityNR }
 
   # 线路特性层 - 手动选择节点，根据自己需求选择节点，建议修改位置顺序发挥线路优势,（不需要该策略可以在组名上添加 # 注释）
-  - { name: 香港-手选, type: select, include-all: true, <<: *FilterHK }
-  - { name: 台湾-手选, type: select, include-all: true, <<: *FilterTW }
-  - { name: 日本-手选, type: select, include-all: true, <<: *FilterJP }
-  - { name: 狮城-手选, type: select, include-all: true, <<: *FilterSG }
-  - { name: 美国-手选, type: select, include-all: true, <<: *FilterUS }
-  - { name: 低倍率-手选, type: select, include-all: true, <<: *FilterLR }
-  - { name: 高倍率-手选, type: select, include-all: true, <<: *FilterHR }
-  - { name: 冷门节点-手选, type: select, include-all: true, <<: *FilterEU }
-  - { name: 全部节点-手选, type: select, include-all: true, <<: *FilterAL }
+  - { name: 香港-手选,     <<: [*BaseSL, *FilterHK], include-all: true }
+  - { name: 台湾-手选,     <<: [*BaseSL, *FilterTW], include-all: true }
+  - { name: 日本-手选,     <<: [*BaseSL, *FilterJP], include-all: true }
+  - { name: 狮城-手选,     <<: [*BaseSL, *FilterSG], include-all: true }
+  - { name: 美国-手选,     <<: [*BaseSL, *FilterUS], include-all: true }
+  - { name: 低倍率-手选,    <<: [*BaseSL, *FilterLR], include-all: true }
+  - { name: 高倍率-手选,    <<: [*BaseSL, *FilterHR], include-all: true }
+  - { name: 冷门节点-手选,  <<: [*BaseSL, *FilterEU], include-all: true }
+  - { name: 全部节点-手选,  <<: [*BaseSL, *FilterAL], include-all: true }
   
- # 地理策略层 - Smart智能选择，政策权重数值越大优先级越高，修改为关键词节点，比如 优:2;中:1;备:0.5，默认为1，优>中>备，使用时请修改
-  - { name: 香港-智能, <<: [*BaseSmart, *FilterHK], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 台湾-智能, <<: [*BaseSmart, *FilterTW], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 日本-智能, <<: [*BaseSmart, *FilterJP], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 狮城-智能, <<: [*BaseSmart, *FilterSG], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 美国-智能, <<: [*BaseSmart, *FilterUS], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 冷门节点-智能, <<: [*BaseSmart, *FilterEU], include-all: true, policy-priority: '优:3;中:2;次:1;备:0.5' }
-  - { name: 低倍率-智能,   <<: [*BaseSmart, *FilterLR], include-all: true, policy-priority: '0.01:8;0.1:7;0.2:6;实验:6;0.3:5;0.4:4;0.5:3;0.6:2;0.7:1;0.8:0.5' }
-
 
 rules:
 # ==================== 特定IP分流规则 ====================
@@ -339,8 +356,9 @@ rules:
   - RULE-SET,Bing,Proxy                            # Bing 搜索引擎 
   - RULE-SET,MSN,Proxy                             # MSN
 
-# --- 货币平台 ---
+# --- 支付/货币平台 ---
   - RULE-SET,Crypto,Crypto                         # Bybit 等虚拟货币
+  - RULE-SET,PayPal,PayPal                         # PayPal 贝宝
 
 # --- Emby 服务 ---
 #（需要自己另外补上emby域名，- DOMAIN,你的emby域名,Emby）
@@ -395,10 +413,13 @@ rules:
 # --- 微软兜底 ---
   - RULE-SET,MicrosoftCN,国内直连                   # 微软中国服务直连
   - RULE-SET,Microsoft,Microsoft                   # 微软国际服务走代理
-
-# ---CN 国内服务直连 ---
+  
+# --- 苹果服务 ---
   - RULE-SET,Apple,Apple                          # Apple 服务 (App Store/iCloud)
   - RULE-SET,Apple-IP,Apple,no-resolve            # Apple 服务 (App Store/iCloud)
+
+# ---CN 国内服务直连 ---
+# 非全局模式下该部分可以注释
   - RULE-SET,AI-CN,国内直连                        # 国内 AI (豆包、千问等)
   - RULE-SET,Netdisk-CN,国内直连                   # 国内网盘
   - RULE-SET,Bank-CN,国内直连                      # 银行客户端
@@ -425,120 +446,112 @@ rules:
   - MATCH,漏网之鱼
   
 
-# ==================== 规则集行为模板 ====================
-RuleIntv: &RuleIntv 86400             #外部规则统一更新时间
-DmnMrs: &DmnMrs { type: http, behavior: domain,    format: mrs,  interval: *RuleIntv }
-DmnYml: &DmnYml { type: http, behavior: domain,    format: yaml, interval: *RuleIntv }
-IpcMrs: &IpcMrs { type: http, behavior: ipcidr,    format: mrs,  interval: *RuleIntv }
-ClsTxt: &ClsTxt { type: http, behavior: classical, format: text, interval: *RuleIntv }
-ClsYml: &ClsYml { type: http, behavior: classical, format: yaml, interval: *RuleIntv }
-# 命名逻辑：Dmn=Domain, Ipc=IPCIDR, Cls=Classical | Mrs=MRS, Yml=YAML, Txt=Text
-
 # 域名规则
 rule-providers:
 #==================== 域名规则 (Domain / Geosite)====================
 
-# --- 🏠 基础直连& 下载& 测速---
-  Private:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs}
-  Category-DoH:  {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-doh.mrs, path: ./ruleset/category-doh.mrs}
-  HTTPDNS-CN:    {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-httpdns-cn.mrs, path: ./ruleset/category-httpdns-cn.mrs}
-  PublicTracker: {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-public-tracker.mrs, path: ./ruleset/category-public-tracker.mrs}
-  Speedtest:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-speedtest.mrs, path: ./ruleset/category-speedtest.mrs}
-  Trackers:      {<<: *DmnYml, url: https://raw.githubusercontent.com/yhlh9982/clash-rules/master/trackers_domain.yaml, path: ./ruleset/trackers_domain.yaml}
+  # --- 🏠 基础直连 & 下载 & 测速 ---
+  Private:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs }
+  Category-DoH:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-doh.mrs, path: ./ruleset/category-doh.mrs }
+  HTTPDNS-CN:     { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-httpdns-cn.mrs, path: ./ruleset/category-httpdns-cn.mrs }
+  PublicTracker:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-public-tracker.mrs, path: ./ruleset/category-public-tracker.mrs }
+  Speedtest:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-speedtest.mrs, path: ./ruleset/category-speedtest.mrs }
+  Trackers:       { <<: *DmnYml, url: https://raw.githubusercontent.com/yhlh9982/clash-rules/master/trackers_domain.yaml, path: ./ruleset/trackers_domain.yaml }
 
   # --- 🤖 AI & 微软 ---
-  AI:            {<<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/ai.mrs, path: ./ruleset/Gemini.mrs}
-  GlobalAI:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs, path: ./ruleset/category-ai-!cn.mrs}
-  AI-CN:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-cn.mrs, path: ./ruleset/category-ai-cn.mrs}
-  MicrosoftCN:   {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft@cn.mrs, path: ./ruleset/microsoft-cn.mrs}
-  Microsoft:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft.mrs, path: ./ruleset/microsoft.mrs}
-  Bing:          {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bing.mrs, path: ./ruleset/bing.mrs}
-  MSN:           {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/msn.mrs, path: ./ruleset/msn.mrs}
-  Teams:         {<<: *ClsYml, url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Teams/Teams.yaml, path: ./ruleset/blackmatrix/Teams.yaml}
+  AI:             { <<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/ai.mrs, path: ./ruleset/Gemini.mrs }
+  GlobalAI:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs, path: ./ruleset/category-ai-!cn.mrs }
+  AI-CN:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-cn.mrs, path: ./ruleset/category-ai-cn.mrs }
+  MicrosoftCN:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft@cn.mrs, path: ./ruleset/microsoft-cn.mrs }
+  Microsoft:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft.mrs, path: ./ruleset/microsoft.mrs }
+  Bing:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bing.mrs, path: ./ruleset/bing.mrs }
+  MSN:            { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/msn.mrs, path: ./ruleset/msn.mrs }
+  Teams:          { <<: *ClsYml, url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Teams/Teams.yaml, path: ./ruleset/blackmatrix/Teams.yaml }
 
-  # --- 📲 社交/应用 ---
-  Google:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/google.mrs, path: ./ruleset/google.mrs}
-  GoogleFCM:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs, path: ./ruleset/googlefcm.mrs}
-  Telegram:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs, path: ./ruleset/telegram.mrs}
-  Twitter:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/x.mrs, path: ./ruleset/x.mrs}
-  Meta:          {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/meta.mrs, path: ./ruleset/meta.mrs}
-  Reddit:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/reddit.mrs, path: ./ruleset/reddit.mrs}
-  Tumblr:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tumblr.mrs, path: ./ruleset/tumblr.mrs}
-  GitHub:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/github.mrs, path: ./ruleset/github.mrs}
-  Docker:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/docker.mrs, path: ./ruleset/docker.mrs}
-  Pixiv:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/pixiv.mrs, path: ./ruleset/pixiv.mrs}
-  Communication: {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs}
-  SocialMedia:   {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs, path: ./ruleset/category-social-media-!cn.mrs}
-  Ecommerce:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ecommerce.mrs, path: ./ruleset/category-ecommerce.mrs}
-  Crypto:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-cryptocurrency.mrs, path: ./ruleset/category-cryptocurrency.mrs}
+  # --- 📲 社交 / 应用 ---
+  Google:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/google.mrs, path: ./ruleset/google.mrs }
+  GoogleFCM:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs, path: ./ruleset/googlefcm.mrs }
+  Telegram:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs, path: ./ruleset/telegram.mrs }
+  Twitter:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/x.mrs, path: ./ruleset/x.mrs }
+  Meta:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/meta.mrs, path: ./ruleset/meta.mrs }
+  Reddit:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/reddit.mrs, path: ./ruleset/reddit.mrs }
+  Tumblr:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tumblr.mrs, path: ./ruleset/tumblr.mrs }
+  GitHub:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/github.mrs, path: ./ruleset/github.mrs }
+  Docker:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/docker.mrs, path: ./ruleset/docker.mrs }
+  Pixiv:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/pixiv.mrs, path: ./ruleset/pixiv.mrs }
+  Communication:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
+  SocialMedia:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs, path: ./ruleset/category-social-media-!cn.mrs }
+  Ecommerce:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ecommerce.mrs, path: ./ruleset/category-ecommerce.mrs }
+  PayPal:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/paypal.mrs, path: ./ruleset/paypal.mrs }
+  Crypto:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-cryptocurrency.mrs, path: ./ruleset/category-cryptocurrency.mrs }
 
   # --- 🎬 流媒体 ---
-  YouTube:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/youtube.mrs, path: ./ruleset/youtube.mrs}
-  Netflix:       {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs, path: ./ruleset/netflix.mrs}
-  Disney:        {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs, path: ./ruleset/disney.mrs}
-  Spotify:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/spotify.mrs, path: ./ruleset/spotify.mrs}
-  PrimeVideo:    {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/primevideo.mrs, path: ./ruleset/primevideo.mrs}
-  AppleTV:       {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs, path: ./ruleset/apple-tvplus.mrs}
-  HBO:           {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hbo.mrs, path: ./ruleset/hbo.mrs}
-  Hulu:          {<<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hulu.mrs, path: ./ruleset/hulu.mrs}
-  Emby:          {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-emby.mrs, path: ./ruleset/category-emby.mrs}
-  TikTok-MCX:    {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tiktok.mrs, path: ./ruleset/tiktok.mrs}
-  TikTok-b7:     {<<: *ClsYml, url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml, path: ./ruleset/TikTok.yaml}
+  YouTube:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/youtube.mrs, path: ./ruleset/youtube.mrs }
+  Netflix:        { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs, path: ./ruleset/netflix.mrs }
+  Disney:         { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs, path: ./ruleset/disney.mrs }
+  Spotify:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/spotify.mrs, path: ./ruleset/spotify.mrs }
+  PrimeVideo:     { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/primevideo.mrs, path: ./ruleset/primevideo.mrs }
+  AppleTV:        { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple-tvplus.mrs, path: ./ruleset/apple-tvplus.mrs }
+  HBO:            { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hbo.mrs, path: ./ruleset/hbo.mrs }
+  Hulu:           { <<: *DmnMrs, url: https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/hulu.mrs, path: ./ruleset/hulu.mrs }
+  Emby:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-emby.mrs, path: ./ruleset/category-emby.mrs }
+  TikTok-MCX:     { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tiktok.mrs, path: ./ruleset/tiktok.mrs }
+  TikTok-b7:      { <<: *ClsYml, url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml, path: ./ruleset/TikTok.yaml }
 
   # --- 🎮 游戏 ---
-  Steam:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam.mrs, path: ./ruleset/steam.mrs}
-  SteamCN:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam@cn.mrs, path: ./rule_provider/steam_cn.mrs}
-  Xbox:          {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xbox.mrs, path: ./ruleset/xbox.mrs}
-  XboxCN:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xbox@cn.mrs, path: ./rule_provider/xbox_cn.mrs}
-  PlayStation:   {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/playstation.mrs, path: ./ruleset/playstation.mrs}
-  Ubisoft:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft.mrs, path: ./ruleset/ubisoft.mrs}
-  UbisoftCN:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft@cn.mrs, path: ./rule_provider/ubisoft_cn.mrs}
-  Epic:          {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs, path: ./ruleset/epicgames.mrs}
-  Blizzard:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/blizzard.mrs, path: ./ruleset/blizzard.mrs}
-  Nintendo:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/nintendo.mrs, path: ./ruleset/nintendo.mrs}
-  NintendoCN:    {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/nintendo@cn.mrs, path: ./rule_provider/nintendo_cn.mrs}
-  EA:            {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ea.mrs, path: ./ruleset/ea.mrs}
-  GOG:           {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog.mrs, path: ./rule_provider/gog.mrs}
-  GOGCN:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog@cn.mrs, path: ./rule_provider/gog_cn.mrs}
-  Origin:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/origin.mrs, path: ./rule_provider/origin.mrs}
-  Accelerator:   {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs}
-  GamesCN:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-cn.mrs, path: ./ruleset/category-games-cn.mrs}
-  GameDownload:  {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-platforms-download.mrs, path: ./ruleset/category-game-platforms-download.mrs}
-  GamesGlobal:   {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-!cn.mrs, path: ./ruleset/category-games-!cn.mrs}
-  EpicCN:        {<<: *ClsYml, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/classical/epicgames%40cn.yaml, path: ./rule_provider/epicgames_cn.yaml}
+  Steam:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam.mrs, path: ./ruleset/steam.mrs }
+  SteamCN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam@cn.mrs, path: ./rule_provider/steam_cn.mrs }
+  Xbox:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xbox.mrs, path: ./ruleset/xbox.mrs }
+  XboxCN:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xbox@cn.mrs, path: ./rule_provider/xbox_cn.mrs }
+  PlayStation:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/playstation.mrs, path: ./ruleset/playstation.mrs }
+  Ubisoft:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft.mrs, path: ./ruleset/ubisoft.mrs }
+  UbisoftCN:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft@cn.mrs, path: ./rule_provider/ubisoft_cn.mrs }
+  Epic:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs, path: ./ruleset/epicgames.mrs }
+  Blizzard:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/blizzard.mrs, path: ./ruleset/blizzard.mrs }
+  Nintendo:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/nintendo.mrs, path: ./ruleset/nintendo.mrs }
+  NintendoCN:     { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/nintendo@cn.mrs, path: ./rule_provider/nintendo_cn.mrs }
+  EA:             { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ea.mrs, path: ./ruleset/ea.mrs }
+  GOG:            { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog.mrs, path: ./rule_provider/gog.mrs }
+  GOGCN:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog@cn.mrs, path: ./rule_provider/gog_cn.mrs }
+  Origin:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/origin.mrs, path: ./rule_provider/origin.mrs }
+  Accelerator:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs }
+  GamesCN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-cn.mrs, path: ./ruleset/category-games-cn.mrs }
+  GameDownload:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-platforms-download.mrs, path: ./ruleset/category-game-platforms-download.mrs }
+  GamesGlobal:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-!cn.mrs, path: ./ruleset/category-games-!cn.mrs }
+  EpicCN:         { <<: *ClsYml, url: https://github.com/MetaCubeX/meta-rules-dat/raw/meta/geo/geosite/classical/epicgames%40cn.yaml, path: ./rule_provider/epicgames_cn.yaml }
 
   # --- 🇨🇳 国内服务 ---
-  Apple:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs, path: ./ruleset/apple.mrs}
-  Xunlei:        {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xunlei.mrs, path: ./ruleset/xunlei.mrs}
-  Netease:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netease.mrs, path: ./ruleset/netease.mrs}
-  Bilibili:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bilibili.mrs, path: ./ruleset/bilibili.mrs}
-  Bilibili2:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bilibili2.mrs, path: ./ruleset/bilibili2.mrs}
-  Baidu:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/baidu.mrs, path: ./ruleset/baidu.mrs}
-  JD:            {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/jd.mrs, path: ./ruleset/jd.mrs}
-  Alibaba:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/alibaba.mrs, path: ./ruleset/alibaba.mrs}
-  Tencent:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tencent.mrs, path: ./ruleset/tencent.mrs}
-  Netdisk-CN:    {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-netdisk-cn.mrs, path: ./ruleset/category-netdisk-cn.mrs}
-  Bank-CN:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-bank-cn.mrs, path: ./ruleset/category-bank-cn.mrs}
-  Social-CN:     {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-cn.mrs, path: ./ruleset/category-social-media-cn.mrs}
-  Media-CN:      {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-media-cn.mrs, path: ./ruleset/category-media-cn.mrs}
+  Apple:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs, path: ./ruleset/apple.mrs }
+  Xunlei:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xunlei.mrs, path: ./ruleset/xunlei.mrs }
+  Netease:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/netease.mrs, path: ./ruleset/netease.mrs }
+  Bilibili:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bilibili.mrs, path: ./ruleset/bilibili.mrs }
+  Bilibili2:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/bilibili2.mrs, path: ./ruleset/bilibili2.mrs }
+  Baidu:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/baidu.mrs, path: ./ruleset/baidu.mrs }
+  JD:             { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/jd.mrs, path: ./ruleset/jd.mrs }
+  Alibaba:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/alibaba.mrs, path: ./ruleset/alibaba.mrs }
+  Tencent:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/tencent.mrs, path: ./ruleset/tencent.mrs }
+  Netdisk-CN:     { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-netdisk-cn.mrs, path: ./ruleset/category-netdisk-cn.mrs }
+  Bank-CN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-bank-cn.mrs, path: ./ruleset/category-bank-cn.mrs }
+  Social-CN:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-cn.mrs, path: ./ruleset/category-social-media-cn.mrs }
+  Media-CN:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-media-cn.mrs, path: ./ruleset/category-media-cn.mrs }
 
   # --- 🛡️ 域名兜底 ---
-  Scholar:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-scholar-!cn.mrs, path: ./ruleset/category-scholar-!cn.mrs}
-  China:         {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/cn.mrs, path: ./ruleset/cn.mrs}
-  Geo-!CN:       {<<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-!cn.mrs, path: ./ruleset/geolocation-!cn.mrs}
-  fakeip-filter: {<<: *DmnMrs, url: https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs, path: ./ruleset/fakeip-filter.mrs}
+  Scholar:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-scholar-!cn.mrs, path: ./ruleset/category-scholar-!cn.mrs }
+  China:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/cn.mrs, path: ./ruleset/cn.mrs }
+  Geo-!CN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/geolocation-!cn.mrs, path: ./ruleset/geolocation-!cn.mrs }
+  fakeip-filter:  { <<: *DmnMrs, url: https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs, path: ./ruleset/fakeip-filter.mrs }
 
 #==================== IP 规则 ((IP / GeoIP)====================
-  Private-IP:    {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/private.mrs, path: ./ruleset/private-ip.mrs}
-  Google-IP:     {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/google.mrs, path: ./ruleset/google-ip.mrs}
-  Telegram-IP:   {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs, path: ./ruleset/telegram-ip.mrs}
-  Twitter-IP:    {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/twitter.mrs, path: ./ruleset/twitter-ip.mrs}
-  Facebook-IP:   {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/facebook.mrs, path: ./ruleset/facebook-ip.mrs}
-  Netflix-IP:    {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs, path: ./ruleset/netflix-ip.mrs}
-  China-IP:      {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cn.mrs, path: ./ruleset/cn-ip.mrs}
-  Apple-IP:      {<<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo-lite/geoip/apple.mrs, path: ./ruleset/apple_ip.mrs}
-  Trackers-IP:   {<<: *ClsYml, url: https://raw.githubusercontent.com/yhlh9982/clash-rules/master/trackers_ip.yaml, path: ./ruleset/trackers_ip.yaml}
-  DNS-IP:        {<<: *IpcMrs, url: https://gcore.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Encrypted_DNS_IP.mrs, path: ./ruleset/Encrypted_DNS_IP.mrs}
+  Private-IP:     { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/private.mrs, path: ./ruleset/private-ip.mrs }
+  Google-IP:      { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/google.mrs, path: ./ruleset/google-ip.mrs }
+  Telegram-IP:    { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/telegram.mrs, path: ./ruleset/telegram-ip.mrs }
+  Twitter-IP:     { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/twitter.mrs, path: ./ruleset/twitter-ip.mrs }
+  Facebook-IP:    { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/facebook.mrs, path: ./ruleset/facebook-ip.mrs }
+  Netflix-IP:     { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/netflix.mrs, path: ./ruleset/netflix-ip.mrs }
+  China-IP:       { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geoip/cn.mrs, path: ./ruleset/cn-ip.mrs }
+  Apple-IP:       { <<: *IpcMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo-lite/geoip/apple.mrs, path: ./ruleset/apple_ip.mrs }
+  Trackers-IP:    { <<: *ClsYml, url: https://raw.githubusercontent.com/yhlh9982/clash-rules/master/trackers_ip.yaml, path: ./ruleset/trackers_ip.yaml }
+  DNS-IP:         { <<: *IpcMrs, url: https://gcore.jsdelivr.net/gh/Aethersailor/Custom_OpenClash_Rules@main/rule/Encrypted_DNS_IP.mrs, path: ./ruleset/Encrypted_DNS_IP.mrs }
     
     
 # ========================

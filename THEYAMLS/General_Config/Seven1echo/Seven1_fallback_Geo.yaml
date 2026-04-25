@@ -1,6 +1,6 @@
 # 名称： Seven1_fallback_Geo
-# 版本： V2026.4.20
-# 日期： 2026年4月20日
+# 版本： V2026.4.25
+# 日期： 2026年4月25日
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①本文件适用于Mihomo核心的工具使用，如：OpenWrt（Clash/Nikki 插件）、Clashmi、FlClash、Clash Meta ……（支持仅内核使用）； ②使用前需补充完整 “订阅链接” 与 “机场名”，并将 “nameserver” 修改为运营商提供的 DNS 地址; ③已隐藏“故障转移”、“延迟自选”这两个策略组，使用时手动选取对应地区节点即可。
@@ -74,7 +74,7 @@ external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download
 # TUN配置
 tun:
   enable: true                                                          # 网卡模式  是否启用 TUN 虚拟网卡模式  
-  stack: system                                                         # 协议类型  网络栈：system（系统栈）/ gvisor（内置用户态栈）/ mixed（混合）
+  stack: mixed                                                          # 协议类型  网络栈：system（系统栈）/ gvisor（内置用户态栈）/ mixed（混合）
   dns-hijack: [0.0.0.0:53]                                              # 劫持请求  劫持所有 UDP/TCP 53 端口的 DNS 请求
   auto-detect-interface: true                                           # 自动出口  自动识别默认出口网络接口 （仅内核模式有效）
   auto-route: true                                                      # 自动路由  自动添加系统路由表      （仅内核模式有效）
