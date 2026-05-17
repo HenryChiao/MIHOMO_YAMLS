@@ -1,0 +1,13 @@
+gog.com
+gog-statics.com
+full:gog.qtlglb.com
+full:gogalaxy.gog-statics.com
+full:menu-static.gog-statics.com
+full:productcard.gog-statics.com
+full:static-login.gog-statics.com
+full:www4-static.gog-statics.com
+regexp:^cdn-akamai-.+\.gog-services\.com$
+regexp:^gog-cdn-.+\.footprint\.net$
+regexp:^images(-\d)?\.gog-statics\.com$
+full:gog-cdn-fastly.gog.com
+full:gog-cdn.akamaized.net
