@@ -7,14 +7,15 @@
 ## 📄 配置详情
 
 #### 📝 config.yaml
-- **路径**: `config.yaml` | **大小**: 23.5 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/wanswu/config.yaml)
-- **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
+- **路径**: `config.yaml` | **大小**: 22.7 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/wanswu/config.yaml)
+- **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (52个)</summary>
+<summary>🔍 策略组 (49个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 手动选择 | `select` |
+| 🔧 家宽选择 | `fallback` |
 | 👆 GLOBAL | `select` |
 | 👆 Claude | `select` |
 | 👆 Gemini | `select` |
@@ -33,6 +34,5 @@
 | 👆 Twitter(X) | `select` |
 | 👆 Telegram | `select` |
 | 👆 WhatsApp | `select` |
-| 👆 Steam | `select` |
-| ... | 还有 32 个 |
+| ... | 还有 29 个 |
 </details>

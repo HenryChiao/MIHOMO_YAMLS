@@ -7,10 +7,10 @@
 ## 📄 配置详情
 
 #### 📝 OneSmartProMCX.yaml
-- **路径**: `OneSmartProMCX.yaml` | **大小**: 40.1 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Smart_Mode/edison/OneSmartProMCX.yaml)
+- **路径**: `OneSmartProMCX.yaml` | **大小**: 38.2 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Smart_Mode/edison/OneSmartProMCX.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (37个)</summary>
+<summary>🔍 策略组 (38个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -20,6 +20,7 @@
 | 👆 Streaming | `select` |
 | 👆 Google | `select` |
 | 👆 Microsoft | `select` |
+| 👆 Speedtest | `select` |
 | 👆 TikTok | `select` |
 | 👆 Emby | `select` |
 | 👆 PayPal | `select` |
@@ -33,6 +34,5 @@
 | 🔧 台湾-故转 | `fallback` |
 | 🔧 日本-故转 | `fallback` |
 | 🔧 狮城-故转 | `fallback` |
-| 🔧 美国-故转 | `fallback` |
-| ... | 还有 17 个 |
+| ... | 还有 18 个 |
 </details>
