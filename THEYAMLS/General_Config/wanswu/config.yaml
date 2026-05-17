@@ -18,12 +18,12 @@ FilterPP: &FilterPP "Expire|到期|剩余|Traffic|网址|官网|过期|地址"
 # https://www.qualcomm.cn/generate_204
 UrlTest:  &UrlTest 'https://www.gstatic.com/generate_204'
 
-ProvidersURL: &ProvidersURL { exclude-filter: *FilterPP, type: http, interval: 86400, health-check: { enable: true, url: *UrlTest, interval: 300 } }
-ProvidersFILE: &ProvidersFILE { exclude-filter: *FilterPP, type: file, interval: 86400, health-check: { enable: true, url: *UrlTest, interval: 300 } }
+PU: &PU { exclude-filter: *FilterPP, type: http, proxy: DIRECT, interval: 86400, health-check: { enable: true, url: *UrlTest, interval: 300 } }
+PF: &PF { exclude-filter: *FilterPP, type: file, proxy: DIRECT, interval: 86400, health-check: { enable: true, url: *UrlTest, interval: 300 } }
 # 官方配置文档: https://wiki.metacubex.one/config/proxy-providers/
 proxy-providers:
   main:
-    <<: *ProvidersURL
+    <<: *PU
     url: https://anyland.club/#/register?code=R7vdKxbE
     path: ./proxy_provider/main.yaml
     header:
@@ -36,7 +36,7 @@ proxy-providers:
       additional-prefix: '主-'  # 订阅节点前缀，方便区分该节点属于哪个订阅链接 例如`主-香港🇭🇰
 
   back:
-    <<: *ProvidersFILE
+    <<: *PF
     path: proxy_provider/back.yaml   # 本地文件，内容格式同订阅链接，方便测试和备用
     override:
       udp: true
@@ -44,7 +44,7 @@ proxy-providers:
 
 # 通用配置
 mode: rule
-ipv6: true
+ipv6: false
 mixed-port: 7890
 allow-lan: true
 bind-address: '*'
@@ -119,7 +119,7 @@ tun:
   auto-route: true
   auto-redirect: true
   auto-detect-interface: true
-  dns-hijack: [any:53, tcp://any:53]
+  dns-hijack: [ any:53, tcp://any:53 ]
 
 # 嗅探
 sniffer:
@@ -128,12 +128,12 @@ sniffer:
   override-destination: true
   sniff:
     TLS:
-      ports: [443, 8443]
+      ports: [ 443, 8443 ]
     HTTP:
-      ports: [80, 8080-8880]
+      ports: [ 80, 8080-8880 ]
       override-destination: true
     QUIC:
-      ports: [443, 8443]
+      ports: [ 443, 8443 ]
   skip-domain:
      - "Mijia Cloud"
      - "+.push.apple.com"
@@ -163,29 +163,30 @@ external-controller: '0.0.0.0:9090'
 # 节点筛选锚点
 FilterHK: &FilterHK "(?i)(?=.*(🇭🇰|香港|港|hk|hkg|hong ?kong))"
 FilterTW: &FilterTW "(?i)(?=.*(🇹🇼|台湾|台|TW|TWN|taiwan|taipei))"
-FilterMO: &FilterMO "(?i)(?=.*(🇲🇴|澳门|门|MO|macao))"
 FilterSG: &FilterSG "(?i)(?=.*(🇸🇬|新加坡|狮城|新|SG|SGP|singapore))"
 FilterJP: &FilterJP "(?i)(?=.*(🇯🇵|日本|日|JP|JPN|japan|tokyo|osaka))"
 FilterKR: &FilterKR "(?i)(?=.*(🇰🇷|韩国|韩|KR|KOR|korea|seoul))"
 FilterUS: &FilterUS "(?i)(?=.*(🇺🇸|美国|美|US|USA|united ?states|america|los angeles|san jose|silicon valley))"
 FilterUK: &FilterUK "(?i)(?=.*(🇬🇧|英国|英|GBR|UK|united ?kingdom|london))"
+FilterHM: &FilterHM "(?i)(?=.*(家宽))"
 
 # 代理组地区配置锚点 hidden: true 是为了隐藏地区分组，有需要显示出来的佬友可以删除
-BaseUT: &BaseUT { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: url-test,  }
-BaseFB: &BaseFB { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: fallback,  }
+BaseUT: &BaseUT { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: url-test }
+BaseFB: &BaseFB { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: fallback }
 BaseCR: &BaseCR { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: round-robin }
 BaseCH: &BaseCH { interval: 300, lazy: true, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: consistent-hashing }
 
 # 代理组锚点
-SelectUL: &SelectUL { type: select, include-all: true, proxies: [ 香港自动, 台湾自动, 澳门自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 英国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 澳门-回退, 澳门均衡-散列, 澳门均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectTW: &SelectTW { type: select, include-all: true, proxies: [ 台湾自动, 手动选择, 香港自动, 澳门自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 澳门-回退, 澳门均衡-散列, 澳门均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectUS: &SelectUS { type: select, include-all: true, proxies: [ 美国自动, 手动选择, 香港自动, 台湾自动, 澳门自动, 狮城自动, 日本自动, 韩国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 澳门-回退, 澳门均衡-散列, 澳门均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectSG: &SelectSG { type: select, include-all: true, proxies: [ 狮城自动, 手动选择, 香港自动, 台湾自动, 澳门自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 澳门-回退, 澳门均衡-散列, 澳门均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 香港自动, 台湾自动, 澳门自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 澳门-回退, 澳门均衡-散列, 澳门均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectUL: &SelectUL { type: select, include-all: true, proxies: [ 香港自动, 家宽选择, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 英国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectTW: &SelectTW { type: select, include-all: true, proxies: [ 台湾自动, 手动选择, 香港自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectUS: &SelectUS { type: select, include-all: true, proxies: [ 美国自动, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectSG: &SelectSG { type: select, include-all: true, proxies: [ 狮城自动, 手动选择, 香港自动, 台湾自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
 
 # 代理组
 proxy-groups:
   - { name: 手动选择,     <<: *SelectUL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Rocket.png }
+  - { name: 家宽选择,     <<: *BaseFB, filter: *FilterHM, hidden: false, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
   - { name: GLOBAL,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Global.png }
 
   # ===================== AI大模型 =====================
@@ -219,7 +220,6 @@ proxy-groups:
   # ===================== 地区分组(自动测速+隐藏) =====================
   - { name: 香港自动,       <<: *BaseUT, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
   - { name: 台湾自动,       <<: *BaseUT, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 澳门自动,       <<: *BaseUT, filter: *FilterMO, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Macao.png }
   - { name: 狮城自动,       <<: *BaseUT, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
   - { name: 日本自动,       <<: *BaseUT, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
   - { name: 韩国自动,       <<: *BaseUT, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
@@ -229,7 +229,6 @@ proxy-groups:
   # ===================== 地区分组 (回退) =====================
   - { name: 香港-回退,       <<: *BaseFB, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
   - { name: 台湾-回退,       <<: *BaseFB, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 澳门-回退,       <<: *BaseFB, filter: *FilterMO, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Macao.png }
   - { name: 狮城-回退,       <<: *BaseFB, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
   - { name: 日本-回退,       <<: *BaseFB, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
   - { name: 韩国-回退,       <<: *BaseFB, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
@@ -239,7 +238,6 @@ proxy-groups:
   # =====================地区分组(负载均衡-散列) =====================
   - { name: 香港均衡-散列,       <<: *BaseCH, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
   - { name: 台湾均衡-散列,       <<: *BaseCH, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 澳门均衡-散列,       <<: *BaseCH, filter: *FilterMO, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Macao.png }
   - { name: 狮城均衡-散列,       <<: *BaseCH, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
   - { name: 日本均衡-散列,       <<: *BaseCH, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
   - { name: 韩国均衡-散列,       <<: *BaseCH, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
@@ -249,7 +247,6 @@ proxy-groups:
   # ===================== 地区分组 (负载均衡-轮询) =====================
   - { name: 香港均衡-轮询,       <<: *BaseCR, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
   - { name: 台湾均衡-轮询,       <<: *BaseCR, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 澳门均衡-轮询,       <<: *BaseCR, filter: *FilterMO, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Macao.png }
   - { name: 狮城均衡-轮询,       <<: *BaseCR, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
   - { name: 日本均衡-轮询,       <<: *BaseCR, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
   - { name: 韩国均衡-轮询,       <<: *BaseCR, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }

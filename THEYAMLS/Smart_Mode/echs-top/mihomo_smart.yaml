@@ -1,4 +1,4 @@
-# update: 2026-04-29
+# update: 2026-05-16
 # 简介: https://github.com/echs-top/proxy
 
 
@@ -28,8 +28,8 @@ disable-keep-alive: false
 keep-alive-interval: 15
 keep-alive-idle: 300
 etag-support: true
-# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.7727.55 Mobile Safari/537.36'
-# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.7680.201 Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.120 Mobile Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.168 Safari/537.36'
 # external-controller: 127.0.0.1:9090
 # secret: '密码'
 # external-ui: ./zashboard
@@ -59,7 +59,7 @@ tun:
   auto-detect-interface: true
   strict-route: true
   disable-icmp-forwarding: true
-  dns-hijack: [any:53,tcp://any:53]
+  dns-hijack: [any:53,tcp://any:53,any:853,tcp://any:853]
   # mtu: 9000
   # udp-timeout: 300
   # endpoint-independent-nat: true
@@ -68,7 +68,7 @@ domain: &domain { type: http, interval: 86400, proxy: 代理连接, behavior: do
 rule-providers:
   private_ip: { <<: *ip, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/private_ip.mrs',  path: ./rules/private_ip.mrs }
   private: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/private.mrs', path: ./rules/private.mrs }
-  AWAvenue-Ads: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/AWAvenue-Ads_domain.mrs', path: ./rules/AWAvenue-Ads.mrs }
+  ads: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/ads_domain.mrs', path: ./rules/ads.mrs }
   fcm: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/googlefcm.mrs', path: ./rules/fcm.mrs }
   captcha: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/captcha_domain.mrs', path: ./rules/captcha.mrs }
   ai: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/ai.mrs', path: ./rules/ai.mrs }
@@ -94,13 +94,14 @@ rule-providers:
   direct_ip: { <<: *ip, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/direct_ip.mrs', path: ./rules/direct_ip.mrs }
   cn_ip: { <<: *ip, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/rules/mrs/cn_ip.mrs', path: ./rules/cn_ip.mrs }
 rules:
-  - SUB-RULE,(DST-PORT,5228-5230),fcm_rules
+  - DST-PORT,53/853,DNS劫持
+  - DST-PORT,5228-5230,FCM服务
   - DST-PORT,1337/2710/6881-6999/7777,TRACKER
   - RULE-SET,private_ip,直接连接,no-resolve
   - RULE-SET,private,直接连接
-  - RULE-SET,AWAvenue-Ads,REJECT
-  - SUB-RULE,(RULE-SET,fcm),fcm_rules
-  - SUB-RULE,(RULE-SET,captcha),captcha_rules
+  - RULE-SET,ads,广告拦截
+  - RULE-SET,fcm,FCM服务
+  - RULE-SET,captcha,人机验证
   - SUB-RULE,(RULE-SET,ai),ai_rules
   - SUB-RULE,(RULE-SET,telegram),telegram_rules
   - SUB-RULE,(RULE-SET,media),media_rules
@@ -127,12 +128,6 @@ rules:
   - DST-PORT,10000-65535,TRACKER
   - MATCH,代理连接
 sub-rules:
-  fcm_rules:
-    - NETWORK,UDP,REJECT
-    - MATCH,直接连接
-  captcha_rules:
-    - AND,((NETWORK,UDP),(DST-PORT,443)),代理QUIC
-    - MATCH,人机验证
   ai_rules:
     - AND,((NETWORK,UDP),(DST-PORT,443)),代理QUIC
     - MATCH,国外AI
@@ -158,8 +153,9 @@ hosts:
   dns.quad9.net: [9.9.9.9,149.112.112.112,'2620:fe::fe','2620:fe::9']
   services.googleapis.cn: services.googleapis.com
   google.cn: google.com
-direct-dns: &direct-dns [119.29.29.29,223.5.5.5,'2402:4e00::','2400:3200::1']
+direct-dns: &direct-dns ['119.29.29.29#直接连接','223.5.5.5#直接连接','[2402:4e00::]#直接连接','[2400:3200::1]#直接连接']
 direct-doh: &direct-doh ['https://dns.alidns.com/dns-query#直接连接','https://doh.pub/dns-query#直接连接&h3=false']
+proxy-dns: &proxy-dns ['tcp://8.8.8.8#代理DNS','tcp://9.9.9.9#代理DNS','tcp://[2001:4860:4860::8888]#代理DNS','tcp://[2620:fe::fe]#代理DNS']
 proxy-doh: &proxy-doh ['https://dns.google/dns-query#代理DNS','https://dns.quad9.net/dns-query#代理DNS']
 dns: 
   enable: true
@@ -177,7 +173,7 @@ dns:
   fake-ip-filter-mode: rule
   fake-ip-filter:
     - RULE-SET,private,real-ip
-    - RULE-SET,AWAvenue-Ads,fake-ip
+    - RULE-SET,ads,fake-ip
     - RULE-SET,fcm,real-ip
     - RULE-SET,captcha,fake-ip
     - RULE-SET,ai,fake-ip
@@ -195,30 +191,30 @@ dns:
     - RULE-SET,proxy,fake-ip
     - RULE-SET,cn,real-ip
     - MATCH,fake-ip
-  # default-nameserver: [223.5.5.5,119.29.29.29]
+  # default-nameserver: *direct-dns
   proxy-server-nameserver: *direct-doh
   nameserver-policy:
     'rule-set:private': *direct-dns
-    'rule-set:AWAvenue-Ads': [rcode://name_error]
+    # 'rule-set:ads': [rcode://name_error]
     'rule-set:fcm': *direct-doh
     'rule-set:captcha': *direct-doh
-    'rule-set:ai': *proxy-doh
-    'rule-set:telegram': *proxy-doh
-    'rule-set:media': *proxy-doh
+    'rule-set:ai': *proxy-dns
+    'rule-set:telegram': *proxy-dns
+    'rule-set:media': *proxy-dns
     'rule-set:google-cn': *direct-doh
-    'rule-set:google': *proxy-doh
-    'rule-set:trackerslist': *proxy-doh
+    'rule-set:google': *proxy-dns
+    'rule-set:trackerslist': *proxy-dns
     'rule-set:apple-cn': *direct-doh
     'rule-set:microsoft-cn': *direct-doh
     'rule-set:games-cn': *direct-doh
-    'rule-set:proxy_domain': *proxy-doh
+    'rule-set:proxy_domain': *proxy-dns
     'rule-set:direct_domain': *direct-doh
-    'rule-set:github': *proxy-doh
-    'rule-set:proxy': *proxy-doh
+    'rule-set:github': *proxy-dns
+    'rule-set:proxy': *proxy-dns
     'rule-set:cn': *direct-dns
     'rule-set:dnsmasq-china-add': *direct-dns
-  nameserver: *proxy-doh
-  direct-nameserver: *direct-doh
+  nameserver: *proxy-dns
+  direct-nameserver: *direct-dns
   direct-nameserver-follow-policy: true
 sniffer: 
   enable: true
@@ -226,17 +222,19 @@ sniffer:
   parse-pure-ip: true
   override-destination: false
   sniff: { HTTP: { ports: [80,8080-8880], override-destination: true }, TLS: { ports: [443,8443] }, QUIC: { ports: [443,8443] } }
-  skip-domain: ['rule-set:private','rule-set:AWAvenue-Ads','rule-set:fcm','rule-set:captcha','rule-set:ai','rule-set:telegram','rule-set:media','rule-set:google-cn','rule-set:google','rule-set:trackerslist','rule-set:apple-cn','rule-set:microsoft-cn','rule-set:games-cn','rule-set:proxy_domain','rule-set:direct_domain','rule-set:github','rule-set:proxy','rule-set:cn']
+  skip-domain: ['rule-set:private','rule-set:ads','rule-set:fcm','rule-set:captcha','rule-set:ai','rule-set:telegram','rule-set:media','rule-set:google-cn','rule-set:google','rule-set:trackerslist','rule-set:apple-cn','rule-set:microsoft-cn','rule-set:games-cn','rule-set:proxy_domain','rule-set:direct_domain','rule-set:github','rule-set:proxy','rule-set:cn','rule-set:dnsmasq-china-add']
   skip-src-address: ['rule-set:private_ip','rule-set:telegram_ip','rule-set:media_ip','rule-set:google_ip','rule-set:proxy_ip','rule-set:enhanced-FaaS-in-China_ip','rule-set:direct_ip','rule-set:cn_ip']
   skip-dst-address: ['rule-set:private_ip']
-proxies: [{ name: IPV4优先, type: direct, udp: true, ip-version: ipv4-prefer },{ name: IPV6优先, type: direct, udp: true, ip-version: ipv6-prefer },{ name: 仅IPV4, type: direct, udp: true, ip-version: ipv4 },{ name: 仅IPV6, type: direct, udp: true, ip-version: ipv6 }]
+proxies: [{ name: DNS劫持, type: dns },{ name: IPV4优先, type: direct, udp: true, ip-version: ipv4-prefer },{ name: IPV6优先, type: direct, udp: true, ip-version: ipv6-prefer },{ name: 仅IPV4, type: direct, udp: true, ip-version: ipv4 },{ name: 仅IPV6, type: direct, udp: true, ip-version: ipv6 }]
 smart: &smart { type: smart, strategy: sticky-sessions, uselightgbm: true, collectdata: false, sample-rate: 1, prefer-asn: false, <<: *use, hidden: true }
 dl: &dl { type: select, proxies: [代理连接,直接连接,最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,PASS,REJECT], include-all-providers: true }
 proxy-groups:
   - { name: 代理连接, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择], include-all-providers: true, icon: 'https://mihomo.echs.top/img/icon/Global.webp' }
   - { name: 直接连接, type: select, proxies: [DIRECT,IPV4优先,IPV6优先,仅IPV4,仅IPV6], icon: 'https://mihomo.echs.top/img/icon/DIRECT.webp' }
-  - { name: 代理QUIC, type: select, proxies: [PASS,REJECT], icon: 'https://mihomo.echs.top/img/icon/Forbidden.webp' }
+  - { name: 代理QUIC, type: select, proxies: [PASS,REJECT], icon: 'https://mihomo.echs.top/img/icon/Settings.webp' }
   - { name: 代理DNS, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/Server.webp' }
+  - { name: 广告拦截, type: select, proxies: [REJECT,PASS], icon: 'https://mihomo.echs.top/img/icon/Forbidden.webp' }
+  - { name: FCM服务, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/FCM_Firebase_Cloud_Messaging.webp' }
   - { name: 人机验证, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/CloudFlare.webp' }
   - { name: 国外AI, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/AI.webp' }
   - { name: TELEGRAM, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/Telegram.webp' }
@@ -255,4 +253,4 @@ proxy-groups:
   - { name: 英国|智能选择, <<: *smart, filter: '(?i)🇬🇧|英国|\bUK\b|\bGB\b|\bunitedkingdom\b|\bunited\s?kingdom\b', icon: 'https://mihomo.echs.top/img/flags/gb.svg' }
   - { name: 法国|智能选择, <<: *smart, filter: '(?i)🇫🇷|法国|\bFR\b', icon: 'https://mihomo.echs.top/img/flags/fr.svg' }
   - { name: 荷兰|智能选择, <<: *smart, filter: '(?i)🇳🇱|荷兰|\bNL\b|\bnetherlands?\b', icon: 'https://mihomo.echs.top/img/flags/nl.svg' }
-  - { name: GLOBAL, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,代理连接,直接连接,代理QUIC,代理DNS,人机验证,国外AI,TELEGRAM,国外媒体,GOOGLE,TRACKER], include-all-providers: true, hidden: true, icon: 'https://mihomo.echs.top/img/icon/Globefish.webp' }
+  - { name: GLOBAL, type: select, proxies: [最低延迟,香港|智能选择,台湾|智能选择,新加坡|智能选择,日本|智能选择,韩国|智能选择,美国|智能选择,加拿大|智能选择,德国|智能选择,英国|智能选择,法国|智能选择,荷兰|智能选择,代理连接,直接连接,代理QUIC,代理DNS,广告拦截,FCM服务,人机验证,国外AI,TELEGRAM,国外媒体,GOOGLE,TRACKER], include-all-providers: true, hidden: true, icon: 'https://mihomo.echs.top/img/icon/Globefish.webp' }
