@@ -8,7 +8,7 @@
 
 | 特性 | `MihomoAIO.yaml` | `MihomoProMax.yaml` | `MihomoProPlus.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 30.1 KB | 27.4 KB | 27.9 KB |
+| **大小** | 28.3 KB | 25.7 KB | 26.2 KB |
 | **混合端口** | 7893 | 7893 | 7893 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule | rule |
@@ -19,7 +19,7 @@
 ## 📄 配置详情
 
 #### 📝 MihomoAIO.yaml
-- **路径**: `MihomoAIO.yaml` | **大小**: 30.1 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoAIO.yaml)
+- **路径**: `MihomoAIO.yaml` | **大小**: 28.3 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoAIO.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (61个)</summary>
@@ -50,7 +50,7 @@
 </details>
 
 #### 📝 MihomoProMax.yaml
-- **路径**: `MihomoProMax.yaml` | **大小**: 27.4 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoProMax.yaml)
+- **路径**: `MihomoProMax.yaml` | **大小**: 25.7 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoProMax.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (54个)</summary>
@@ -81,7 +81,7 @@
 </details>
 
 #### 📝 MihomoProPlus.yaml
-- **路径**: `MihomoProPlus.yaml` | **大小**: 27.9 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoProPlus.yaml)
+- **路径**: `MihomoProPlus.yaml` | **大小**: 26.2 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/HenryChiao/MihomoProPlus.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (54个)</summary>

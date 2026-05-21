@@ -7,7 +7,7 @@
 ## 📄 配置详情
 
 #### 📝 config.yaml
-- **路径**: `config.yaml` | **大小**: 22.7 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/wanswu/config.yaml)
+- **路径**: `config.yaml` | **大小**: 23.3 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/General_Config/wanswu/config.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (49个)</summary>
