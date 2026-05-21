@@ -99,6 +99,8 @@ dns:
   proxy-server-nameserver-policy: # 格式同nameserver-policy，仅用于节点域名解析，优先于proxy-server-nameserver查询，自定义机场在此添加DNS
     '*.digital-nvme.com': 
       - 8.138.94.132:8053
+    '*.yunsmartdns.com': 
+      - 8.138.94.132:8053
 
 
 # GEO配置
@@ -182,6 +184,7 @@ SelectTW: &SelectTW { type: select, include-all: true, proxies: [ 台湾自动, 
 SelectUS: &SelectUS { type: select, include-all: true, proxies: [ 美国自动, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
 SelectSG: &SelectSG { type: select, include-all: true, proxies: [ 狮城自动, 手动选择, 香港自动, 台湾自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
 SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
+SelectDR: &SelectDR { type: select, include-all: true, proxies: [ DIRECT, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, REJECT ] }
 
 # 代理组
 proxy-groups:
@@ -190,7 +193,7 @@ proxy-groups:
   - { name: GLOBAL,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Global.png }
 
   # ===================== AI大模型 =====================
-  - { name: Claude,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/claude-color.png }
+  - { name: Claude,     <<: *SelectTW, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/claude-color.png }
   - { name: Gemini,     <<: *SelectSG, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/gemini-color.png, url: "https://www.google.com/generate_204" }
   - { name: OpenAI,     <<: *SelectUS, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/openai.png }
 
@@ -206,7 +209,7 @@ proxy-groups:
   - { name: Emby,       <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Emby.png }
   - { name: Github,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/GitHub.png }
   - { name: Google,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Google_Search.png, url: "https://www.google.com/generate_204" }
-  - { name: Microsoft,  <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Microsoft.png, url: "http://www.msftconnecttest.com/connecttest.txt" }
+  - { name: Microsoft,  <<: *SelectDR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Microsoft.png, url: "http://www.msftconnecttest.com/connecttest.txt" }
   - { name: OneDrive,   <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/OneDrive.png }
 
   # ===================== 社交 & 即时通讯 ===================== https://macosicons.com/#/
@@ -256,9 +259,9 @@ proxy-groups:
 # 规则锚点
 rule-anchor:
   # 规则集锚点
-  BehaviorDN: &BehaviorDN {type: http, interval: 86400, format: mrs,  behavior: domain }
-  BehaviorIP: &BehaviorIP {type: http, interval: 86400, format: mrs,  behavior: ipcidr }
-  BehaviorCL: &BehaviorCL {type: http, interval: 86400, format: yaml, behavior: classical }
+  BehaviorDN: &BehaviorDN {type: http, interval: 86400, proxy: DIRECT, format: mrs,  behavior: domain }
+  BehaviorIP: &BehaviorIP {type: http, interval: 86400, proxy: DIRECT, format: mrs,  behavior: ipcidr }
+  BehaviorCL: &BehaviorCL {type: http, interval: 86400, proxy: DIRECT, format: yaml, behavior: classical }
 
 # 规则集配置
 rule-providers:

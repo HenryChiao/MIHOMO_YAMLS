@@ -10,7 +10,7 @@
 # >>=========================================================<<
 # 名称: OneSmartPro
 # 修改: Edison
-# 更新: 2026 年 5 月 17 日
+# 更新: 2026 年 5 月 18 日
 # 覆盖AI、流媒体、TikTok等应用场景，提供多种监听协议支持
 # 配合手选节点+故转Smart算法智能选择最优节点和节点可用性保证
 # YAML模板原作者: YYDS666 | 频道: https://t.me/Pinched666 | Github地址: https://github.com/666OS/YYDS
@@ -23,7 +23,7 @@ BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, 
 
 
 # 策略组基础配置模板
-BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true, prefer-asn: true }
+BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true }
 BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204', hidden: true }
 BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204' }
 BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, url: 'https://cp.cloudflare.com/generate_204' }
@@ -54,8 +54,8 @@ FilterSG: &FilterSG { filter: '^(?i).*(坡|🇸🇬|Sing|SIN|SG[-_ ]?\d*|XSP).*$
 FilterHK: &FilterHK { filter: '^(?i).*(港|🇭🇰|Hong|HKG|HK[-_ ]?\d*).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
 
 # Smart 优先级权重
-PriorityLR: &PriorityLR ['0.01:8', '0.1:7', '0.2:6', '实验:6', '0.3:5', '0.4:4', '0.5:3', '0.6:2', '0.7:1', '0.8:0.5'] # 低倍率优先级
-PriorityNR: &PriorityNR ['优:3', '中:2', '次:1', '备:0.5'] # 按订阅质量排序优先级
+PriorityLR: &PriorityLR "0.01:9;0.1:8;0.2:7;实验:7;0.3:6;0.4:5;0.5:4;0.6:3;0.7:2;0.8:1" # 低倍率优先级
+PriorityNR: &PriorityNR "优:3;中:2;次:1;备:0.5" # 按订阅质量排序优先级
 
 # 规则集行为模板
 RuleIntv: &RuleIntv 86400  # 外部规则统一更新时间
@@ -419,11 +419,11 @@ rule-providers:
   # --- 🏠 基础直连 & 下载 & 测速 ---
   PublicTracker:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-public-tracker.mrs, path: ./ruleset/category-public-tracker.mrs }
   HTTPDNS-CN:     { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-httpdns-cn.mrs, path: ./ruleset/category-httpdns-cn.mrs }
-  Speedtest:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-speedtest.mrs, path: ./ruleset/category-speedtest.mrs }
+  Speedtest:      { <<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/speedtest.mrs, path: ./ruleset/category-speedtest.mrs }
   Trackers:       { <<: *DmnMrs, url: https://github.com/yhlh9982/clash-rules/releases/download/tracker-rules/trackers_domain.mrs, path: ./ruleset/trackers_domain.mrs }
   Category-DoH:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-doh.mrs, path: ./ruleset/category-doh.mrs }
   Apple-CN:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple-cn.mrs, path: ./ruleset/apple-cn.mrs }
-  Private:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs }
+  私有:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs }
   Xunlei:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xunlei.mrs, path: ./ruleset/xunlei.mrs }
   Apple:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs, path: ./ruleset/apple.mrs }
 
@@ -439,7 +439,7 @@ rule-providers:
   # --- 📲 社交 / 应用 ---
   SocialMedia:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs, path: ./ruleset/category-social-media-!cn.mrs }
   Crypto:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-cryptocurrency.mrs, path: ./ruleset/category-cryptocurrency.mrs }
-  Communication:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
+  通信:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
   Ecommerce:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ecommerce.mrs, path: ./ruleset/category-ecommerce.mrs }
   GoogleFCM:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs, path: ./ruleset/googlefcm.mrs }
   Telegram:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs, path: ./ruleset/telegram.mrs }
@@ -467,7 +467,7 @@ rule-providers:
 
   # --- 🎮 游戏 ---
   GameDownload:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-platforms-download.mrs, path: ./ruleset/category-game-platforms-download.mrs }
-  Accelerator:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs }
+  加速器计划:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs }
   GamesGlobal:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-!cn.mrs, path: ./ruleset/category-games-!cn.mrs }
   GamesCN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-cn.mrs, path: ./ruleset/category-games-cn.mrs }
   PlayStation:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/playstation.mrs, path: ./ruleset/playstation.mrs }
