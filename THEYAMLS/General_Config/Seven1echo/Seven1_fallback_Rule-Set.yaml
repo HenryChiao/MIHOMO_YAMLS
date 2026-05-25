@@ -164,8 +164,8 @@ proxy-groups:
 
 # ███████████████████████████ 规则匹配 ███████████████████████████
 rules:
-  - RULE-SET,private_domain,DIRECT                                      # Private
-  - RULE-SET,private_ip,DIRECT,no-resolve                               # Private
+  - RULE-SET,private_domain,国内直连                                    # Private
+  - RULE-SET,private_ip,国内直连,no-resolve                             # Private
   - RULE-SET,openai_domain,ChatGPT                                      # ChatGPT
   - RULE-SET,anthropic_domain,Claude                                    # Claude
   - RULE-SET,google-gemini_domain,Gemini                                # Gemini

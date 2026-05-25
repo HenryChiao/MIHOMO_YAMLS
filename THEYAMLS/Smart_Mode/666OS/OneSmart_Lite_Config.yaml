@@ -10,9 +10,9 @@
 # >>=====================================<<
 # 名称: OneSmart 极简版
 # 地址: https://github.com/666OS/YYDS
-# 版本: v26.1.1
+# 版本: v26.1.2
 # 作者: YYDS666
-# 更新: 2026 年 1 月 30 日
+# 更新: 2026 年 5 月 25 日
 # 频道: https://t.me/Pinched666
 # 描述: 基于全功能版本精简而来，保留核心功能
 
@@ -54,8 +54,8 @@ socks-port: 7891
 redir-port: 7892
 mixed-port: 7893
 tproxy-port: 7895
-ipv6: true
-allow-lan: true
+ipv6: false
+allow-lan: false
 unified-delay: true
 tcp-concurrent: true
 log-level: warning
@@ -68,10 +68,8 @@ keep-alive-idle: 600
 authentication:
   - mihomo:yyds666
 skip-auth-prefixes:
-  - 192.168.1.0/24
-  - 192.168.31.0/24
-  - 192.168.100.0/24
   - 127.0.0.1/8
+  - ::1/128
 
 # 实验性功能
 experimental:
@@ -118,7 +116,7 @@ tun:
 # DNS配置
 dns:
   enable: true
-  ipv6: true
+  ipv6: false
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   default-nameserver:
@@ -185,7 +183,7 @@ rules:
   - RULE-SET,EmbyIP,国际媒体,no-resolve
   - RULE-SET,StreamingIP,国际媒体,no-resolve
   - RULE-SET,ProxyIP,国外流量,no-resolve
-  - RULE-SET,ChinaIP,国内流量
+  - RULE-SET,ChinaIP,国内流量,no-resolve
 
   # 兜底规则
   - MATCH,兜底流量
