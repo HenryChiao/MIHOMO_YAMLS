@@ -7,19 +7,15 @@
 ## 📄 配置详情
 
 #### 📝 mihomo_smart.yaml
-- **路径**: `mihomo_smart.yaml` | **大小**: 16.4 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Smart_Mode/echs-top/mihomo_smart.yaml)
+- **路径**: `mihomo_smart.yaml` | **大小**: 12.7 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Smart_Mode/echs-top/mihomo_smart.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (25个)</summary>
+<summary>🔍 策略组 (21个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 代理连接 | `select` |
-| 👆 直接连接 | `select` |
-| 👆 代理QUIC | `select` |
 | 👆 代理DNS | `select` |
-| 👆 广告拦截 | `select` |
-| 👆 FCM服务 | `select` |
 | 👆 人机验证 | `select` |
 | 👆 国外AI | `select` |
 | 👆 TELEGRAM | `select` |
@@ -34,5 +30,9 @@
 | 👆 韩国&#124;智能选择 | `smart` |
 | 👆 美国&#124;智能选择 | `smart` |
 | 👆 加拿大&#124;智能选择 | `smart` |
-| ... | 还有 5 个 |
+| 👆 德国&#124;智能选择 | `smart` |
+| 👆 英国&#124;智能选择 | `smart` |
+| 👆 法国&#124;智能选择 | `smart` |
+| 👆 荷兰&#124;智能选择 | `smart` |
+| ... | 还有 1 个 |
 </details>
