@@ -226,6 +226,7 @@ proxy-groups:
   - {name: Streaming,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/DomesticMedia.png}
   - {name: Google,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Google_Search.png}
   - {name: Microsoft,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
+  - {name: Bing,          <<: *SelectAL, icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Bing.png}
   - {name: Speedtest,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Speedtest.png}
   - {name: TikTok,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/TikTok_1.png}
   - {name: Emby,          <<: *SelectLR, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
@@ -333,8 +334,8 @@ rules:
 
 # --- Bing 搜索 & MSN ---
 # Copilot 走 AI 策略组，Bing/MSN 走Proxy  (Bing/MSN如需访问国内版，请改为直连)
-  - RULE-SET,Bing,Proxy                            # Bing 搜索引擎 
-  - RULE-SET,MSN,Proxy                             # MSN
+  - RULE-SET,Bing,Bing                             # Bing 搜索引擎 
+  - RULE-SET,MSN,Bing                              # MSN
 
 # --- 支付/货币平台 ---
   - RULE-SET,Crypto,Crypto                         # Bybit 等虚拟货币
@@ -423,7 +424,7 @@ rule-providers:
   Trackers:       { <<: *DmnMrs, url: https://github.com/yhlh9982/clash-rules/releases/download/tracker-rules/trackers_domain.mrs, path: ./ruleset/trackers_domain.mrs }
   Category-DoH:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-doh.mrs, path: ./ruleset/category-doh.mrs }
   Apple-CN:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple-cn.mrs, path: ./ruleset/apple-cn.mrs }
-  私有:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs }
+  Private:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/private.mrs, path: ./ruleset/private.mrs }
   Xunlei:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xunlei.mrs, path: ./ruleset/xunlei.mrs }
   Apple:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs, path: ./ruleset/apple.mrs }
 
@@ -439,7 +440,7 @@ rule-providers:
   # --- 📲 社交 / 应用 ---
   SocialMedia:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-social-media-!cn.mrs, path: ./ruleset/category-social-media-!cn.mrs }
   Crypto:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-cryptocurrency.mrs, path: ./ruleset/category-cryptocurrency.mrs }
-  通信:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
+  Communication:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
   Ecommerce:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ecommerce.mrs, path: ./ruleset/category-ecommerce.mrs }
   GoogleFCM:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs, path: ./ruleset/googlefcm.mrs }
   Telegram:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs, path: ./ruleset/telegram.mrs }
@@ -467,7 +468,7 @@ rule-providers:
 
   # --- 🎮 游戏 ---
   GameDownload:   { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-platforms-download.mrs, path: ./ruleset/category-game-platforms-download.mrs }
-  加速器计划:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs }
+  Accelerator:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-game-accelerator-cn.mrs, path: ./ruleset/category-game-accelerator-cn.mrs }
   GamesGlobal:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-!cn.mrs, path: ./ruleset/category-games-!cn.mrs }
   GamesCN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-cn.mrs, path: ./ruleset/category-games-cn.mrs }
   PlayStation:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/playstation.mrs, path: ./ruleset/playstation.mrs }
