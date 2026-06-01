@@ -1,5 +1,5 @@
 # mihomo 配置
-# 日期：2026-03-02 15:48:34
+# 日期：2026-05-28 21:23:22
 # 配置作者：https://t.me/iKeLee
 # 适用版本：所有使用 mihomo 核心的程序
 port: 7890
@@ -138,7 +138,7 @@ proxy-groups:
   - {name: TikTok, type: select, include-all-providers: true, filter: *FilterAll}
   - {name: Speedtest国际, type: select, include-all-providers: true, filter: *FilterAll, proxies: [PASS, DIRECT]}
   - {name: Netflix, type: select, include-all-providers: true, filter: *FilterAll}
-  - {name: 兜底后备策略, type: fallback, proxies: [香港自动策略, 台湾自动策略, 日本自动策略, 韩国自动策略, 新国自动策略, 美国自动策略, 英国自动策略, 法国自动策略, 德国自动策略]}
+  - {name: 兜底后备策略, <<: *FallBack, proxies: [香港自动策略, 台湾自动策略, 日本自动策略, 韩国自动策略, 新国自动策略, 美国自动策略, 英国自动策略, 法国自动策略, 德国自动策略]}
 
   - {name: 香港自动策略, <<: *UrlTest, filter: *FilterHK}
   - {name: 台湾自动策略, <<: *UrlTest, filter: *FilterTW}

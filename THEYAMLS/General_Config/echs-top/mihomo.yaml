@@ -1,10 +1,10 @@
-# update: 2026-05-24
+# update: 2026-06-02
 # 简介: https://github.com/echs-top/proxy
 
 
 # 节点IP优先级：ip-version: ipv6-prefer
 # 测速细分/筛选：https://8.8.8.8/generate_204、https://[2001:4860:4860::8888]/generate_204
-providers: &providers { type: http, interval: 86400, proxy: 直接连接, header: { User-Agent: ["clash-verge/v2.4.7"] }, health-check: { enable: true, url: 'https://dns.google/generate_204', expected-status: 204,  interval: 900, timeout: 3000, max-failed-times: 2, lazy: false }, override: { ip-version: dual }, exclude-filter: '(?i)套餐|剩余|流量|到期|重置|频道|订阅|官网|禁止|客户端|有效|联系|测试|节点|日期|群组|加入|通知|维护|网址|地址|下载|更新|APP|登录|严禁|海外|恢复|处理|谢谢' }
+providers: &providers { type: http, interval: 86400, proxy: 直接连接, header: { User-Agent: ["clash-verge/v2.5.1"] }, health-check: { enable: true, url: 'https://dns.google/generate_204', expected-status: 204,  interval: 600, timeout: 3000, max-failed-times: 2, lazy: true }, override: { ip-version: dual }, exclude-filter: '(?i)套餐|剩余|流量|到期|重置|频道|订阅|官网|禁止|客户端|有效|联系|测试|节点|日期|群组|加入|通知|维护|网址|地址|下载|更新|APP|登录|严禁|海外|恢复|处理|谢谢' }
 proxy-providers:
   link1: { <<: *providers, url: '订阅链接1', path: ./providers/link1.yaml }
   link2: { <<: *providers, url: '订阅链接2', path: ./providers/link2.yaml }
@@ -28,8 +28,8 @@ disable-keep-alive: false
 keep-alive-interval: 15
 keep-alive-idle: 300
 etag-support: true
-# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.120 Mobile Safari/537.36'
-# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.168 Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Linux; Android 16; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.215 Mobile Safari/537.36'
+# global-ua: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.7778.217 Safari/537.36'
 # external-controller: 127.0.0.1:9090
 # secret: '密码'
 # external-ui: ./zashboard
@@ -64,9 +64,9 @@ rule-providers:
   ads: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/ads.mrs', path: ./rules/ads.mrs }
   fcm: { <<: *domain, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/googlefcm.mrs', path: ./rules/fcm.mrs }
   captcha: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/captcha.mrs', path: ./rules/captcha.mrs }
-  ai: { <<: *domain, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs', path: ./rules/ai.mrs }
+  ai: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/ai.mrs', path: ./rules/ai.mrs }
   telegram: { <<: *domain, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs', path: ./rules/telegram.mrs }
-  media: { <<: *domain, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/media.mrs', path: ./rules/media.mrs }
+  media: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/media.mrs', path: ./rules/media.mrs }
   google: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/google.mrs', path: ./rules/google.mrs }
   trackerslist: { <<: *domain, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/trackerslist.mrs', path: ./rules/trackerslist.mrs }
   proxy-lite: { <<: *domain, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/proxy-lite.mrs', path: ./rules/proxy-lite.mrs }
@@ -108,9 +108,11 @@ hosts:
   dns.quad9.net: [9.9.9.9,149.112.112.112,'2620:fe::fe','2620:fe::9']
   services.googleapis.cn: services.googleapis.com
   google.cn: google.com
-direct-dns: &direct-dns ['119.29.29.29#直接连接','223.5.5.5#直接连接','[2402:4e00::]#直接连接','[2400:3200::1]#直接连接']
+direct-dns: &direct-dns ['119.29.29.29#直接连接','223.5.5.5#直接连接']
+# direct-dns: &direct-dns ['119.29.29.29#直接连接','223.5.5.5#直接连接','[2402:4e00::]#直接连接','[2400:3200::1]#直接连接']
 direct-doh: &direct-doh ['https://dns.alidns.com/dns-query#直接连接','https://doh.pub/dns-query#直接连接&h3=false']
-proxy-dns: &proxy-dns ['tcp://8.8.8.8#代理DNS','tcp://9.9.9.9#代理DNS','tcp://[2001:4860:4860::8888]#代理DNS','tcp://[2620:fe::fe]#代理DNS']
+proxy-dns: &proxy-dns ['8.8.8.8#代理DNS','9.9.9.9#代理DNS']
+# proxy-dns: &proxy-dns ['8.8.8.8#代理DNS','9.9.9.9#代理DNS','[2001:4860:4860::8888]#代理DNS','[2620:fe::fe]#代理DNS']
 proxy-doh: &proxy-doh ['https://dns.google/dns-query#代理DNS','https://dns.quad9.net/dns-query#代理DNS']
 dns: 
   enable: true
@@ -168,7 +170,7 @@ sniffer:
   skip-dst-address: ['rule-set:private_ip']
 proxies: [{ name: DNS劫持, type: dns },{ name: 直接连接, type: direct, udp: true, ip-version: dual }]
 fall: &fall { type: fallback, <<: *use, hidden: true }
-dl: &dl { type: select, proxies: [代理连接,直接连接,最低延迟,香港|故障转移,台湾|故障转移,新加坡|故障转移,日本|故障转移,韩国|故障转移,美国|故障转移,加拿大|故障转移,德国|故障转移,英国|故障转移,法国|故障转移,荷兰|故障转移,PASS,REJECT], include-all-providers: true }
+dl: &dl { type: select, proxies: [代理连接,直接连接,最低延迟,香港|故障转移,台湾|故障转移,新加坡|故障转移,日本|故障转移,韩国|故障转移,美国|故障转移,加拿大|故障转移,德国|故障转移,英国|故障转移,法国|故障转移,荷兰|故障转移], include-all-providers: true }
 proxy-groups:
   - { name: 代理连接, type: select, proxies: [最低延迟,香港|故障转移,台湾|故障转移,新加坡|故障转移,日本|故障转移,韩国|故障转移,美国|故障转移,加拿大|故障转移,德国|故障转移,英国|故障转移,法国|故障转移,荷兰|故障转移], include-all-providers: true, icon: 'https://mihomo.echs.top/img/icon/Global.webp' }
   - { name: 代理DNS, <<: *dl, icon: 'https://mihomo.echs.top/img/icon/Server.webp' }

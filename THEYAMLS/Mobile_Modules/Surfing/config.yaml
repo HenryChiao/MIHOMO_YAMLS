@@ -13,18 +13,12 @@ geo-update-interval: 24
 updatetime: &Time 86400
 geox-url:
   asn: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/GeoLite2-ASN.mmdb"
-experimental:
-  http-headers:
-    request:
-      - name: "User-Agent"
-        value: "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Mobile Safari/537.36"
-      - name: "Accept-Language"
-        value: "en-US,en;q=0.9"
 unified-delay: true
 tcp-concurrent: true
 log-level: silent # debug / silent
 find-process-mode: always
-#global-client-fingerprint: chrome 未来官方可能将移除，意义不大
+proxy_fp: &proxy_fp
+  client-fingerprint: chrome
 external-controller: 0.0.0.0:9090 #修改端口后，如使用磁贴请重新正确设置API端口
 external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip"
 external-ui: "./webroot/Zash/"
@@ -69,18 +63,21 @@ proxy-providers: # ← 此函数位置请勿变动！此为模块更新时备份
     <<: *p
     override:
       additional-prefix: "Main："
+      <<: *proxy_fp
     path: ./proxies/1.主要地址.yaml
     url: "此处引入您的Clash订阅链接地址"
   2.备用地址:
     <<: *p
     override:
       additional-prefix: "Minor："
+      <<: *proxy_fp
     path: ./proxies/2.备用地址.yaml
     url: "此处引入您的Clash订阅链接地址"
   3.额外地址:
     <<: *p
     override:
       additional-prefix: "Additi："
+      <<: *proxy_fp
     path: ./proxies/3.额外地址.yaml
     url: "此处引入您的Clash订阅链接地址"
 # —————————
@@ -148,13 +145,11 @@ dns:
   fake-ip-range: 198.18.0.0/16
   fake-ip-range6: fdfe:dcba:9876::/64
   enhanced-mode: fake-ip # redir-host
-  fake-ip-filter-mode: rule
   fake-ip-filter:
-    - "RULE-SET,CN_域,real-ip"
-    - "RULE-SET,Private_域,real-ip"
-    - "RULE-SET,GoogleFCM_域,real-ip"
-    - "RULE-SET,自定义规则,real-ip"
-    - "MATCH,fake-ip"
+    - "RULE-SET:CN_域"
+    - "RULE-SET:Private_域"
+    - "RULE-SET:GoogleFCM_域"
+    - "RULE-SET:自定义规则"
   proxy-server-nameserver:
     - https://1.12.12.12:443/dns-query#🌐 本机·本地直连&h3=false
     - https://120.53.53.53:443/dns-query#🌐 本机·本地直连&h3=false
