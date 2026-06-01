@@ -8,7 +8,7 @@
 
 | 特性 | `config.yaml` | `config.yaml` | `config.yaml` | `config.yaml` |
 | :--- | :--- | :--- | :--- | :--- |
-| **大小** | 4.2 KB | 8.2 KB | 19.0 KB | 5.6 KB |
+| **大小** | 4.2 KB | 8.2 KB | 18.7 KB | 5.6 KB |
 | **混合端口** | 7890 | 7890 | 7890 | 7890 |
 | **面板地址** | 0.0.0.0:9090 | 127.0.0.1:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 |
 | **运行模式** | Rule | rule | Rule | rule |
@@ -90,7 +90,7 @@
 ### 👤 Surfing
 
 #### 📝 config.yaml
-- **路径**: `Surfing/config.yaml` | **大小**: 19.0 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Mobile_Modules/Surfing/config.yaml)
+- **路径**: `Surfing/config.yaml` | **大小**: 18.7 KB | [查看源码](https://github.com/weblzl/mihomo_yamls/blob/main/THEYAMLS/Mobile_Modules/Surfing/config.yaml)
 - **模式**: Rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (34个)</summary>
