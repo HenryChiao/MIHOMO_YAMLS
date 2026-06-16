@@ -1,0 +1,38 @@
+name: Sync and Create Release
+
+on:
+  workflow_dispatch: # 手动触发
+
+permissions:
+  contents: write # 必须有写入权限来创建 Release
+
+jobs:
+  build_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. 创建临时下载目录
+      - name: Create Temporary Directory
+        run: mkdir -p ./temp_assets
+
+      # 2. 从你指定的仓库下载最新 Release 的所有文件
+      - name: Download Upstream Assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download --repo hbsx/MIHOMO_YAMLS --dir ./temp_assets
+
+      # 3. 核心步骤：直接在你的本地仓库创建一个新的 Release，并把文件传上去
+      # 获取当前时间作为版本号（例如 2026.06.15）
+      - name: Create New Release and Upload Assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="v$(date +'%Y.%m.%d-%H%M')"
+          echo "正在创建 Release，版本号为: $TAG_NAME"
+          
+          gh release create "$TAG_NAME" ./temp_assets/* \
+            --title "同步更新-$TAG_NAME" \
+            --note "自动同步自上游 Release 的最新文件"
