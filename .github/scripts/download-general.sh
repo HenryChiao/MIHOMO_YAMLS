@@ -8,8 +8,11 @@ https://raw.githubusercontent.com/yiteei/Share/refs/heads/Proxy/config/redir-hos
 https://raw.githubusercontent.com/yiteei/Share/refs/heads/Proxy/config/fake-ip.yaml|THEYAMLS/General_Config/Yiteei/fake-ip_config.yaml
 https://raw.githubusercontent.com/JohnsonRan/CRules/refs/heads/master/config/AIB.yaml|THEYAMLS/General_Config/JohnsonRan/AIB.yaml
 https://raw.githubusercontent.com/JohnsonRan/CRules/refs/heads/master/config/AIO.yaml|THEYAMLS/General_Config/JohnsonRan/AIO.yaml
-https://raw.githubusercontent.com/666OS/YYDS/main/mihomo/config/MihomoPro.yaml|THEYAMLS/General_Config/666OS/MihomoPro_Config.yaml
-https://raw.githubusercontent.com/666OS/YYDS/main/mihomo/config/OneTouch.yaml|THEYAMLS/General_Config/666OS/OneTouch_Config.yaml
+https://raw.githubusercontent.com/666OS/YYDS/refs/heads/main/mihomo/config/legacy/MihomoPro.yaml|THEYAMLS/General_Config/666OS/MihomoPro_Config.yaml
+https://raw.githubusercontent.com/666OS/YYDS/refs/heads/main/mihomo/config/legacy/OneTouch.yaml|THEYAMLS/General_Config/666OS/OneTouch_Config.yaml
+https://raw.githubusercontent.com/666OS/YYDS/refs/heads/main/mihomo/config/en/Lite_en.yaml|THEYAMLS/General_Config/666OS/Lite_en.yaml
+https://raw.githubusercontent.com/666OS/YYDS/refs/heads/main/mihomo/config/en/Mini_en.yaml|THEYAMLS/General_Config/666OS/Mini_en.yaml
+https://raw.githubusercontent.com/666OS/YYDS/refs/heads/main/mihomo/config/en/Pro_en.yaml|THEYAMLS/General_Config/666OS/Pro_en.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoAIO.yaml|THEYAMLS/General_Config/HenryChiao/MihomoAIO.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoProMax.yaml|THEYAMLS/General_Config/HenryChiao/MihomoProMax.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/General/MihomoProPlus.yaml|THEYAMLS/General_Config/HenryChiao/MihomoProPlus.yaml
@@ -35,8 +38,6 @@ https://gist.githubusercontent.com/liuran001/5ca84f7def53c70b554d3f765ff86a33/ra
 https://raw.githubusercontent.com/wanswu/my-backup/refs/heads/main/clash/config.yaml|THEYAMLS/General_Config/wanswu/config.yaml
 https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/mihomo/Client/config.yaml|THEYAMLS/General_Config/Repcz/config.yaml
 https://raw.githubusercontent.com/Repcz/Tool/refs/heads/X/mihomo/Client/Lite/config.yaml|THEYAMLS/General_Config/Repcz/config_lite.yaml
-https://gist.github.com/SHICHUNHUI88/099059cfce913ef7b80496fbf4241324/raw/us_la.yaml|THEYAMLS/General_Config/SHICHUNHUI88/us_la.yaml
-https://gist.github.com/SHICHUNHUI88/b8e2ee8ca31a91f3dbc130e4e35e9996/raw/Clash-Airport.yaml|THEYAMLS/General_Config/SHICHUNHUI88/Clash-Airport.yaml
 https://raw.githubusercontent.com/lvbibir/clash/refs/heads/master/mihomo.yaml|THEYAMLS/General_Config/lvbibir/mihomo.yaml
 https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/Seven1_fallback_Geo.yaml|THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Geo.yaml
 https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/Seven1_fallback_Rule-Set.yaml|THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml
