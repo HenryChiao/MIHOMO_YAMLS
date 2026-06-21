@@ -155,7 +155,7 @@ proxy-groups:
   - {name: "📕小红书", type: select, icon: https://gh-proxy.com/https://raw.githubusercontent.com/bgpeer/icons/main/color/xiaohongshu_1.png, proxies: *GLOBAL_WITH_DIRECT, <<: *AUTO_COMMON}
   - {name: "⛩️阿里腾讯", type: select, icon: https://gh-proxy.com/https://raw.githubusercontent.com/bgpeer/icons/main/color/alibaba_tencent.png, proxies: ["🎯直连","🌍全球加速"]}
   - {name: "🎯直连", type: select, icon: https://gh-proxy.com/https://raw.githubusercontent.com/bgpeer/icons/main/color/china.png, proxies: ["DIRECT","🌍全球加速"], url: "http://connect.rom.miui.com/generate_204"}
-  - {name: "🤡漏网之鱼", type: select, icon: https://gh-proxy.com/https://raw.githubusercontent.com/bgpeer/icons/main/color/match.png, proxies: ["🌍全球加速","🎯直连"]}
+  - {name: "🤡漏网之鱼", type: select, icon: https://gh-proxy.com/https://raw.githubusercontent.com/bgpeer/icons/main/color/match_1.png, proxies: ["🌍全球加速","🎯直连"]}
   - {name: "🇭🇰香港随机", <<: *URLTEST_COMMON, filter: "🇭🇰|HK|Hong|hong|香港|深港|沪港|京港|港"}
   - {name: "🇹🇼台湾随机", <<: *URLTEST_COMMON, filter: "🇹🇼|TW|TWN|Taiwan|Taipei|台湾|台灣|台北"}
   - {name: "🇯🇵日本随机", <<: *URLTEST_COMMON, filter: "🇯🇵|JP|Japan|japan|Tokyo|东京|大阪|日本"}

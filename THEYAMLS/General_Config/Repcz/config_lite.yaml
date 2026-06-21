@@ -1,6 +1,6 @@
 # Author:https://github.com/Repcz
 # TG:https://t.me/@LUCYChannel_1024
-# 最后更新时间: 2026-4-27 17:40
+# 最后更新时间: 2026-6-21 13:00
 #
 # Mihomo Version ≥ 1.19.23
 # 官方文档: https://github.com/MetaCubeX/mihomo/blob/Meta/docs/config.yaml
@@ -23,10 +23,10 @@ unified-delay: true
 
 geodata-mode: true
 geox-url:
-  geoip: "https://git.repcz.link/raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip.dat"
-  geosite: "https://git.repcz.link/github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
-  mmdb: "https://git.repcz.link/raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
-  asn: "https://git.repcz.link/raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb"
+  geoip: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/geoip.dat"
+  geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
+  mmdb: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb"
+  asn: "https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb"
 
 profile: { store-selected: true, store-fake-ip: false }
 sniffer: { enable: true, sniff: { HTTP: { ports: [80], override-destination: true }, TLS: { ports: [443, 8443] }, QUIC: { ports: [443, 8443] } } }

@@ -1,4 +1,4 @@
-# update: 2026-06-19
+# update: 2026-06-21
 # 简介: https://github.com/echs-top/proxy
 
 
@@ -70,7 +70,7 @@ hosts:
   google.cn: google.com
   cn.bing.com: global.bing.com
 direct-dns: &direct-dns ['https://dns.alidns.com/dns-query#直接连接','https://doh.pub/dns-query#直接连接&h3=false']
-proxy-dns: &proxy-dns ['https://dns.google/dns-query#代理DNS','https://dns.quad9.net/dns-query#代理DNS']
+proxy-dns: &proxy-dns ['https://dns.google/dns-query#代理DNS&ecs=8.8.8.8/24&ecs-override=true','https://dns.quad9.net/dns-query#代理DNS&ecs=9.9.9.9/24&ecs-override=true']
 dns: 
   enable: true
   ipv6: true

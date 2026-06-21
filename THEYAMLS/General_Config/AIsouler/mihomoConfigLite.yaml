@@ -48,6 +48,7 @@ proxy-providers:
 
 allow-lan: true
 ipv6: true
+log-level: info
 bind-address: '*'
 unified-delay: true
 tcp-concurrent: true
@@ -181,6 +182,12 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple@cn.mrs'
     path: './ruleset/apple@cn.mrs'
     path-in-bundle: 'geo/geosite/apple@cn.mrs'
+  microsoft_cn:
+    <<: *rule_providers_domain
+    format: mrs
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft@cn.mrs'
+    path: './ruleset/microsoft@cn.mrs'
+    path-in-bundle: 'geo/geosite/microsoft@cn.mrs'
   ai:
     <<: *rule_providers_domain
     format: mrs
@@ -199,12 +206,12 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs'
     path: './ruleset/telegram_ip.mrs'
     path-in-bundle: 'geo/geoip/telegram.mrs'
-  geolocation-!cn:
+  gfw:
     <<: *rule_providers_domain
     format: mrs
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs'
-    path: './ruleset/geolocation-!cn.mrs'
-    path-in-bundle: 'geo/geosite/geolocation-!cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/gfw.mrs'
+    path: './ruleset/gfw.mrs'
+    path-in-bundle: 'geo/geosite/gfw.mrs'
   cn_additional:
     <<: *rule_providers_domain
     format: mrs
@@ -320,6 +327,7 @@ proxy-groups:
 
   - name: 'AI'
     <<: [*group_common_select, *proxies_default]
+    default-selected: '日本'
     icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png'
 
   - name: 'Telegram'
@@ -408,6 +416,9 @@ proxy-groups:
 
 # --- 路由规则 (Rules) ---
 rules:
+  # 禁用国外 QUIC 流量
+  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_additional),(RULE-SET,cn_ip,no-resolve)))))),REJECT
+
   # 私有网络直连
   - RULE-SET,private,直连
   - RULE-SET,private_ip,直连,no-resolve
@@ -416,6 +427,7 @@ rules:
   - RULE-SET,games_cn,直连
   - RULE-SET,epicgames,直连
   - RULE-SET,apple_cn,直连
+  - RULE-SET,microsoft_cn,直连
   - DOMAIN,fsend.cn,直连
   - DOMAIN,international-gfe.download.nvidia.com,直连
 
@@ -428,7 +440,7 @@ rules:
   - RULE-SET,telegram_ip,Telegram,no-resolve
 
   # 兜底规则
-  - RULE-SET,geolocation-!cn,默认代理
+  - RULE-SET,gfw,默认代理
   - RULE-SET,cn_additional,直连
   - RULE-SET,cn_ip,直连
   - MATCH,漏网之鱼
