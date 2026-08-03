@@ -38,7 +38,7 @@ FilterOT: &FilterOT '^(?!.*(DIRECT|直接连接|美|港|坡|台|新|日|韩|奥|
 FilterAL: &FilterAL '^(?!.*(DIRECT|直接连接|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author))'
 
 # 策略组代理列表模板 - 预定义的代理节点优先级排序
-SelectFB: &SelectFB {type: select, proxies: [故障转移, 香港策略, 狮城策略, 日本策略, 韩国策略, 美国策略, 台湾策略, 欧盟策略, 冷门自选, 全球手动, 直接连接]}
+SelectFB: &SelectFB {type: select, proxies: [全球自动,全球均衡-散列,全球均衡-轮询,故障转移, 香港策略, 狮城策略, 日本策略, 韩国策略, 美国策略, 台湾策略, 欧盟策略, 冷门自选, 全球手动, 直接连接]}
 SelectPY: &SelectPY {type: select, proxies: [默认代理, 故障转移, 香港策略, 狮城策略, 日本策略, 韩国策略, 美国策略, 台湾策略, 欧盟策略, 冷门自选, 全球手动, 直接连接]}
 SelectDC: &SelectDC {type: select, proxies: [直接连接, 默认代理, 故障转移, 香港策略, 狮城策略, 日本策略, 韩国策略, 美国策略, 台湾策略, 欧盟策略, 冷门自选, 全球手动]}
 SelectHK: &SelectHK {type: select, proxies: [香港策略, 默认代理, 故障转移, 狮城策略, 日本策略, 韩国策略, 美国策略, 台湾策略, 欧盟策略, 冷门自选, 全球手动, 直接连接]}
@@ -235,6 +235,7 @@ proxy-groups:
   - {name: 全球手动,     type: select, include-all: true, filter: *FilterAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Clubhouse.png}
 
   # ==================== 自动测速组 ====================
+  - {name: 全球自动,     <<: *BaseUT, include-all: true, filter: *FilterAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
   - {name: 香港自动,     <<: *BaseUT, include-all: true, filter: *FilterHK, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
   - {name: 台湾自动,     <<: *BaseUT, include-all: true, filter: *FilterTW, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
   - {name: 狮城自动,     <<: *BaseUT, include-all: true, filter: *FilterSG, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
@@ -244,6 +245,7 @@ proxy-groups:
   - {name: 欧盟自动,     <<: *BaseUT, include-all: true, filter: *FilterEU, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Auto.png}
 
   # ==================== 负载均衡-散列 ====================
+  - {name: 全球均衡-散列, <<: *BaseCH, include-all: true, filter: *FilterAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
   - {name: 香港均衡-散列, <<: *BaseCH, include-all: true, filter: *FilterHK, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
   - {name: 台湾均衡-散列, <<: *BaseCH, include-all: true, filter: *FilterTW, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
   - {name: 狮城均衡-散列, <<: *BaseCH, include-all: true, filter: *FilterSG, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
@@ -253,6 +255,7 @@ proxy-groups:
   - {name: 欧盟均衡-散列, <<: *BaseCH, include-all: true, filter: *FilterEU, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png}
 
   # ==================== 负载均衡-轮询 ====================
+  - {name: 全球均衡-轮询, <<: *BaseCR, include-all: true, filter: *FilterAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png}
   - {name: 香港均衡-轮询, <<: *BaseCR, include-all: true, filter: *FilterHK, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png}
   - {name: 台湾均衡-轮询, <<: *BaseCR, include-all: true, filter: *FilterTW, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png}
   - {name: 狮城均衡-轮询, <<: *BaseCR, include-all: true, filter: *FilterSG, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin.png}
