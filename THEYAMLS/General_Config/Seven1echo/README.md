@@ -8,32 +8,33 @@
 
 | 特性 | `Seven1_fallback_Geo.yaml` | `Seven1_fallback_Rule-Set.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 20.8 KB | 23.4 KB |
+| **大小** | 21.0 KB | 23.7 KB |
 | **混合端口** | 7893 | 7893 |
 | **面板地址** | 0.0.0.0:9090 | 0.0.0.0:9090 |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
-| **策略组** | **40** | **40** |
-| **规则数** | **26** | **26** |
+| **策略组** | **41** | **41** |
+| **规则数** | **27** | **27** |
 
 ## 📄 配置详情
 
 #### 📝 Seven1_fallback_Geo.yaml
-- **路径**: `Seven1_fallback_Geo.yaml` | **大小**: 20.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Geo.yaml)
+- **路径**: `Seven1_fallback_Geo.yaml` | **大小**: 21.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Geo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (40个)</summary>
+<summary>🔍 策略组 (41个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 一键代理 | `select` |
-| 👆 AI(国外) | `select` |
+| 👆 AI | `select` |
 | 👆 YouTube | `select` |
 | 👆 Google | `select` |
 | 👆 GitHub | `select` |
 | 👆 OneDrive | `select` |
 | 👆 Microsoft | `select` |
 | 👆 Apple | `select` |
+| 👆 Steam | `select` |
 | 👆 TikTok | `select` |
 | 👆 Twitter(X) | `select` |
 | 👆 Telegram | `select` |
@@ -45,26 +46,26 @@
 | 👆 漏网之鱼 | `select` |
 | 👆 国内直连 | `select` |
 | 🔧 香港-故转 | `fallback` |
-| 🔧 台湾-故转 | `fallback` |
-| ... | 还有 20 个 |
+| ... | 还有 21 个 |
 </details>
 
 #### 📝 Seven1_fallback_Rule-Set.yaml
-- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 23.4 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
+- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 23.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (40个)</summary>
+<summary>🔍 策略组 (41个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 一键代理 | `select` |
-| 👆 AI(国外) | `select` |
+| 👆 AI | `select` |
 | 👆 YouTube | `select` |
 | 👆 Google | `select` |
 | 👆 GitHub | `select` |
 | 👆 OneDrive | `select` |
 | 👆 Microsoft | `select` |
 | 👆 Apple | `select` |
+| 👆 Steam | `select` |
 | 👆 TikTok | `select` |
 | 👆 Twitter(X) | `select` |
 | 👆 Telegram | `select` |
@@ -76,6 +77,5 @@
 | 👆 漏网之鱼 | `select` |
 | 👆 国内直连 | `select` |
 | 🔧 香港-故转 | `fallback` |
-| 🔧 台湾-故转 | `fallback` |
-| ... | 还有 20 个 |
+| ... | 还有 21 个 |
 </details>
