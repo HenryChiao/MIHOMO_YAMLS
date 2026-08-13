@@ -121,7 +121,7 @@ skip-auth-prefixes:                       # 免密 IP 段 (局域网内免输密
 # 实验性功能
 experimental:
   quic-go-disable-gso: true               # 禁用 GSO (解决部分 OpenWrt 固件的 UDP 兼容性问题) 
-  recv-msg-x: true                        # 推荐开启：高速下载时显著降低CPU占用 (MacOS)
+  recv-msg-x: true                        # 推荐开启：下载时降低CPU占用 (MacOS)
   send-msg-x: false                       # 推荐关闭：防止多线程大流量下内核假死 (MacOS)
      
 # 管理面板配置
@@ -181,6 +181,9 @@ tun:
     - Private-IP                           # 绕过局域网内网流量
     - Trackers-IP                          # 绕过 BT/PT 下载服务器 IP
     - China-IP                             # 绕过CN IP
+
+hosts:
+  services.googleapis.cn: services.googleapis.com  # 谷歌商店  解决无法下载的问题
 
 # DNS配置
 dns:
@@ -261,12 +264,12 @@ proxy-groups:
   - { name: 冷门节点-智能,   <<: [*BaseST, *FilterEU], include-all: true, policy-priority: *PriorityNR }
 
   # 线路特性层 - 手动选择节点，根据自己需求选择节点，建议修改位置顺序发挥线路优势,（不需要该策略可以在组名上添加 # 注释）
+  - { name: 家宽-手选,     <<: [*BaseSL, *FilterJK], include-all: true }
   - { name: 香港-手选,     <<: [*BaseSL, *FilterHK], include-all: true }
   - { name: 台湾-手选,     <<: [*BaseSL, *FilterTW], include-all: true }
   - { name: 日本-手选,     <<: [*BaseSL, *FilterJP], include-all: true }
   - { name: 狮城-手选,     <<: [*BaseSL, *FilterSG], include-all: true }
   - { name: 美国-手选,     <<: [*BaseSL, *FilterUS], include-all: true }
-  - { name: 家宽-手选,     <<: [*BaseSL, *FilterJK], include-all: true }
   - { name: 低倍率-手选,    <<: [*BaseSL, *FilterLR], include-all: true }
   - { name: 高倍率-手选,    <<: [*BaseSL, *FilterHR], include-all: true }
   - { name: 冷门节点-手选,  <<: [*BaseSL, *FilterEU], include-all: true }
@@ -279,8 +282,7 @@ rules:
 #- SRC-IP-CIDR,你需要走直连的IP/32,国内直连         # 需要强制走国内的IP
 
 # ==================== 阻止 QUIC/APP内置DOH ====================
-  - AND,(DST-PORT,443),(NETWORK,UDP),(NOT,((RULE-SET,China))),REJECT
-  - AND,(DST-PORT,443),(NETWORK,UDP),(NOT,((RULE-SET,China-IP))),REJECT
+  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((RULE-SET,China))),(NOT,((RULE-SET,China-IP,no-resolve)))),REJECT
   - RULE-SET,DNS-IP,REJECT,no-resolve
   - RULE-SET,Category-DoH,REJECT
   - RULE-SET,HTTPDNS-CN,REJECT              

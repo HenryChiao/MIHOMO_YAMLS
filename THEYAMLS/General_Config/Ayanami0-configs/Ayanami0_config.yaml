@@ -213,6 +213,17 @@ proxy-groups:
       - US
       - WD
 
+  - name: Google
+    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
+    type: select
+    proxies:
+      - HK
+      - SG
+      - JP
+      - TW
+      - US
+      - WD
+
   - name: ADS
     icon: "https://raw.githubusercontent.com/GitMetaio/Surfing/rm/Home/icon/No-ads-all.svg"
     type: select
@@ -304,6 +315,14 @@ rule-providers:
     <<: *IPCIDR
     path: ./rules/Telegram_IP.mrs
     url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_IP.mrs"
+  Google:
+    <<: *Domain
+    path: ./rules/Google.mrs
+    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_Domain.mrs"
+  Google_IP:
+    <<: *IPCIDR
+    path: ./rules/Google_IP.mrs
+    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_IP.mrs"
   GoogleFCM:
     <<: *Domain
     path: ./rules/GoogleFCM.mrs
@@ -336,6 +355,8 @@ rules:
   - RULE-SET,Emby,Emby
   - RULE-SET,Telegram,PROXY
   - RULE-SET,Telegram_IP,PROXY,no-resolve
+  - RULE-SET,Google,Google
+  - RULE-SET,Google_IP,Google
   - RULE-SET,Global,PROXY
   - RULE-SET,Global_IP,PROXY
 

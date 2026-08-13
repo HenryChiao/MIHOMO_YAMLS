@@ -63,11 +63,11 @@ hosts:
   "dns.google": ["8.8.8.8", "8.8.4.4"]
 
 proxy-groups:
-  - {name: 香港, type: select, include-all: true, filter: "(?i)香港|hk", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Hong_Kong.png"}
-  - {name: 新加坡, type: select, include-all: true, filter: "(?i)新加坡|sg", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Singapore.png"}
-  - {name: 日本, type: select, include-all: true, filter: "(?i)日本|jp", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Japan.png"}
-  - {name: 美国, type: select, include-all: true, filter: "(?i)美国|us", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/United_States.png"}
-  - {name: 其他, type: select, include-all: true, exclude-filter: "(?i)剩余|到期|香港|hk|新加坡|sg|日本|jp|美国|us", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Server.png"}
+  - {name: 香港, type: select, include-all: true, filter: "(?i)香港|hk|hongkong|hong kong", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Hong_Kong.png"}
+  - {name: 新加坡, type: select, include-all: true, filter: "(?i)新加坡|sg|singapore", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Singapore.png"}
+  - {name: 日本, type: select, include-all: true, filter: "(?i)日本|jp|japan", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Japan.png"}
+  - {name: 美国, type: select, include-all: true, filter: "(?i)美国|us|unitedstates|united states", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/United_States.png"}
+  - {name: 其他, type: select, include-all: true, exclude-filter: "(?i)剩余|到期|香港|hk|hongkong|hong kong|新加坡|sg|singapore|日本|jp|japan|美国|us|unitedstates|united states", <<: *check, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Server.png"}
 
   - {name: 代理, <<: [*pr, *check], default-selected: 香港, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Proxy.png"}
   - {name: AI, <<: [*pr, *check], default-selected: 美国, icon: "https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/ChatGPT.png"}

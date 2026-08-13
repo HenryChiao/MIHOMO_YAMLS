@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Geo
-# 版本： V2026.8.7
+# 版本： V2026.8.12
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -128,13 +128,14 @@ dns:
 # ══ 服务组 ══
 proxy-groups:
   - {name: 一键代理,      <<: *Anchor_PG, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Rocket.png}
-  - {name: AI(国外),     <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Ai.png}
+  - {name: AI,           <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Ai.png}
   - {name: YouTube,      <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/YouTube.png}
   - {name: Google,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Google.png}
   - {name: GitHub,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/GitHub.png}
   - {name: OneDrive,     <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/OneDrive.png}
   - {name: Microsoft,    <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png}
   - {name: Apple,        <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png}
+  - {name: Steam,        <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Steam.png}
   - {name: TikTok,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
   - {name: Twitter(X),   <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
   - {name: Telegram,     <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Telegram.png}
@@ -177,13 +178,14 @@ proxy-groups:
 rules:
   - "GEOSITE,private,国内直连"                                           # Private
   - "GEOIP,private,国内直连,no-resolve"                                  # Private
-  - "GEOSITE,category-ai-!cn,AI(国外)"                                  # AI(国外)
+  - "GEOSITE,category-ai-!cn,AI"                                        # AI(国际)
   - "GEOSITE,youtube,YouTube"                                           # YouTube
   - "GEOSITE,google,Google"                                             # Google
   - "GEOSITE,github,GitHub"                                             # GitHub
   - "GEOSITE,onedrive,OneDrive"                                         # OneDrive
   - "GEOSITE,microsoft,Microsoft"                                       # 微软服务
   - "GEOSITE,apple,Apple"                                               # 苹果服务
+  - "GEOSITE,steam,Steam"                                               # Steam
   - "GEOSITE,tiktok,TikTok"                                             # TikTok
   - "GEOSITE,twitter,Twitter(X)"                                        # Twitter(X)
   - "GEOSITE,telegram,Telegram"                                         # Telegram
