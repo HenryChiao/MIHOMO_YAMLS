@@ -6,28 +6,17 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `config_lite.yaml` | `config.yaml` |
+| 特性 | `config.yaml` | `config_lite.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 2.9 KB | 7.3 KB |
+| **大小** | 7.3 KB | 2.9 KB |
 | **混合端口** | 7893 | 7893 |
 | **面板地址** | - | - |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
-| **策略组** | **1** | **17** |
-| **规则数** | **16** | **24** |
+| **策略组** | **17** | **1** |
+| **规则数** | **24** | **16** |
 
 ## 📄 配置详情
-
-#### 📝 config_lite.yaml
-- **路径**: `config_lite.yaml` | **大小**: 2.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Repcz/config_lite.yaml)
-- **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
-<details>
-<summary>🔍 策略组 (1个)</summary>
-
-| 名称 | 类型 |
-| :--- | :--- |
-| 👆 Proxy | `select` |
-</details>
 
 #### 📝 config.yaml
 - **路径**: `config.yaml` | **大小**: 7.3 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Repcz/config.yaml)
@@ -54,4 +43,15 @@
 | ♻️ Singapore | `url-test` |
 | ♻️ Japan | `url-test` |
 | ♻️ Taiwan | `url-test` |
+</details>
+
+#### 📝 config_lite.yaml
+- **路径**: `config_lite.yaml` | **大小**: 2.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Repcz/config_lite.yaml)
+- **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
+<details>
+<summary>🔍 策略组 (1个)</summary>
+
+| 名称 | 类型 |
+| :--- | :--- |
+| 👆 Proxy | `select` |
 </details>

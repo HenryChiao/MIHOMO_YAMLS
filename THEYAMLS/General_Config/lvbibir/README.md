@@ -7,10 +7,10 @@
 ## 📄 配置详情
 
 #### 📝 mihomo.yaml
-- **路径**: `mihomo.yaml` | **大小**: 15.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/lvbibir/mihomo.yaml)
+- **路径**: `mihomo.yaml` | **大小**: 15.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/lvbibir/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (29个)</summary>
+<summary>🔍 策略组 (19个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -28,11 +28,9 @@
 | 👆 🍀 Google | `select` |
 | 👆 📹 YouTube | `select` |
 | 👆 🐟 漏网之鱼 | `select` |
-| 👆 🇺🇸 美国节点 | `select` |
-| 👆 🇯🇵 日本节点 | `select` |
-| 👆 🇸🇬 狮城节点 | `select` |
-| 👆 🇹🇼 台湾节点 | `select` |
-| 👆 🇭🇰 香港节点 | `select` |
-| 🔧 🔯 美国故转 | `fallback` |
-| ... | 还有 9 个 |
+| ♻️ ♻️ 美国自动 | `url-test` |
+| ♻️ ♻️ 日本自动 | `url-test` |
+| ♻️ ♻️ 狮城自动 | `url-test` |
+| ♻️ ♻️ 台湾自动 | `url-test` |
+| ♻️ ♻️ 香港自动 | `url-test` |
 </details>
