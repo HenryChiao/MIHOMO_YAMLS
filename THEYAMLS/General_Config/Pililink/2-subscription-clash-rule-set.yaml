@@ -484,6 +484,10 @@ rule-providers:
 
 rules:
   - RULE-SET,private,🔒 私有网络
+  # Google OAuth 登录依赖:ssl.gstatic.com 被 ACL4SSR UnBan 误直连、recaptcha.net 被 google-cn 直连,
+  # 与 accounts.google.com 出口 IP 不一致导致登录点击无反应(XTLS/Xray-core#1618),统一走谷歌服务
+  - DOMAIN-SUFFIX,gstatic.com,🇬 谷歌服务
+  - DOMAIN-SUFFIX,recaptcha.net,🇬 谷歌服务
   - RULE-SET,unban,🎯 全球直连
   - RULE-SET,myignore,DIRECT
   - RULE-SET,ads,🛑 广告拦截

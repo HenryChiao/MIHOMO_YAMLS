@@ -94,9 +94,9 @@ proxies:
 mode: rule                                # 运行模式：规则模式 (Global/Rule/Direct)
 port: 7890                                # HTTP 代理端口
 socks-port: 7891                          # SOCKS5 代理端口
-redir-port: 7892                          # Redir 端口 (透明代理用)
-mixed-port: 7893                          # 混合端口 (HTTP + SOCKS5)
-tproxy-port: 7895                         # TProxy 端口 (Linux/安卓透明代理用)
+redir-port: 7892                          # Redir 透明代理端口
+mixed-port: 7893                          # HTTP + SOCKS5 混合代理端口
+tproxy-port: 7895                         # TProxy 透明代理端口
 ipv6: true                                # 开启 IPv6 支持
 allow-lan: false                          # 允许局域网连接
 bind-address: '*'                         # 绑定地址 (* 代表所有网卡)

@@ -42,9 +42,11 @@ proxy-providers:
 
 # 节点配置，可添加自定义节点
 proxies:
+  - { name: '🇨🇳 直连 | 双栈', type: direct }
   - { name: '🇨🇳 直连 | IPv4优先', type: direct, ip-version: ipv4-prefer }
   - { name: '🇨🇳 直连 | IPv6优先', type: direct, ip-version: ipv6-prefer }
-  - { name: '🇨🇳 直连 | 双栈', type: direct }
+  - { name: '🇨🇳 直连 | 仅IPv4', type: direct, ip-version: ipv4 }
+  - { name: '🇨🇳 直连 | 仅IPv6', type: direct, ip-version: ipv6 }
 
 # --- 基础全局配置 ---
 
@@ -67,8 +69,9 @@ profile:
   store-fake-ip: true
 
 # 国内外 DNS 定义
-chinaDNS: &chinaDNS ['https://dns.alidns.com/dns-query#DIRECT', 'https://doh.pub/dns-query#DIRECT']
-foreignDNS: &foreignDNS ['https://dns.cloudflare.com/dns-query#默认代理', 'https://dns.google/dns-query#默认代理']
+chinaDNS: &chinaDNS ['223.5.5.5', '119.29.29.29']
+chinaDohDNS: &chinaDohDNS ['https://223.5.5.5/dns-query#DIRECT', 'https://1.12.12.12/dns-query#DIRECT']
+foreignDNS: &foreignDNS ['https://cloudflare-dns.com/dns-query#默认代理', 'https://dns.google/dns-query#默认代理']
 
 dns:
   enable: true
@@ -80,17 +83,15 @@ dns:
   fake-ip-range: 198.18.0.1/15
   fake-ip-range6: 2001:2::1/48
   fake-ip-filter: ['rule-set:private', 'rule-set:fakeip_filter']
-  proxy-server-nameserver: *chinaDNS
-  default-nameserver: ['223.5.5.5', '119.29.29.29']
+  proxy-server-nameserver: *chinaDohDNS
+  default-nameserver: *chinaDNS
   nameserver: *foreignDNS
   nameserver-policy:
     'rule-set:cn': *chinaDNS
   direct-nameserver: ['system', '223.5.5.5', '119.29.29.29']
 
 hosts:
-  'dns.alidns.com': ['223.5.5.5', '223.6.6.6']
-  'doh.pub': ['1.12.12.12', '120.53.53.53']
-  'dns.cloudflare.com': ['1.1.1.1', '1.0.0.1']
+  'cloudflare-dns.com': ['1.1.1.1', '1.0.0.1']
   'dns.google': ['8.8.8.8', '8.8.4.4']
 
   # 解决谷歌商店无法下载的问题
@@ -296,6 +297,11 @@ rule-providers:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs'
     path: './ruleset/emby.mrs'
+    path-in-bundle: 'geo/geosite/category-emby.mrs'
+  emos:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/binaryu/emos-proxy-rule@main/rules/emos-mihomo.mrs'
+    path: './ruleset/emos.mrs'
     path-in-bundle: 'geo/geosite/category-emby.mrs'
   pikpak:
     <<: *rule_providers_domain
@@ -563,7 +569,7 @@ proxy-groups:
 
   - name: '直连'
     <<: *group_common_select
-    proxies: ['🇨🇳 直连 | 双栈', '🇨🇳 直连 | IPv4优先', '🇨🇳 直连 | IPv6优先']
+    proxies: ['🇨🇳 直连 | 双栈', '🇨🇳 直连 | IPv4优先', '🇨🇳 直连 | IPv6优先', '🇨🇳 直连 | 仅IPv4', '🇨🇳 直连 | 仅IPv6']
     url: 'https://connectivitycheck.platform.hicloud.com/generate_204'
     icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/China_Map.png'
 
@@ -675,6 +681,7 @@ rules:
   - RULE-SET,tiktok,TikTok
   - RULE-SET,twitter,Twitter
   - RULE-SET,emby,Emby
+  - RULE-SET,emos,Emby
   - DOMAIN-SUFFIX,mb3admin.com,Emby
   - DOMAIN-SUFFIX,nubebelle.com,Emby
   - DOMAIN-KEYWORD,emby,Emby

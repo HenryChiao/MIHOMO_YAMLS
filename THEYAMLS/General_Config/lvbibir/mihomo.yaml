@@ -8,7 +8,6 @@ ipv6: false
 unified-delay: true
 log-level: warning
 find-process-mode: strict
-global-client-fingerprint: chrome
 tcp-concurrent: true
 keep-alive-idle: 600
 keep-alive-interval: 15
@@ -18,7 +17,6 @@ profile:
 lan-allowed-ips:
   - 0.0.0.0/0
   - ::/0
-  - 127.0.0.1/8
 
 secret: 123456
 external-controller: 0.0.0.0:9090
@@ -26,43 +24,27 @@ external-ui: ui
 external-ui-name: zashboard
 external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip
 
-# geodata-mode: true 
-# geodata-loader: memconservative
-# geo-update-interval: 24
-# geox-url:
-#   geosite: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat
-#   geoip: https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat
-
 # 订阅基础配置 [每天更新一次订阅节点，每 300 秒一次健康检查]
 NodeParam: &NodeParam {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}}
 
 proxy-providers:
 
-  150G_Mouth:
-    <<: *NodeParam        # 引用锚点
-    url: '---'
-    path: './proxy-providers/providers-1.yaml'
-
-  # 500G_LongTerm:
-  #   <<: *NodeParam
+  # liangxin:
+  #   <<: *NodeParam        # 引用锚点
   #   url: '---'
-  #   path: './proxy-providers/providers-2.yaml'
-  #   override:
-  #     additional-prefix: "2. "
+  #   path: './proxy-providers/providers-1.yaml'
+    # override:
+    #   additional-prefix: "1. "
 
-  # xingyun:
+  500G_LongTerm:
+    <<: *NodeParam
+    url: '---'
+    path: './proxy-providers/providers-2.yaml'
+
+  # ikuuu:
   #   <<: *NodeParam
   #   url: '---'
   #   path: './proxy-providers/providers-3.yaml'
-  #   override:
-  #     additional-prefix: "3. "
-
-  # pokemon:
-  #   <<: *NodeParam
-  #   url: '---'
-  #   path: './proxy-providers/providers-4.yaml'
-  #   override:
-  #     additional-prefix: "4. "
 
 # 入站
 tun:
@@ -80,7 +62,7 @@ tun:
 dns:
   enable: true
   cache-algorithm: arc
-  listen: 0.0.0.0:1053
+  listen: ":1053"
   ipv6: false
   respect-rules: true
   use-hosts: true
@@ -134,12 +116,12 @@ proxies:
 
 # 节点筛选
 # 按地区筛选
-FilterUS: &FilterUS '^(?=.*?(?i)(United States|America|\bUS\b|硅谷|家宽|洛杉矶|西雅图|纽约|芝加哥|拉斯维加斯|美帝|美国)).*(?<!(?i)(回国|过期|剩余|官网|网址|节点|订阅|机场|客服|校园|本土)).*$'
-FilterJP: &FilterJP '^(?=.*?(?i)(Japan|\bJP\b|东京|大阪|埼玉|川日|泉日|日区|日本)).*(?<!(?i)(回国|过期|剩余|官网|网址|节点|订阅|机场|客服|校园|本土)).*$'
-FilterSG: &FilterSG '^(?=.*?(?i)(Singapore|\bSG\b|新加坡|狮城|狮)).*(?<!(?i)(回国|过期|剩余|官网|网址|节点|订阅|机场|客服|校园|本土)).*$'
-FilterTW: &FilterTW '^(?=.*?(?i)(Taiwan|\bTW\b|\bTai(?:wan)?\b|台湾|台北|台中|台南|高雄|新竹)).*(?<!(?i)(回国|过期|剩余|官网|网址|节点|订阅|机场|客服|校园|本土)).*$'
-FilterHK: &FilterHK '^(?=.*?(?i)(\bHK\b|Hong.?Kong|香港|深港|广港|港区)).*(?<!(?i)(回国|过期|剩余|官网|网址|节点|订阅|机场|客服|校园|本土)).*$'
-FilterAll: &FilterAll '^(?!.*?(?i)(GB\s*[\|丨]\s*GB|GB|Traffic|Reset|Days|Left|Expire|Date|Direct|直连|套餐|流量|重置|剩余|到期|时间|频道)).*$'
+FilterUS: &FilterUS '(?i)(United States|America|\bUS\b|硅谷|家宽|洛杉矶|西雅图|纽约|芝加哥|拉斯维加斯|美帝|美国)'
+FilterJP: &FilterJP '(?i)(Japan|\bJP\b|东京|大阪|埼玉|川日|泉日|日区|日本)'
+FilterSG: &FilterSG '(?i)(Singapore|\bSG\b|新加坡|狮城|狮)'
+FilterTW: &FilterTW '(?i)(Taiwan|\bTW\b|\bTai(?:wan)?\b|台湾|台北|台中|台南|高雄|新竹)'
+FilterHK: &FilterHK '(?i)(\bHK\b|Hong.?Kong|香港|深港|广港|港区)'
+FilterExclude: &FilterExclude '(?i)(GB\s*[\|丨]\s*GB|Traffic|Reset|Days|Left|Expire|Date|Direct|回国|过期|官网|网址|订阅|机场|客服|校园|本土|免费|下载专用|直连|套餐|流量|重置|剩余|到期|时间|频道|英国|阿根廷|俄罗斯|土耳其|韩国|印度|德国|加拿大|澳大利亚|法国|乌克兰|Korea|Canada|France|Germany|Philippines|Netherlands|Turkey|Vietnam|Malaysia|Thailand|Britain)'
 
 ### 策略组基础配置
 # 手动选择
@@ -147,36 +129,34 @@ FilterAll: &FilterAll '^(?!.*?(?i)(GB\s*[\|丨]\s*GB|GB|Traffic|Reset|Days|Left|
 # 自动回退 [每 300 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次自动触发健康检查]
 # 负载均衡 [每 300 秒一次惰性健康检查，时延超过 2 秒判定为失败，失败 3 次自动触发健康检查]
 Select: &Select {type: select, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: false, include-all: true}
-UrlTest: &UrlTest {type: url-test, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: true, include-all: true, interval: 300, lazy: true, tolerance: 50, timeout: 2000, max-failed-times: 3}
-FallBack: &FallBack {type: fallback, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: true, include-all: true, interval: 300, lazy: true, timeout: 2000, max-failed-times: 3}
+UrlTest: &UrlTest {type: url-test, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: false, include-all: true, interval: 300, lazy: true, tolerance: 50, timeout: 2000, max-failed-times: 3}
+# FallBack: &FallBack {type: fallback, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: true, include-all: true, interval: 300, lazy: true, timeout: 2000, max-failed-times: 3}
 # LoadBalance: &LoadBalance {type: load-balance, url: 'https://www.gstatic.com/generate_204', disable-udp: false, hidden: true, include-all: true, interval: 300, lazy: true, strategy: consistent-hashing, timeout: 2000, max-failed-times: 3}
 
 # 稳定 IP 锚点
-pg_FallBack_US: &pg_FallBack_US [
-  🔯 美国故转, 🔯 日本故转, 🔯 狮城故转, 🔯 台湾故转, 🔯 香港故转
-]
+# pg_FallBack_US: &pg_FallBack_US [
+#   🔯 美国故转, 🔯 日本故转, 🔯 狮城故转, 🔯 台湾故转, 🔯 香港故转
+# ]
+
 # 所有节点锚点, 优先自动选择
 pg_Proxy: &pg_Proxy [
   ♻️ 自动选择, 🌐 全部节点, 直连,
   ♻️ 美国自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 台湾自动, ♻️ 香港自动, 
-  🔯 美国故转, 🔯 日本故转, 🔯 狮城故转, 🔯 台湾故转, 🔯 香港故转, 
-  🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇹🇼 台湾节点, 🇭🇰 香港节点
 ]
+
 # 所有节点锚点, 优先直连
 pg_Direct: &pg_Direct [
   直连, ♻️ 自动选择, 🌐 全部节点, 
   ♻️ 美国自动, ♻️ 日本自动, ♻️ 狮城自动, ♻️ 台湾自动, ♻️ 香港自动, 
-  🔯 美国故转, 🔯 日本故转, 🔯 狮城故转, 🔯 台湾故转, 🔯 香港故转, 
-  🇺🇸 美国节点, 🇯🇵 日本节点, 🇸🇬 狮城节点, 🇹🇼 台湾节点, 🇭🇰 香港节点
 ]
 
 proxy-groups:
   # --- 默认节点 ---
-  - {name: ♻️ 自动选择, <<: *UrlTest, filter: *FilterAll}
-  - {name: 🌐 全部节点, <<: *Select, filter: *FilterAll}
+  - {name: ♻️ 自动选择, <<: *UrlTest, exclude-filter: *FilterExclude}
+  - {name: 🌐 全部节点, <<: *Select}
   # --- 功能策略组 ---
   - {name: 🚀 默认代理, type: select, proxies: *pg_Proxy}
-  - {name: 🤖 AIGC, type: select, proxies: *pg_FallBack_US}
+  - {name: 🤖 AIGC, type: select, proxies: *pg_Proxy}
   - {name: 🎮 Steam, type: select, proxies: *pg_Direct}
   - {name: 🐬 OneDrive, type: select, proxies: *pg_Direct}
   - {name: Ⓜ️ Microsoft, type: select, proxies: *pg_Direct}
@@ -184,27 +164,27 @@ proxy-groups:
   - {name: ✖️ X, type: select, proxies: *pg_Proxy}
   - {name: 🎧 Sony, type: select, proxies: *pg_Proxy}
   - {name: ✈️ Telegram, type: select, proxies: *pg_Proxy}
-  - {name: 🍀 Google, type: select, proxies: *pg_FallBack_US}
+  - {name: 🍀 Google, type: select, proxies: *pg_Proxy}
   - {name: 📹 YouTube, type: select, proxies: *pg_Proxy}
   - {name: 🐟 漏网之鱼, type: select, proxies: *pg_Proxy}
-  # --- 地区节点选择 (Select - 手动选择) ---
-  - {name: 🇺🇸 美国节点, <<: *Select, filter: *FilterUS}
-  - {name: 🇯🇵 日本节点, <<: *Select, filter: *FilterJP}
-  - {name: 🇸🇬 狮城节点, <<: *Select, filter: *FilterSG}
-  - {name: 🇹🇼 台湾节点, <<: *Select, filter: *FilterTW}
-  - {name: 🇭🇰 香港节点, <<: *Select, filter: *FilterHK}
-  # --- 故障转移 (Fallback - 自动高可用) ---
-  - {name: 🔯 美国故转, <<: *FallBack, filter: *FilterUS}
-  - {name: 🔯 日本故转, <<: *FallBack, filter: *FilterJP}
-  - {name: 🔯 狮城故转, <<: *FallBack, filter: *FilterSG}
-  - {name: 🔯 台湾故转, <<: *FallBack, filter: *FilterTW}
-  - {name: 🔯 香港故转, <<: *FallBack, filter: *FilterHK}
   # --- 自动测速 (Url-Test - 选最快) ---
-  - {name: ♻️ 美国自动, <<: *UrlTest, filter: *FilterUS}
-  - {name: ♻️ 日本自动, <<: *UrlTest, filter: *FilterJP}
-  - {name: ♻️ 狮城自动, <<: *UrlTest, filter: *FilterSG}
-  - {name: ♻️ 台湾自动, <<: *UrlTest, filter: *FilterTW}
-  - {name: ♻️ 香港自动, <<: *UrlTest, filter: *FilterHK}
+  - {name: ♻️ 美国自动, <<: *UrlTest, filter: *FilterUS, exclude-filter: *FilterExclude}
+  - {name: ♻️ 日本自动, <<: *UrlTest, filter: *FilterJP, exclude-filter: *FilterExclude}
+  - {name: ♻️ 狮城自动, <<: *UrlTest, filter: *FilterSG, exclude-filter: *FilterExclude}
+  - {name: ♻️ 台湾自动, <<: *UrlTest, filter: *FilterTW, exclude-filter: *FilterExclude}
+  - {name: ♻️ 香港自动, <<: *UrlTest, filter: *FilterHK, exclude-filter: *FilterExclude}
+  # # --- 地区节点选择 (Select - 手动选择) ---
+  # - {name: 🇺🇸 美国节点, <<: *Select, filter: *FilterUS, exclude-filter: *FilterExclude}
+  # - {name: 🇯🇵 日本节点, <<: *Select, filter: *FilterJP, exclude-filter: *FilterExclude}
+  # - {name: 🇸🇬 狮城节点, <<: *Select, filter: *FilterSG, exclude-filter: *FilterExclude}
+  # - {name: 🇹🇼 台湾节点, <<: *Select, filter: *FilterTW, exclude-filter: *FilterExclude}
+  # - {name: 🇭🇰 香港节点, <<: *Select, filter: *FilterHK, exclude-filter: *FilterExclude}
+  # --- 故障转移 (Fallback - 自动高可用) ---
+  # - {name: 🔯 美国故转, <<: *FallBack, filter: *FilterUS, exclude-filter: *FilterExclude}
+  # - {name: 🔯 日本故转, <<: *FallBack, filter: *FilterJP, exclude-filter: *FilterExclude}
+  # - {name: 🔯 狮城故转, <<: *FallBack, filter: *FilterSG, exclude-filter: *FilterExclude}
+  # - {name: 🔯 台湾故转, <<: *FallBack, filter: *FilterTW, exclude-filter: *FilterExclude}
+  # - {name: 🔯 香港故转, <<: *FallBack, filter: *FilterHK, exclude-filter: *FilterExclude}
 
 rules:
   # ============================================
@@ -376,3 +356,4 @@ rule-providers:
     <<: *RuleSet_ipcidr_mrs
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/telegram.mrs"
     path: ./rule-providers/telegram_ip.mrs
+

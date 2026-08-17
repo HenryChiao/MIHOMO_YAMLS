@@ -85,11 +85,12 @@ dns:
   fake-ip-ttl: 60
   fake-ip-filter: ["localhost","+.lan","+.local","+.arpa","+.ntp.org","captive.apple.com","connectivitycheck.gstatic.com","msftconnecttest.com","msftncsi.com","openai.*","+.openai.*","report-v2.samsung.japps.cn","rule-set:private"]
   direct-nameserver: ["system"]
-  default-nameserver: ["223.5.5.5", "119.29.29.29", "114.114.114.114", "180.76.76.76"]
-  nameserver: ["https://dns.alidns.com/dns-query", "https://1.1.1.1/dns-query", "https://doh.pub/dns-query", "https://dns.google/dns-query", "https://dns.quad9.net/dns-query", "https://dns.adguard.com/dns-query", "tls://cloudflare-dns.com:853", "tls://dns.google:853"]
-  proxy-server-nameserver: ["https://1.1.1.1/dns-query", "https://dns.google/dns-query", "https://cloudflare-dns.com/dns-query", "https://dns.quad9.net/dns-query", "https://dns.adguard.com/dns-query", "https://public.dns.iij.jp/dns-query", "tls://cloudflare-dns.com:853", "tls://dns.google:853"]  
+  default-nameserver: ["223.5.5.5", "119.29.29.29"]
+  nameserver: ["https://223.5.5.5/dns-query", "https://doh.pub/dns-query", "https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query", "https://9.9.9.9/dns-query", "tls://1.1.1.1:853", "tls://8.8.8.8:853"]
+  proxy-server-nameserver: ["https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query", "https://9.9.9.9/dns-query"]
   direct-nameserver-follow-policy: true
   nameserver-policy:
+    "rule-set:private": ["system"]
     "rule-set:reject": ["https://dns.adguard.com/dns-query"]
     "rule-set:Google-zj": *global-dns
     "rule-set:OpenAI-zj": *global-dns
@@ -115,7 +116,6 @@ dns:
     "rule-set:Alibaba": *cn-dns
     "rule-set:Tencent": *cn-dns
     "rule-set:games-cn": *cn-dns
-    "rule-set:private": *cn-dns
     "rule-set:cn-domain": *cn-dns
 
 hosts: 
