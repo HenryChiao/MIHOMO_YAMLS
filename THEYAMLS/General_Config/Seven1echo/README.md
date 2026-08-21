@@ -8,7 +8,7 @@
 
 | 特性 | `Seven1_fallback_Rule-Set.yaml` | `Seven1_fallback_Geo.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 23.7 KB | 21.0 KB |
+| **大小** | 24.4 KB | 21.6 KB |
 | **混合端口** | 7893 | 7893 |
 | **面板地址** | 0.0.0.0:9090 | 0.0.0.0:9090 |
 | **运行模式** | rule | rule |
@@ -19,7 +19,7 @@
 ## 📄 配置详情
 
 #### 📝 Seven1_fallback_Rule-Set.yaml
-- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 23.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
+- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 24.4 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (41个)</summary>
@@ -50,7 +50,7 @@
 </details>
 
 #### 📝 Seven1_fallback_Geo.yaml
-- **路径**: `Seven1_fallback_Geo.yaml` | **大小**: 21.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Geo.yaml)
+- **路径**: `Seven1_fallback_Geo.yaml` | **大小**: 21.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Geo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (41个)</summary>
