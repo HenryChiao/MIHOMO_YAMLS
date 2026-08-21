@@ -1,6 +1,6 @@
 # Clash.Meta(mihomo)
 # Version: v1.19.28
-# Updated: 2026-07-22 16:14:00
+# Updated: 2026-08-19 01:59:00
 
 JNTM: &JNTM
     interval: 43200
@@ -119,7 +119,7 @@ tun:
   dns-hijack:
     - any:53
     - tcp://any:53
-  strict-route: true
+  strict-route: false
 
 # DNS Configuration
 dns:

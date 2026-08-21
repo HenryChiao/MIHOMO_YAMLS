@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Geo
-# 版本： V2026.8.12
+# 版本： V2026.8.21
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -109,13 +109,18 @@ hosts:
 dns:
   enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
   ipv6: true                                                            # 网络协议  启用 IPv6 DNS 解析支持
+  use-hosts: true                                                       # 配置映射  使用 Mihomo 配置中的 hosts 映射
+  use-system-hosts: true                                                # 系统映射  使用操作系统 hosts 文件中的域名映射
+  cache-algorithm: arc                                                  # 缓存策略  DNS 按访问频率与最近使用情况动态淘汰缓存
   listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
   enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
-  fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP 虚拟地址池范围
+  fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP IPv4虚拟地址池范围
+  fake-ip-range6: 2001:2::1/48                                          # 虚拟地址  Fake-IP IPv6虚拟地址池范围
   fake-ip-filter-mode: blacklist                                        # 过滤模式  Fake-IP 过滤模式（命中规则则返回真实 IP）
   respect-rules: false                                                  # 遵循规则  不强制遵循规则顺序
   fake-ip-filter:
     - "+.lan"                                                           # 真实解析  常见局域网域名后缀
+    - "+.local"                                                         # 真实解析  常见局域网域名后缀
     - "rule-set:add_direct_domain"                                      # 真实解析  大陆冷门域名
     - "geosite:cn"                                                      # 真实解析  大陆域 GeoSite 数据
   nameserver:                                                           # 解析服务  请使用运营商提供的 DNS
