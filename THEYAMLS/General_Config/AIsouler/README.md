@@ -8,27 +8,28 @@
 
 | 特性 | `mihomoConfigLite.yaml` | `mihomoconfig.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 16.8 KB | 25.9 KB |
+| **大小** | 17.2 KB | 24.8 KB |
 | **混合端口** | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
-| **策略组** | **25** | **38** |
-| **规则数** | **20** | **55** |
+| **策略组** | **26** | **40** |
+| **规则数** | **21** | **49** |
 
 ## 📄 配置详情
 
 #### 📝 mihomoConfigLite.yaml
-- **路径**: `mihomoConfigLite.yaml` | **大小**: 16.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoConfigLite.yaml)
+- **路径**: `mihomoConfigLite.yaml` | **大小**: 17.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoConfigLite.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (25个)</summary>
+<summary>🔍 策略组 (26个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 默认代理 | `select` |
 | 👆 手动选择 | `select` |
 | ♻️ 自动选择 | `url-test` |
+| 👆 Google | `select` |
 | 👆 AI | `select` |
 | 👆 Telegram | `select` |
 | 👆 Steam | `select` |
@@ -45,15 +46,14 @@
 | ♻️ 新加坡-自动选择 | `url-test` |
 | 👆 台湾省 | `select` |
 | ♻️ 台湾省-自动选择 | `url-test` |
-| 👆 低倍率节点 | `select` |
-| ... | 还有 5 个 |
+| ... | 还有 6 个 |
 </details>
 
 #### 📝 mihomoconfig.yaml
-- **路径**: `mihomoconfig.yaml` | **大小**: 25.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
+- **路径**: `mihomoconfig.yaml` | **大小**: 24.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (38个)</summary>
+<summary>🔍 策略组 (40个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -61,21 +61,21 @@
 | 👆 手动选择 | `select` |
 | ♻️ 自动选择 | `url-test` |
 | ⚖️ 负载均衡 | `load-balance` |
-| 👆 AI | `select` |
-| 👆 Media | `select` |
 | 👆 FCM | `select` |
+| 👆 YouTube | `select` |
 | 👆 Google | `select` |
+| 👆 AI | `select` |
 | 👆 Microsoft | `select` |
 | 👆 Apple | `select` |
 | 👆 Telegram | `select` |
 | 👆 Steam | `select` |
 | 👆 TikTok | `select` |
 | 👆 Twitter | `select` |
+| 👆 Instagram | `select` |
+| 👆 Netflix | `select` |
 | 👆 Emby | `select` |
 | 👆 PikPak | `select` |
 | 👆 Spotify | `select` |
 | 👆 Crypto | `select` |
-| 👆 EHentai | `select` |
-| 👆 AdBlock | `select` |
-| ... | 还有 18 个 |
+| ... | 还有 20 个 |
 </details>
