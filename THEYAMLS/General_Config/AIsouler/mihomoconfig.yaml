@@ -19,7 +19,7 @@ proxy_providers_common:
 # 全局过滤节点
 global_exclude_filter:
   &global_exclude_filter {
-    exclude-filter: '(?i)(群|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|提示|访问|支持|教程|关注|更新|作者|加入|超时|收藏|福利|邀请|好友|失联|选择|剩余|公益|发布|DIZTNA|通路|登录|定时|渠道|牢记|永久|余额|阁下|本站|刷新|导航|建议|重置|以下|⚠️|@|\bexpire\b|\bhttps?:\/\/|\.com|\btraffic\b)',
+    exclude-filter: '(?i)(群|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|电报|频道|无法|说明|提示|访问|支持|教程|关注|更新|作者|加入|超时|收藏|优惠|福利|邀请|好友|失联|选择|剩余|公益|发布|DIZTNA|通路|登录|定时|渠道|牢记|永久|余额|阁下|本站|刷新|导航|建议|重置|以下|⚠️|@|t\.me\/\+|\bexpire\b|\bhttps?:\/\/|\.com|\btraffic\b)',
   }
 
 # 订阅提供者，如果你想要添加多个订阅提供者，可以复制 provider1 的配置块，并修改 url 、 path 和 additional-prefix 字段。
@@ -179,66 +179,16 @@ rule-providers:
 
   # --- 代理规则集 ---
 
-  ai:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs'
-    path: './ruleset/ai.mrs'
-    path-in-bundle: 'geo/geosite/category-ai-!cn.mrs'
-  youtube:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs'
-    path: './ruleset/youtube.mrs'
-    path-in-bundle: 'geo/geosite/youtube.mrs'
-  instagram:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/instagram.mrs'
-    path: './ruleset/instagram.mrs'
-    path-in-bundle: 'geo/geosite/instagram.mrs'
-  netflix:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs'
-    path: './ruleset/netflix.mrs'
-    path-in-bundle: 'geo/geosite/netflix.mrs'
-  netflix_ip:
-    <<: *rule_providers_ip
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs'
-    path: './ruleset/netflix_ip.mrs'
-    path-in-bundle: 'geo/geoip/netflix.mrs'
-  hbo:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/hbo.mrs'
-    path: './ruleset/hbo.mrs'
-    path-in-bundle: 'geo/geosite/hbo.mrs'
-  twitch:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitch.mrs'
-    path: './ruleset/twitch.mrs'
-    path-in-bundle: 'geo/geosite/twitch.mrs'
-  disney:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/disney.mrs'
-    path: './ruleset/disney.mrs'
-    path-in-bundle: 'geo/geosite/disney.mrs'
-  niconico:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/niconico.mrs'
-    path: './ruleset/niconico.mrs'
-    path-in-bundle: 'geo/geosite/niconico.mrs'
-  bbc:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/bbc.mrs'
-    path: './ruleset/bbc.mrs'
-    path-in-bundle: 'geo/geosite/bbc.mrs'
-  pornhub:
-    <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/pornhub.mrs'
-    path: './ruleset/pornhub.mrs'
-    path-in-bundle: 'geo/geosite/pornhub.mrs'
   googlefcm:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/googlefcm.mrs'
     path: './ruleset/googlefcm.mrs'
     path-in-bundle: 'geo/geosite/googlefcm.mrs'
+  youtube:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs'
+    path: './ruleset/youtube.mrs'
+    path-in-bundle: 'geo/geosite/youtube.mrs'
   google:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs'
@@ -249,6 +199,11 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs'
     path: './ruleset/google_ip.mrs'
     path-in-bundle: 'geo/geoip/google.mrs'
+  ai:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs'
+    path: './ruleset/ai.mrs'
+    path-in-bundle: 'geo/geosite/category-ai-!cn.mrs'
   github:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs'
@@ -294,6 +249,21 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs'
     path: './ruleset/twitter_ip.mrs'
     path-in-bundle: 'geo/geoip/twitter.mrs'
+  instagram:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/instagram.mrs'
+    path: './ruleset/instagram.mrs'
+    path-in-bundle: 'geo/geosite/instagram.mrs'
+  netflix:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs'
+    path: './ruleset/netflix.mrs'
+    path-in-bundle: 'geo/geosite/netflix.mrs'
+  netflix_ip:
+    <<: *rule_providers_ip
+    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs'
+    path: './ruleset/netflix_ip.mrs'
+    path-in-bundle: 'geo/geoip/netflix.mrs'
   emby:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/666OS/rules@release/mihomo/domain/Emby.mrs'
@@ -496,24 +466,23 @@ proxy-groups:
   - name: '负载均衡'
     <<: *group_common_load
 
-  - name: 'AI'
-    <<: [*group_common_select, *proxies_default]
-    default-selected: '美国'
-    icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png'
-
-  - name: 'Media'
-    default-selected: '日本'
-    <<: [*group_common_select, *proxies_default]
-    icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ForeignMedia.png'
-
   - name: 'FCM'
     <<: [*group_common_select, *proxies_direct]
     default-selected: '直连'
     icon: 'https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/fcm.png'
 
+  - name: 'YouTube'
+    <<: [*group_common_select, *proxies_default]
+    icon: 'https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/YouTube.png'
+
   - name: 'Google'
     <<: [*group_common_select, *proxies_default]
     icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png'
+
+  - name: 'AI'
+    <<: [*group_common_select, *proxies_default]
+    default-selected: '美国'
+    icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ChatGPT.png'
 
   - name: 'Microsoft'
     <<: [*group_common_select, *proxies_direct]
@@ -539,6 +508,14 @@ proxy-groups:
   - name: 'Twitter'
     <<: [*group_common_select, *proxies_default]
     icon: 'https://fastly.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Twitter.png'
+
+  - name: 'Instagram'
+    <<: [*group_common_select, *proxies_default]
+    icon: 'https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/Instagram.png'
+
+  - name: 'Netflix'
+    <<: [*group_common_select, *proxies_default]
+    icon: 'https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/Netflix.png'
 
   - name: 'Emby'
     <<: [*group_common_select, *proxies_direct]
@@ -664,26 +641,24 @@ rules:
   # 广告拦截
   - RULE-SET,adblockmihomolite,AdBlock
 
-  # 代理规则（域名）
-  - RULE-SET,ai,AI
-  - RULE-SET,youtube,Media
-  - RULE-SET,instagram,Media
-  - RULE-SET,netflix,Media
-  - RULE-SET,hbo,Media
-  - RULE-SET,twitch,Media
-  - RULE-SET,disney,Media
-  - RULE-SET,niconico,Media
-  - RULE-SET,bbc,Media
-  - RULE-SET,pornhub,Media
+  # 代理规则
   - RULE-SET,googlefcm,FCM
+  - RULE-SET,youtube,YouTube
   - RULE-SET,google,Google
+  - RULE-SET,google_ip,Google,no-resolve
+  - RULE-SET,ai,AI
   - RULE-SET,github,默认代理
   - RULE-SET,microsoft,Microsoft
   - RULE-SET,apple,Apple
   - RULE-SET,telegram,Telegram
+  - RULE-SET,telegram_ip,Telegram,no-resolve
   - RULE-SET,steam,Steam
   - RULE-SET,tiktok,TikTok
   - RULE-SET,twitter,Twitter
+  - RULE-SET,twitter_ip,Twitter,no-resolve
+  - RULE-SET,instagram,Instagram
+  - RULE-SET,netflix,Netflix
+  - RULE-SET,netflix_ip,Netflix,no-resolve
   - RULE-SET,emby,Emby
   - RULE-SET,emos,Emby
   - DOMAIN-SUFFIX,mb3admin.com,Emby
@@ -700,12 +675,6 @@ rules:
   - RULE-SET,spotify,Spotify
   - RULE-SET,cryptocurrency,Crypto
   - RULE-SET,ehentai,EHentai
-
-  # 代理规则（IP）
-  - RULE-SET,google_ip,Google,no-resolve
-  - RULE-SET,telegram_ip,Telegram,no-resolve
-  - RULE-SET,twitter_ip,Twitter,no-resolve
-  - RULE-SET,netflix_ip,Media,no-resolve
 
   # 兜底规则
   - RULE-SET,gfw,默认代理

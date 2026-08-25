@@ -1,35 +1,138 @@
-# mihomo文档 h(tps://wiki.metacubex.one/config/dns/hosts/#hosts
+# ============================================================================
+#  akashaProxy 默认配置模板 (mihomo 原生内核)
+# ----------------------------------------------------------------------------
+#  使用方法: 重命名为 config.yaml, 并在下方 proxy-providers 填入你的机场订阅
+#  mihomo 文档: https://wiki.metacubex.one
+#
+#  【模块相关 请勿随意改名/删除的字段】
+#    redir-port / tproxy-port / mixed-port  透明代理端口, 模块脚本会读取
+#    dns.listen                             必须保持 ip:port 格式
+#    external-controller                    必须保持 ip:port 格式
+#    tun.enable / tun.auto-route / tun.device
+#    ipv6 / geodata-mode / geo-auto-update / geox-url
+#    dns.enhanced-mode
+#  以上字段由 /data/adb/akashaProxy/clash.env 通过 yamlcli 解析, 改错会导致启动失败
+#
+#  【分流数据来源】
+#    GEOSITE/GEOIP  -> 模块内置的 GeoSite.dat / GeoIP.dat (离线可用, 负责 cn 大类)
+#    RULE-SET       -> MetaCubeX/meta-rules-dat 的 .mrs (细分类, 首次启动需联网)
+#    广告拦截        -> 秋风广告规则 AWAvenue Ads Rule
+# ============================================================================
 
-mode: rule # 规则模式
-mixed-port: 7890 # socks/http代理端口
-redir-port: 7892 # redirect透明代理端口
-tproxy-port: 7893 # tproxy透明代理端口
-allow-lan: true # 允许局域网访问
-ipv6: true # 开启ipv6
-unified-delay: true #统一延迟
-log-level: info # 日志等级
 
-tcp-concurrent: true # 启用 TCP 并发连接
+# ==================== 锚点 (模板复用, 非 mihomo 配置项) ====================
 
-# TCP Keep Alive 设置，减少设备耗电问题
+# 订阅基础配置: 过滤掉机场的流量/到期/官网等信息节点
+BaseProvider: &BaseProvider
+  type: http
+  interval: 86400
+  proxy: DIRECT
+  health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300, timeout: 3000, lazy: true}
+  exclude-filter: '(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|重置|剩余|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)'
+
+# 策略组类型模板
+BaseAuto:  &BaseAuto  {type: url-test,     interval: 300, tolerance: 50, lazy: true, url: 'https://www.gstatic.com/generate_204', hidden: true}
+BaseFB:    &BaseFB    {type: fallback,     interval: 300, lazy: true, url: 'https://www.gstatic.com/generate_204'}
+# 负载均衡: 散列(同一目标固定走同一节点, 兼容性好) / 轮询(逐连接轮换, 更容易叠加带宽)
+BaseHash:  &BaseHash  {type: load-balance, interval: 300, lazy: true, url: 'https://www.gstatic.com/generate_204', strategy: consistent-hashing, hidden: true}
+BaseRobin: &BaseRobin {type: load-balance, interval: 300, lazy: true, url: 'https://www.gstatic.com/generate_204', strategy: round-robin, hidden: true}
+
+# 节点地区筛选正则
+# 两条铁律, 改之前务必先看:
+#  1) 绝不使用裸的单字中文 (日/美/英/港/台/韩/德/法...)。机场前缀会被误命中 ——
+#     例如 additional-prefix 设成 '[日用] ' 时, 裸的 "日" 会让该机场的每个节点
+#     都被判成日本节点。一律用双字国名/城市名。
+#  2) 拉丁字母国家代码一律用 (?<![a-z])xx(?![a-z]) 包边界, 否则 Russia 会被判成
+#     us, Ukraine 判成 uk, No.1 判成挪威, 10Gb 判成英国, example 判成波兰。
+# 如果你的机场节点名既没有 flag emoji 也没有国家代码 (例如只写 "日 01"),
+# 请自行往对应 Filter 里补上你机场用的写法。
+FilterHK: &FilterHK '^(?=.*(?i)(香港|沪港|滬港|广港|廣港|深港|京港|🇭🇰|(?<![a-z])(?:hk|hkg|hongkong|hong\s?kong)(?![a-z])))(?!.*(?i)(台湾|臺灣|🇹🇼)).*$'
+FilterTW: &FilterTW '^(?=.*(?i)(台湾|臺灣|台北|臺北|台中|臺中|台南|臺南|沪台|滬台|广台|廣台|深台|🇹🇼|(?<![a-z])(?:tw|twn|taiwan|tpe|khh)(?![a-z]))).*$'
+FilterJP: &FilterJP '^(?=.*(?i)(日本|東京|东京|大阪|埼玉|名古屋|福冈|福岡|沪日|滬日|广日|廣日|深日|川日|泉日|🇯🇵|(?<![a-z])(?:jp|jpn|japan|nrt|hnd|kix|itm|tyo)(?![a-z]))).*$'
+FilterKR: &FilterKR '^(?=.*(?i)(韩国|韓國|首尔|首爾|沪韩|滬韩|广韩|廣韓|深韩|🇰🇷|(?<![a-z])(?:kr|kor|korea|icn|gmp)(?![a-z]))).*$'
+FilterSG: &FilterSG '^(?=.*(?i)(新加坡|狮城|獅城|沪新|滬新|广新|廣新|深新|🇸🇬|(?<![a-z])(?:sg|sgp|singapore|sin)(?![a-z]))).*$'
+FilterUS: &FilterUS '^(?=.*(?i)(美国|美國|美西|美东|美東|洛杉矶|洛杉磯|圣何塞|聖何塞|硅谷|凤凰城|鳳凰城|达拉斯|達拉斯|西雅图|西雅圖|纽约|紐約|沪美|滬美|广美|廣美|深美|🇺🇸|(?<![a-z])(?:us|usa|united\s?states|lax|sjc|jfk|ord|sea|iad|dfw|mia)(?![a-z])))(?!.*(?i)(🇦🇺|澳大利亚|澳洲|(?<![a-z])(?:au|aus|australia)(?![a-z]))).*$'
+FilterUK: &FilterUK '^(?=.*(?i)(英国|英國|伦敦|倫敦|🇬🇧|(?<![a-z])(?:uk|gbr|london|kingdom|lhr|lgw)(?![a-z]))).*$'
+FilterEU: &FilterEU '^(?=.*(?i)(德国|德國|法国|法國|荷兰|荷蘭|瑞典|瑞士|意大利|義大利|西班牙|葡萄牙|波兰|波蘭|奥地利|奧地利|比利时|比利時|捷克|丹麦|丹麥|芬兰|芬蘭|爱尔兰|愛爾蘭|挪威|匈牙利|罗马尼亚|羅馬尼亞|希腊|希臘|土耳其|俄罗斯|俄羅斯|莫斯科|法兰克福|法蘭克福|阿姆斯特丹|苏黎世|蘇黎世|🇩🇪|🇫🇷|🇳🇱|🇸🇪|🇨🇭|🇮🇹|🇪🇸|🇵🇹|🇵🇱|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇮🇪|🇳🇴|🇭🇺|🇷🇴|🇬🇷|🇹🇷|🇷🇺|(?<![a-z])(?:de|deu|fr|fra|nl|nld|se|swe|ch|che|it|ita|es|esp|pt|prt|pl|pol|aut|austria|bel|belgium|cz|cze|dk|dnk|fi|fin|ie|irl|nor|norway|hu|hun|ro|rou|gr|grc|ru|rus|tr|tur|cdg|ams|arn|mad|lis|vie|waw|zrh|bru)(?![a-z])))(?!.*(?i)(英国|英國|伦敦|倫敦|🇬🇧|(?<![a-z])(?:uk|london)(?![a-z]))).*$'
+# 其他地区: 排除上面所有已划分地区, 同时排除机场的信息节点
+FilterOT: &FilterOT '^(?!.*(?i)(香港|沪港|滬港|广港|廣港|深港|京港|台湾|臺灣|台北|臺北|台中|臺中|台南|臺南|沪台|滬台|广台|廣台|深台|日本|東京|东京|大阪|埼玉|名古屋|福冈|福岡|沪日|滬日|广日|廣日|深日|川日|泉日|韩国|韓國|首尔|首爾|沪韩|滬韩|广韩|廣韓|深韩|新加坡|狮城|獅城|沪新|滬新|广新|廣新|深新|美国|美國|美西|美东|美東|洛杉矶|洛杉磯|圣何塞|聖何塞|硅谷|凤凰城|鳳凰城|达拉斯|達拉斯|西雅图|西雅圖|纽约|紐約|沪美|滬美|广美|廣美|深美|英国|英國|伦敦|倫敦|德国|德國|法国|法國|荷兰|荷蘭|瑞典|瑞士|意大利|義大利|西班牙|葡萄牙|波兰|波蘭|奥地利|奧地利|比利时|比利時|捷克|丹麦|丹麥|芬兰|芬蘭|爱尔兰|愛爾蘭|挪威|匈牙利|罗马尼亚|羅馬尼亞|希腊|希臘|土耳其|俄罗斯|俄羅斯|莫斯科|法兰克福|法蘭克福|阿姆斯特丹|苏黎世|蘇黎世|🇭🇰|🇹🇼|🇯🇵|🇰🇷|🇸🇬|🇺🇸|🇬🇧|🇩🇪|🇫🇷|🇳🇱|🇸🇪|🇨🇭|🇮🇹|🇪🇸|🇵🇹|🇵🇱|🇦🇹|🇧🇪|🇨🇿|🇩🇰|🇫🇮|🇮🇪|🇳🇴|🇭🇺|🇷🇴|🇬🇷|🇹🇷|🇷🇺|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|重置|剩余|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|(?<![a-z])(?:direct|reject|hk|hkg|hongkong|tw|twn|taiwan|tpe|khh|jp|jpn|japan|nrt|hnd|kix|itm|tyo|kr|kor|korea|icn|gmp|sg|sgp|singapore|sin|us|usa|lax|sjc|jfk|ord|sea|iad|dfw|mia|uk|gbr|london|kingdom|lhr|lgw|de|deu|fr|fra|nl|nld|se|swe|ch|che|it|ita|es|esp|pt|prt|pl|pol|aut|bel|cz|cze|dk|dnk|fi|fin|ie|irl|nor|hu|hun|ro|rou|gr|grc|ru|rus|tr|tur|cdg|ams|arn|mad|lis|vie|waw|zrh|bru|used|total|expire|email|panel|channel|author)(?![a-z]))).*$'
+# 全部节点: 排除内置策略和机场的信息节点
+FilterALL: &FilterALL '^(?!.*(?i)(直连|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|重置|剩余|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|(?<![a-z])(?:direct|reject|used|total|expire|email|panel|channel|author)(?![a-z]))).*$'
+
+# 策略组候选列表模板
+SelectProxy:  &SelectProxy  {type: select, proxies: [全局代理, 故障转移, 香港, 台湾, 日本, 韩国, 新加坡, 美国, 英国, 欧洲, 其他地区, 手动选择, 直接连接]}
+SelectDirect: &SelectDirect {type: select, proxies: [直接连接, 全局代理, 故障转移, 香港, 台湾, 日本, 韩国, 新加坡, 美国, 英国, 欧洲, 其他地区, 手动选择]}
+SelectHK:     &SelectHK     {type: select, proxies: [香港, 全局代理, 故障转移, 台湾, 日本, 韩国, 新加坡, 美国, 英国, 欧洲, 其他地区, 手动选择, 直接连接]}
+SelectSG:     &SelectSG     {type: select, proxies: [新加坡, 全局代理, 故障转移, 香港, 台湾, 日本, 韩国, 美国, 英国, 欧洲, 其他地区, 手动选择, 直接连接]}
+SelectUS:     &SelectUS     {type: select, proxies: [美国, 全局代理, 故障转移, 香港, 台湾, 日本, 韩国, 新加坡, 英国, 欧洲, 其他地区, 手动选择, 直接连接]}
+
+
+# ############################################################################
+# ##                                                                        ##
+# ##   >>>>>>  在这里填写你的机场订阅链接 (本模板唯一必填项)  <<<<<<          ##
+# ##                                                                        ##
+# ##   把下面 url 的 https://example.com/airport 换成你自己的订阅地址即可。   ##
+# ##   多个机场就复制一份, 机场名(机场1/机场2)不能重复。                      ##
+# ##   不填 或 填错 会导致所有策略组为空, 面板里看不到任何节点。              ##
+# ##                                                                        ##
+# ############################################################################
+proxy-providers:
+  机场1:                                        # <-- 机场名, 随便改, 不能和其他机场重名
+    <<: *BaseProvider
+    url: 'https://example.com/airport'          # <-- ★★★ 必填: 换成你的机场订阅链接 ★★★
+    # path: ./proxy_providers/airport1.yaml     # 自定义保存路径, 非必填
+    # override: {additional-prefix: '[A] '}     # 给该机场所有节点加前缀, 非必填
+
+  # 有第二个机场就取消下面三行的注释
+  # 机场2:
+  #   <<: *BaseProvider
+  #   url: 'https://example.com/airport2'       # <-- 换成第二个机场的订阅链接
+
+
+# ==================== 基础配置 ====================
+mode: rule                        # 规则模式
+mixed-port: 7890                  # socks/http 混合代理端口
+redir-port: 7892                  # redirect 透明代理端口 (模块读取)
+tproxy-port: 7893                 # tproxy 透明代理端口 (模块读取)
+allow-lan: true                   # 允许局域网访问
+bind-address: '*'
+ipv6: true                        # 开启 ipv6
+unified-delay: true               # 统一延迟 (扣除握手耗时, 更接近真实延迟)
+tcp-concurrent: true              # TCP 并发连接, 多 IP 域名取最快
+log-level: info                   # silent / error / warning / info / debug
+find-process-mode: strict         # 进程匹配模式, 分应用代理依赖它
+# global-client-fingerprint 已在 mihomo 1.19 移除, TLS 指纹请在节点上写 client-fingerprint,
+# 或用 proxy-providers 的 override.override-expr 批量覆写
+
+# TCP Keep Alive, 拉长间隔可减少 Android 后台耗电
 keep-alive-interval: 30
-keep-alive-idle: 15
+keep-alive-idle: 600
 
-find-process-mode: strict # 进程查找模式
-global-client-fingerprint: chrome # 全局客户端指纹模拟为 Chrome 浏览器
+# external-controller 的访问密钥, 留空为不校验 (WebUI 会读取此项)
+# secret: ''
 
-# 自动更新geo
+# ==================== Geo 数据 ====================
+geodata-mode: true                # true=用 GeoIP.dat (模块已内置) / false=用 Country.mmdb
+geo-auto-update: true
+geo-update-interval: 24
 geox-url:
   geosite: https://ghfast.top/https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat
+  geoip: https://ghfast.top/https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat
   mmdb: https://ghfast.top/https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-Country.mmdb
-  geoip: https://ghfast.top/https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/geoip.dat
   asn: https://ghfast.top/https://raw.githubusercontent.com/Loyalsoldier/geoip/release/GeoLite2-ASN.mmdb
-geo-auto-update: true
-geo-update-interval: 6
 
-# 域名嗅探 https://wiki.metacubex.one/config/sniff/#_1
+# ==================== 管理面板 ====================
+external-controller: 127.0.0.1:9090   # 模块读取此端口, 保持 ip:port 格式
+external-ui: zashboard                # 模块已内置 zashboard, 访问 http://127.0.0.1:9090/ui
+external-ui-name: zashboard
+external-ui-url: 'https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip'
+
+# ==================== 域名嗅探 ====================
+# https://wiki.metacubex.one/config/sniff
 sniffer:
   enable: true
+  parse-pure-ip: true             # 对无域名的纯 IP 连接也尝试嗅探
+  override-destination: false
   sniff:
     HTTP:
       ports: [80, 8080-8880]
@@ -39,216 +142,307 @@ sniffer:
     QUIC:
       ports: [443, 8443]
   skip-domain:
-    - Mijia Cloud
-    - "+.push.apple.com"
+    - 'Mijia Cloud'
+    - '+.push.apple.com'
+    - '+.apple.com'
 
-# 缓存
+# ==================== 缓存与时间同步 ====================
 profile:
-  store-selected: true
-  # 储存 API 对策略组的选择，以供下次启动时使用
-  store-fake-ip: true
-  # 储存 fakeip 映射表，域名再次发生连接时，使用原有映射地址
+  store-selected: true            # 记住面板里选过的策略
+  store-fake-ip: true             # 缓存 fakeip 映射表
 
-# 自动同步时间以防止时间不准导致无法正常联网
 ntp:
   enable: true
-  # 是否同步至系统时间，需要 root/管理员权限
-  write-to-system: false
+  write-to-system: false          # 写入系统时间需要 root, 默认关闭
   server: time.apple.com
   port: 123
   interval: 30
 
-# 管理页面 https://wiki.metacubex.one/config/general/#_7
-external-controller: 127.0.0.1:9090
-# external-ui: yacd
-external-ui: zashboard #使用zashboard为本地管理ui
-external-ui-url: "https://ghfast.top/https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
-bind-address: "*"
-
-# tun虚拟网卡设置 不懂默认就好 默认开启tun
+# ==================== TUN ====================
+# 模块开启 auto_tun 后会在启动时自动补写 exclude-package / include-package
 tun:
   enable: true
   device: mihoyo
   stack: mixed
-  auto-route: true # 自动添加路由
-  strict-route: true # 严格路由模式
-  endpoint-independent-nat: true # 启用端点独立 NAT
-  auto-redirect: true # 自动重定向流量到 TUN 设备
-  auto-detect-interface: true # 自动检测网络接口
-  dns-hijack: 
+  auto-route: true
+  strict-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  endpoint-independent-nat: true
+  dns-hijack:
     - any:53
+    - tcp://any:53
 
-
-# https://wiki.metacubex.one/config/dns/hosts/#hosts
+# ==================== hosts ====================
+# 给 DoH 服务器预置 IP, 避免启动时的 DNS 循环依赖
 hosts:
   doh.pub: [1.12.12.21, 120.53.53.53, 1.12.12.12]
   dot.pub: [1.12.12.21, 120.53.53.53, 1.12.12.12]
-  "*.alidns.com": [223.5.5.5, 223.6.6.6, 2400:3200::1, 2400:3200:baba::1]
-  dns.google: [8.8.8.8, 8.8.4.4, 2001:4860:4860::8888, 2001:4860:4860::8844]
-  cloudflare-dns.com: [1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001]
-  "*.cloudflare-gateway.com": [162.159.36.20, 162.159.36.5, 2606:4700:5c::a29f:2e07, 2606:4700:54::a29f:2407]
+  '*.alidns.com': [223.5.5.5, 223.6.6.6, '2400:3200::1', '2400:3200:baba::1']
+  dns.google: [8.8.8.8, 8.8.4.4, '2001:4860:4860::8888', '2001:4860:4860::8844']
+  cloudflare-dns.com: [1.1.1.1, 1.0.0.1, '2606:4700:4700::1111', '2606:4700:4700::1001']
 
+# ==================== DNS ====================
 dns:
   enable: true
-  listen: 0.0.0.0:1053
-  cache-algorithm: arc # DNS 缓存算法
-  ipv6: false # 启用 IPv6 解析
-  respect-rules: true # 遵循分流规则
+  listen: 0.0.0.0:1053            # 模块读取此端口, 保持 ip:port 格式
+  ipv6: true
+  cache-algorithm: arc
+  respect-rules: true             # DNS 请求也遵循下面的分流规则
+  # redir-host 兼容性最好; 想用 fake-ip 直接改这一项即可, 模块脚本已同时支持
   enhanced-mode: redir-host
-  fake-ip-filter-mode: blacklist
   fake-ip-range: 198.18.0.1/16
-  default-nameserver:
-    - https://1.12.12.21/dns-query
-    - https://223.5.5.5/dns-query
-  nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://xxxxxxxxxx.cloudflare-gateway.com/dns-query
-  proxy-server-nameserver:
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter:
+    - '+.lan'
+    - '+.local'
+    - '+.market.xiaomi.com'
+    - '+.push.apple.com'
+    - '+.pub.3gppnetwork.org'
+  default-nameserver:             # 仅用于解析下面 DoH 的域名, 必须是纯 IP
+    - 223.5.5.5
+    - 119.29.29.29
+  proxy-server-nameserver:        # 解析机场节点域名, 必须直连
     - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  direct-nameserver:              # 命中直连规则的域名用国内 DNS
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+  nameserver:                     # 默认 DNS
+    - https://dns.google/dns-query
+    - https://cloudflare-dns.com/dns-query
   nameserver-policy:
-    "geosite:cn,private":
-      - https://dot.pub/dns-query
+    'geosite:cn,private,category-httpdns-cn':
       - https://dns.alidns.com/dns-query
-    "geosite:geolocation-!cn,gfw,!cn":
+      - https://doh.pub/dns-query
+    'geosite:gfw,geolocation-!cn':
       - https://dns.google/dns-query
-      - https://xxxxxxxxxx.cloudflare-gateway.com/dns-query
+      - https://cloudflare-dns.com/dns-query
 
 
+# ==================== 自建节点 ====================
+# 没有自建节点就留空, 订阅节点在上面的 proxy-providers 里配置
 proxies:
-# mihomo配置参考可以看看这个wiki
-# https://wiki.metacubex.one
-
-#预设
-pr: &pr
-  type: select
-  interval: 3600
-  health-check:
-    enable: true
-    url: https://www.gstatic.com/generate_204
-    interval: 300
-    timeout: 3000
-  include-all: true
 
 
-autotest: &autotest
-  type: url-test
-  interval: 300
-  tolerance: 100
-  health-check:
-    enable: true
-    url: https://www.gstatic.com/generate_204
-    interval: 120
-    timeout: 3000
-  include-all: true
-
-
-p: &p
-  type: http
-  interval: 3600
-  health-check:
-    enable: true
-    url: https://www.gstatic.com/generate_204
-    timeout: 1500
-    interval: 300
-    lazy: true
-
-# 代理提供(订阅)组
-# url 里填写自己的订阅,名称不能重复
-proxy-providers:
-  机场1: #机场名
-    <<: *p
-    url: "https://example.com/airport"
-    # path: ./proxy_providers/jichang1.yaml #指定保存路径 非必填
-
-  # 机场2: #机场名
-    # <<: *p
-    # url: "这里填机场订阅"
-    # path: ./proxy_providers/jichang2.yaml #保存路径
-
-# 代理组
+# ==================== 策略组 ====================
 proxy-groups:
-  - name: 代理设置
-    type: select
-    proxies:
-      - 国内分流
-      - 香港
-      - 台湾
-      - 日本
-      - 新加坡
-      - 美国
-      - 全部节点
 
-  - name: 国内分流
-    type: select
-    proxies:
-      - DIRECT
-      - 中国
+  # ---------- 主策略 ----------
+  - {name: 全局代理, type: select, proxies: [故障转移, 香港, 台湾, 日本, 韩国, 新加坡, 美国, 英国, 欧洲, 其他地区, 手动选择, 直接连接], icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Global.png'}
+  - {name: 兜底流量, <<: *SelectProxy, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Final.png'}
+  - {name: 国内直连, <<: *SelectDirect, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/China.png'}
+  - {name: 故障转移, <<: *BaseFB, proxies: [香港, 台湾, 日本, 韩国, 新加坡, 美国, 英国, 欧洲, 其他地区], icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ULB.png'}
+  - {name: 手动选择, type: select, include-all: true, filter: *FilterALL, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Static.png'}
+  - {name: 广告拦截, type: select, proxies: [REJECT, REJECT-DROP, DIRECT], icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Advertising.png'}
+  - {name: 直接连接, type: select, proxies: [DIRECT], hidden: true, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Direct.png'}
 
-  - name: 屏蔽
-    type: select
-    proxies:
-      - REJECT-DROP
-      - REJECT
-      - DIRECT
+  # ---------- 细分策略 ----------
+  - {name: 人工智能, <<: *SelectUS,     icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/AI.png'}
+  - {name: 海外社交, <<: *SelectProxy,  icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/X.png'}
+  - {name: 国内社交, <<: *SelectDirect, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/DomesticMedia.png'}
+  - {name: 国际媒体, <<: *SelectProxy,  icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/ForeignMedia.png'}
+  - {name: 谷歌服务, <<: *SelectProxy,  icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Google_Search.png'}
+  - {name: 微软服务, <<: *SelectProxy,  icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Microsoft.png'}
+  - {name: 金融平台, <<: *SelectSG,     icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Cryptocurrency.png'}
+  - {name: 游戏平台, <<: *SelectHK,     icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Game.png'}
 
-  - name: AI分流
-    type: select
-    proxies:
-      - 代理设置
-      - 香港
-      - 台湾
-      - 日本
-      - 新加坡
-      - 英国
-      - 美国
-      - 全部节点
+  # ---------- 地区策略 (自动 / 负载均衡) ----------
+  - {name: 香港,     type: select, proxies: [香港自动, 香港均衡-散列, 香港均衡-轮询], include-all: true, filter: *FilterHK, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Hong_Kong.png'}
+  - {name: 台湾,     type: select, proxies: [台湾自动, 台湾均衡-散列, 台湾均衡-轮询], include-all: true, filter: *FilterTW, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Taiwan.png'}
+  - {name: 日本,     type: select, proxies: [日本自动, 日本均衡-散列, 日本均衡-轮询], include-all: true, filter: *FilterJP, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Japan.png'}
+  - {name: 韩国,     type: select, proxies: [韩国自动, 韩国均衡-散列, 韩国均衡-轮询], include-all: true, filter: *FilterKR, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Korea.png'}
+  - {name: 新加坡,   type: select, proxies: [新加坡自动, 新加坡均衡-散列, 新加坡均衡-轮询], include-all: true, filter: *FilterSG, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/Singapore.png'}
+  - {name: 美国,     type: select, proxies: [美国自动, 美国均衡-散列, 美国均衡-轮询], include-all: true, filter: *FilterUS, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_States.png'}
+  - {name: 英国,     type: select, proxies: [英国自动, 英国均衡-散列, 英国均衡-轮询], include-all: true, filter: *FilterUK, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/United_Kingdom.png'}
+  - {name: 欧洲,     type: select, proxies: [欧洲自动, 欧洲均衡-散列, 欧洲均衡-轮询], include-all: true, filter: *FilterEU, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/European_Union.png'}
+  - {name: 其他地区, type: select, proxies: [其他自动, 其他均衡-散列, 其他均衡-轮询], include-all: true, filter: *FilterOT, icon: 'https://gcore.jsdelivr.net/gh/Koolson/Qure@master/IconSet/Color/World_Map.png'}
+
+  # ---------- 自动选择: 延迟最低 (面板默认隐藏) ----------
+  - {name: 香港自动,   <<: *BaseAuto, include-all: true, filter: *FilterHK}
+  - {name: 台湾自动,   <<: *BaseAuto, include-all: true, filter: *FilterTW}
+  - {name: 日本自动,   <<: *BaseAuto, include-all: true, filter: *FilterJP}
+  - {name: 韩国自动,   <<: *BaseAuto, include-all: true, filter: *FilterKR}
+  - {name: 新加坡自动, <<: *BaseAuto, include-all: true, filter: *FilterSG}
+  - {name: 美国自动,   <<: *BaseAuto, include-all: true, filter: *FilterUS}
+  - {name: 英国自动,   <<: *BaseAuto, include-all: true, filter: *FilterUK}
+  - {name: 欧洲自动,   <<: *BaseAuto, include-all: true, filter: *FilterEU}
+  - {name: 其他自动,   <<: *BaseAuto, include-all: true, filter: *FilterOT}
+
+  # ---------- 负载均衡-散列: 同一目标域名固定走同一节点 ----------
+  - {name: 香港均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterHK}
+  - {name: 台湾均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterTW}
+  - {name: 日本均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterJP}
+  - {name: 韩国均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterKR}
+  - {name: 新加坡均衡-散列, <<: *BaseHash, include-all: true, filter: *FilterSG}
+  - {name: 美国均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterUS}
+  - {name: 英国均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterUK}
+  - {name: 欧洲均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterEU}
+  - {name: 其他均衡-散列,   <<: *BaseHash, include-all: true, filter: *FilterOT}
+
+  # ---------- 负载均衡-轮询: 逐连接轮换节点, 多节点叠加带宽 ----------
+  - {name: 香港均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterHK}
+  - {name: 台湾均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterTW}
+  - {name: 日本均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterJP}
+  - {name: 韩国均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterKR}
+  - {name: 新加坡均衡-轮询, <<: *BaseRobin, include-all: true, filter: *FilterSG}
+  - {name: 美国均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterUS}
+  - {name: 英国均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterUK}
+  - {name: 欧洲均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterEU}
+  - {name: 其他均衡-轮询,   <<: *BaseRobin, include-all: true, filter: *FilterOT}
 
 
-# 按照区域划定策略组
-  - {name: 中国, <<: *pr, proxies: [中国自动选择], filter: "(?i)(🇨🇳|中国|cn|china|CN)", exclude-filter: "(?i)(台湾|tw|taiwan|TW)"}
-  - {name: 香港, <<: *pr, proxies: [香港自动选择], filter: "(?i)(🇭🇰|香港|hk|hongkong|hong kong|HK)"}
-  - {name: 台湾, <<: *pr, proxies: [台湾自动选择], filter: "(?i)(台湾|tw|taiwan|TW)"}
-  - {name: 日本, <<: *pr, proxies: [日本自动选择], filter: "(?i)(🇯🇵|日|jp|japan|JP)"}
-  - {name: 美国, <<: *pr, proxies: [美国自动选择], filter: "(?i)(🇺🇸|美|us|unitedstates|united states|US)"}
-  - {name: 英国, <<: *pr, proxies: [英国自动选择], filter: "(?i)(🇬🇧|英国|uk|英国|England|UK)"}
-  - {name: 新加坡, <<: *pr, proxies: [新加坡自动选择], filter: "(?i)(🇸🇬|新加坡|sg|singapore|SG)"}
-  - {name: 全部节点, proxies: [自动选择], <<: *pr}
-  # 下面这段为自动选择不会在面板显示 如果显示了说明你的面板不支持hidden字段
-  - {name: 中国自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇨🇳|中国|cn|china|CN)", exclude-filter: "(?i)(台湾|tw|taiwan|TW)"}
-  - {name: 香港自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇭🇰|香港|hk|hongkong|hong kong|HK)"}
-  - {name: 台湾自动选择, <<: *autotest, hidden: true, filter: "(?i)(台湾|tw|taiwan|TW)"}
-  - {name: 日本自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇯🇵|日|jp|japan|JP)"}
-  - {name: 美国自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇺🇸|美|us|unitedstates|united states|US)"}
-  - {name: 英国自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇬🇧|英国|uk|英国|England|UK)"}
-  - {name: 新加坡自动选择, <<: *autotest, hidden: true, filter: "(?i)(🇸🇬|新加坡|sg|singapore|SG)"}
-  - {name: 自动选择, <<: *autotest, hidden: true}
-
-# 分流规则提供(订阅)组
-rule-providers:
-  AWAvenue:
-    type: http
-    behavior: classical
-    format: yaml
-    path: ./rule_providers/AWAvenue-Ads-Rule-Clash.yaml
-    url: "https://gcore.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash-Classical.yaml"
-    interval: 60480
-
-# 分流规则
+# ==================== 分流规则 ====================
 rules:
 
-  - AND,((NOT,((OR,((PROCESS-NAME,mihomo),(PROCESS-NAME,ClashMeta))))),(DST-PORT,853)),屏蔽 #禁止非mihomo访问dot dns
-  - GEOSITE,category-httpdns-cn,屏蔽 #屏蔽httpdns防止去广告失效
-  - RULE-SET,AWAvenue,屏蔽 #去广告
-  - IP-CIDR,203.107.1.0/24,屏蔽,no-resolve # 阿里云ip httpdns
+  # ---------- 拦截 ----------
+  # 禁止非 mihomo 进程访问 DoT(853), 防止应用自带 DNS 绕过分流
+  - AND,((NOT,((OR,((PROCESS-NAME,mihomo),(PROCESS-NAME,ClashMeta))))),(DST-PORT,853)),广告拦截
+  - GEOSITE,category-httpdns-cn,广告拦截            # 屏蔽 HTTPDNS, 否则去广告会失效
+  - IP-CIDR,203.107.1.0/24,广告拦截,no-resolve      # 阿里云 HTTPDNS
+  - RULE-SET,AWAvenue,广告拦截                      # 秋风广告规则
 
-  - GEOSITE,private,国内分流
-  - GEOSITE,connectivity-check,国内分流
-  - GEOSITE,googlefcm,国内分流
-  - GEOSITE,category-games@cn,国内分流
-  - GEOSITE,cn,国内分流
-  - GEOIP,PRIVATE,国内分流,no-resolve
-  - GEOIP,cn,国内分流,no-resolve
-  - GEOSITE,category-ai-!cn,AI分流
-  - GEOSITE,geolocation-!cn,代理设置
-  - MATCH,代理设置
+  # ---------- 本机与直连 ----------
+  - GEOSITE,private,国内直连
+  - GEOIP,private,国内直连,no-resolve
+  - GEOSITE,connectivity-check,国内直连             # 网络连通性检测必须直连
+  - DOMAIN-SUFFIX,pub.3gppnetwork.org,国内直连      # 运营商 IMS (VoLTE/VoWiFi) 必须直连, 别被代理
+  - GEOSITE,googlefcm,国内直连                      # FCM 推送直连更省电也更稳
+  - GEOSITE,category-games@cn,国内直连              # 国服游戏
+  - RULE-SET,GameDownload,国内直连                  # 游戏平台下载 CDN, 直连跑满带宽
+  - DOMAIN-SUFFIX,steamserver.net,国内直连          # Steam 游戏服务器
 
+  # ---------- 人工智能 ----------
+  - RULE-SET,OpenAI,人工智能                        # ChatGPT / Sora
+  - RULE-SET,Anthropic,人工智能                     # Claude
+  - RULE-SET,Gemini,人工智能
+  - RULE-SET,xAI,人工智能                           # Grok
+  - RULE-SET,Copilot,人工智能
+  - RULE-SET,Perplexity,人工智能
+  - RULE-SET,AI,人工智能                            # 其余国外 AI 服务
+
+  # ---------- 社交 ----------
+  # 国内社交 App 用 PROCESS-NAME 按包名整体归类, 能连带三方 CDN/统计一起兜住,
+  # 比只靠域名规则更彻底 (依赖上面的 find-process-mode: strict; 内核上报的就是 Android 包名)。
+  # 广告拦截在本节之前, 所以 App 内的广告域名仍然会被秋风规则拦掉。
+  # 想加自己的 App: adb shell pm list packages -3 查包名, 照下面的格式加一行即可。
+  - PROCESS-NAME,com.xingin.xhs,国内社交               # 小红书
+  - PROCESS-NAME,com.max.xiaoheihe,国内社交            # 小黑盒
+  - PROCESS-NAME,com.ss.android.ugc.aweme,国内社交     # 抖音
+  - PROCESS-NAME,com.ss.android.ugc.livelite,国内社交  # 抖音极速版
+  - RULE-SET,Xiaohongshu,国内社交
+  - RULE-SET,Xiaoheihe,国内社交
+  - RULE-SET,Douyin,国内社交
+  - RULE-SET,SocialCN,国内社交                      # 微博/知乎/B站 等其余国内社交
+  - RULE-SET,Telegram,海外社交
+  - RULE-SET,Twitter,海外社交                       # X
+  - RULE-SET,SocialOversea,海外社交                 # Facebook/Instagram/Discord/Reddit/WhatsApp 等
+
+  # ---------- 媒体 ----------
+  - RULE-SET,YouTube,国际媒体
+  - RULE-SET,Netflix,国际媒体
+  - RULE-SET,Disney,国际媒体
+  - RULE-SET,Spotify,国际媒体
+  - RULE-SET,TikTok,国际媒体
+  - RULE-SET,Entertainment,国际媒体
+
+  # ---------- 谷歌 / 微软 ----------
+  - RULE-SET,Google,谷歌服务
+  - RULE-SET,Microsoft,微软服务
+
+  # ---------- 金融平台 ----------
+  - RULE-SET,Crypto,金融平台                        # Binance/OKX/Trust Wallet/Coinbase 等
+  - RULE-SET,Finance,金融平台                       # Wise/Stripe/IBKR/富途/老虎 等
+  - RULE-SET,PayPal,金融平台
+  - RULE-SET,Visa,金融平台
+  - RULE-SET,Mastercard,金融平台
+  - DOMAIN-SUFFIX,neverless.com,金融平台
+  - DOMAIN-SUFFIX,revolut.com,金融平台
+
+  # ---------- 游戏平台 ----------
+  - RULE-SET,Steam,游戏平台
+  - RULE-SET,Epic,游戏平台
+  - RULE-SET,Xbox,游戏平台
+  - RULE-SET,PlayStation,游戏平台
+  - RULE-SET,Nintendo,游戏平台
+  - RULE-SET,Games,游戏平台                          # 其余国外游戏平台
+
+  # ---------- IP 规则 (放在域名规则之后) ----------
+  - RULE-SET,TelegramIP,海外社交,no-resolve
+  - RULE-SET,TwitterIP,海外社交,no-resolve
+  - RULE-SET,FacebookIP,海外社交,no-resolve
+  - RULE-SET,NetflixIP,国际媒体,no-resolve
+  - RULE-SET,GoogleIP,谷歌服务,no-resolve
+
+  # ---------- 国内 / 兜底 ----------
+  - GEOSITE,cn,国内直连
+  - GEOIP,cn,国内直连,no-resolve
+  - GEOSITE,geolocation-!cn,全局代理
+  - MATCH,兜底流量
+
+
+# ==================== 规则集 ====================
+# 锚点: mrs 是 mihomo 专用二进制格式, 体积小解析快
+RuleDomain: &RuleDomain {type: http, behavior: domain, format: mrs, interval: 86400, proxy: DIRECT}
+RuleIP:     &RuleIP     {type: http, behavior: ipcidr, format: mrs, interval: 86400, proxy: DIRECT}
+RuleText:   &RuleText   {type: http, behavior: classical, format: text, interval: 86400, proxy: DIRECT}
+
+rule-providers:
+
+  # ---------- 广告拦截: 秋风广告规则 (AWAvenue Ads Rule) ----------
+  AWAvenue: {<<: *RuleDomain, path: ./rule_providers/AWAvenue-Ads-Rule-Clash.mrs, url: 'https://gcore.jsdelivr.net/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs'}
+
+  # ---------- 人工智能 ----------
+  OpenAI:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs'}
+  Anthropic:  {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/anthropic.mrs'}
+  Gemini:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs'}
+  xAI:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/xai.mrs'}
+  Copilot:    {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github-copilot.mrs'}
+  Perplexity: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/perplexity.mrs'}
+  AI:         {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs'}
+
+  # ---------- 社交 ----------
+  Telegram:      {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs'}
+  Twitter:       {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/twitter.mrs'}
+  SocialOversea: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-social-media-!cn.mrs'}
+  SocialCN:      {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-social-media-cn.mrs'}
+  Xiaohongshu:   {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/xiaohongshu.mrs'}
+  Xiaoheihe:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/xiaoheihe.mrs'}
+  Douyin:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/douyin.mrs'}
+
+  # ---------- 媒体 ----------
+  YouTube:       {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs'}
+  Netflix:       {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs'}
+  Disney:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/disney.mrs'}
+  Spotify:       {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/spotify.mrs'}
+  TikTok:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs'}
+  Entertainment: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-entertainment.mrs'}
+
+  # ---------- 谷歌 / 微软 ----------
+  Google:    {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs'}
+  Microsoft: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs'}
+
+  # ---------- 金融平台 ----------
+  Crypto:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-cryptocurrency.mrs'}
+  Finance:    {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-finance.mrs'}
+  PayPal:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/paypal.mrs'}
+  Visa:       {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/visa.mrs'}
+  Mastercard: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/mastercard.mrs'}
+
+  # ---------- 游戏平台 ----------
+  Steam:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam.mrs'}
+  Epic:         {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/epicgames.mrs'}
+  Xbox:         {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/xbox.mrs'}
+  PlayStation:  {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/playstation.mrs'}
+  Nintendo:     {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/nintendo.mrs'}
+  Games:        {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games-!cn.mrs'}
+  GameDownload: {<<: *RuleDomain, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-game-platforms-download.mrs'}
+
+  # ---------- IP 规则 ----------
+  TelegramIP: {<<: *RuleIP, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs'}
+  TwitterIP:  {<<: *RuleIP, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs'}
+  FacebookIP: {<<: *RuleIP, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/facebook.mrs'}
+  NetflixIP:  {<<: *RuleIP, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs'}
+  GoogleIP:   {<<: *RuleIP, url: 'https://gcore.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs'}
+
+# ==================== EOF ====================
