@@ -133,42 +133,42 @@ rule-providers:
 
   private:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/private.mrs'
     path: './ruleset/private.mrs'
     path-in-bundle: 'geo/geosite/private.mrs'
   private_ip:
     <<: *rule_providers_ip
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/private.mrs'
     path: './ruleset/private_ip.mrs'
     path-in-bundle: 'geo/geoip/private.mrs'
   games_cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-games@cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/category-games@cn.mrs'
     path: './ruleset/category-games@cn.mrs'
     path-in-bundle: 'geo/geosite/category-games@cn.mrs'
   epicgames:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/epicgames.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/epicgames.mrs'
     path: './ruleset/epicgames.mrs'
     path-in-bundle: 'geo/geosite/epicgames.mrs'
   apple_cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple@cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs'
     path: './ruleset/apple@cn.mrs'
     path-in-bundle: 'geo/geosite/apple@cn.mrs'
   microsoft_cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft@cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/microsoft@cn.mrs'
     path: './ruleset/microsoft@cn.mrs'
     path-in-bundle: 'geo/geosite/microsoft@cn.mrs'
   geolocation-cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/geolocation-cn.mrs'
     path: './ruleset/geolocation-cn.mrs'
     path-in-bundle: 'geo/geosite/geolocation-cn.mrs'
   cn_ip:
     <<: *rule_providers_ip
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/cn.mrs'
     path: './ruleset/cn_ip.mrs'
     path-in-bundle: 'geo/geoip/cn.mrs'
 
@@ -176,39 +176,44 @@ rule-providers:
 
   google:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/google.mrs'
     path: './ruleset/google.mrs'
     path-in-bundle: 'geo/geosite/google.mrs'
   google_ip:
     <<: *rule_providers_ip
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/google.mrs'
     path: './ruleset/google_ip.mrs'
     path-in-bundle: 'geo/geoip/google.mrs'
   ai:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/category-ai-!cn.mrs'
     path: './ruleset/ai.mrs'
     path-in-bundle: 'geo/geosite/category-ai-!cn.mrs'
   telegram:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/telegram.mrs'
     path: './ruleset/telegram.mrs'
     path-in-bundle: 'geo/geosite/telegram.mrs'
   telegram_ip:
     <<: *rule_providers_ip
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/telegram.mrs'
     path: './ruleset/telegram_ip.mrs'
     path-in-bundle: 'geo/geoip/telegram.mrs'
   steam:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/steam.mrs'
     path: './ruleset/steam.mrs'
     path-in-bundle: 'geo/geosite/steam.mrs'
-  gfw:
+  steam_asn:
+    <<: *rule_providers_ip
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/asn/AS32590.mrs'
+    path: './ruleset/steam_asn.mrs'
+    path-in-bundle: 'asn/AS32590.mrs'
+  geolocation-!cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/gfw.mrs'
-    path: './ruleset/gfw.mrs'
-    path-in-bundle: 'geo/geosite/gfw.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/geolocation-!cn.mrs'
+    path: './ruleset/geolocation-!cn.mrs'
+    path-in-bundle: 'geo/geosite/geolocation-!cn.mrs'
 
   # --- 其他规则集 ---
 
@@ -229,7 +234,7 @@ rule-providers:
     path-in-bundle: 'geo/geosite/cn.mrs'
   cn:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/wwqgtxx/clash-rules@release/direct.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/cn.mrs'
     path: './ruleset/cn.mrs'
     path-in-bundle: 'geo/geosite/cn.mrs'
 
@@ -453,7 +458,6 @@ rules:
   - RULE-SET,microsoft_cn,直连
   - DOMAIN,fsend.cn,直连
   - DOMAIN,international-gfe.download.nvidia.com,直连
-  - DOMAIN-SUFFIX,hdslb.com,直连
 
   # 禁用国外 QUIC 流量
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_additional),(RULE-SET,cn_ip,no-resolve)))))),REJECT
@@ -468,9 +472,10 @@ rules:
   - RULE-SET,telegram,Telegram
   - RULE-SET,telegram_ip,Telegram,no-resolve
   - RULE-SET,steam,Steam
+  - RULE-SET,steam_asn,Steam,no-resolve
 
   # 兜底规则
-  - RULE-SET,gfw,默认代理
+  - RULE-SET,geolocation-!cn,默认代理
   - RULE-SET,geolocation-cn,直连
   - RULE-SET,cn_ip,直连
   - RULE-SET,private_ip,直连

@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Geo
-# 版本： V2026.8.24
+# 版本： V2026.8.26
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -97,8 +97,10 @@ sniffer:
     - "+.media.dssott.com"                                              # 强制嗅探  Disney+ 流媒体
     - "+.tiktok.com"                                                    # 强制嗅探  TikTok 流媒体
   skip-domain:
-    - Mijia Cloud                                                       # 跳过嗅探  米家云服务
-    - dlg.io.mi.com                                                     # 跳过嗅探  小米设备通信
+    - "dlg.io.mi.com"                                                   # 跳过嗅探  小米设备通信
+    - "+.mi.com"                                                        # 跳过嗅探  小米相关服务
+    - "+.xiaomi.com"                                                    # 跳过嗅探  小米官方服务
+    - "+.miwifi.com"                                                    # 跳过嗅探  小米网络服务
     - "+.oray.com"                                                      # 跳过嗅探  花生壳服务
     - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制
     - "+.push.apple.com"                                                # 跳过嗅探  苹果推送服务
