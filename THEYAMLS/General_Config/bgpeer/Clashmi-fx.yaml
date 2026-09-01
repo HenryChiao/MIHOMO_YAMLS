@@ -36,7 +36,6 @@ external-controller-cors:
 external-controller: 127.0.0.1:9092
 secret: "88888888"
 external-ui: './ui'
-external-ui-name: zashboard
 external-ui-url: "https://codeload.github.com/Zephyruso/zashboard/zip/refs/heads/gh-pages"
 
 tun:

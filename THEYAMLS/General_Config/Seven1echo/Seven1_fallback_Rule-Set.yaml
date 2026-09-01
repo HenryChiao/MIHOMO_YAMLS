@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Rule-Set
-# 版本： V2026.8.26
+# 版本： V2026.8.28
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -133,7 +133,7 @@ proxy-groups:
   - {name: OneDrive,     <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/OneDrive.png}
   - {name: Microsoft,    <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Microsoft.png}
   - {name: Apple,        <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png}
-  - {name: Steam,        <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Steam.png}
+  - {name: Steam,        <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Steam.png}
   - {name: TikTok,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
   - {name: Twitter(X),   <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
   - {name: Telegram,     <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Telegram.png}
@@ -177,6 +177,7 @@ rules:
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,cn_ip,no-resolve)))))),REJECT
   - RULE-SET,private_domain,国内直连                                    # Private
   - RULE-SET,private_ip,国内直连,no-resolve                             # Private
+  - RULE-SET,games@cn_domain,国内直连                                   # 游戏直连 
   - RULE-SET,ai-!cn_domain,AI                                           # AI(国际)
   - RULE-SET,youtube_domain,YouTube                                     # YouTube
   - RULE-SET,google_domain,Google                                       # Google
@@ -209,6 +210,7 @@ rules:
 rule-providers: 
 # ══ 域名规则 ══
   private_domain:        { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
+  games@cn_domain:       { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs"}
   ai-!cn_domain:         { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
   youtube_domain:        { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
   google_domain:         { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
