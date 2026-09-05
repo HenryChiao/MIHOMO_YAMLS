@@ -84,73 +84,6 @@ ntp:
   port: 123
 
 
-proxies: ~
-proxy-groups:
-  - name: 🌍 PROXY
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/proxy.png"
-    type: select
-    proxies:
-        - 👉 手动切换
-        - ♻️ 自动选择
-        - 🔄 负载均衡
-        - DIRECT
-  - name: 🔄 负载均衡
-    icon: "https://www.clashverge.dev/assets/icons/balance.svg"
-    type: load-balance
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
-    url: 'https://www.gstatic.com/generate_204'
-    interval: 300
-    lazy: true
-    strategy: sticky-sessions
-  - name: 👉 手动切换
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/select.png"
-    type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
-  - name: ♻️ 自动选择
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/auto.png"
-    type: url-test
-    url: https://www.gstatic.com/generate_204
-    interval: 300
-    tolerance: 50
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
-  - name: 📲 Telegram
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/telegram.png"
-    type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
-  - name: 🎮 Games-Global
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/games-cn.png"
-    type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
-
-  - name: ✖️ Twitter
-    icon: "https://www.clashverge.dev/assets/icons/twitter.svg"
-    type: select
-    filter: "美国|住宅"
-    include-all-proxies: true
-  - name: 🤖 AI大模型
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/ai.png"
-    type: select
-    filter: "美国|住宅"
-    include-all-proxies: true
-  - name: 🎵 TikTok
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/tiktok.png"
-    type: select
-    filter: "美国|住宅"
-    include-all-proxies: true
-  # FCM：Google FCM 域名分流目标（命中规则 RULE-SET,googlefcm,FCM 后进入此组）。
-  # 模板中不隐藏该组，用于表明此代理组确实存在，是配置里真实的分流目标；
-  # 覆写脚本里设置 hidden 则是为了界面简洁：脚本借助 Bettbox 自定义脚本 UI 适配，
-  # 用 FCM直连 开关控制本组的 proxies: 字段（开=仅 DIRECT，关=仅 👉 手动切换），
-  # 方便有需要但不想直接改配置文件的用户。
-  # 开关图标取自本组的 icon 字段，换图标只需改这里一处。
-  - name: FCM
-    icon: "https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/fcm.png"
-    # hidden: true  # 脚本中隐藏该组以保持界面简洁；模板保留可见，以表明该组确实存在
-    type: select
-    proxies:
-      - 👉 手动切换
-      - DIRECT
-
 sniffer:
   enable: true
   force-dns-mapping: true
@@ -292,6 +225,73 @@ hosts                             :
 
 
 # 公共模板配置（锚点定义）
+proxies: ~
+proxy-groups:
+  - name: 🌍 PROXY
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/proxy.png"
+    type: select
+    proxies:
+        - 👉 手动切换
+        - ♻️ 自动选择
+        - 🔄 负载均衡
+        - DIRECT
+  - name: 🔄 负载均衡
+    icon: "https://www.clashverge.dev/assets/icons/balance.svg"
+    type: load-balance
+    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    url: 'https://www.gstatic.com/generate_204'
+    interval: 300
+    lazy: true
+    strategy: sticky-sessions
+  - name: 👉 手动切换
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/select.png"
+    type: select
+    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+  - name: ♻️ 自动选择
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/auto.png"
+    type: url-test
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+  - name: 📲 Telegram
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/telegram.png"
+    type: select
+    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+  - name: 🎮 Games-Global
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/games-cn.png"
+    type: select
+    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+
+  - name: ✖️ Twitter
+    icon: "https://www.clashverge.dev/assets/icons/twitter.svg"
+    type: select
+    filter: "美国|住宅"
+    include-all-proxies: true
+  - name: 🤖 AI大模型
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/ai.png"
+    type: select
+    filter: "美国|住宅"
+    include-all-proxies: true
+  - name: 🎵 TikTok
+    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/tiktok.png"
+    type: select
+    filter: "美国|住宅"
+    include-all-proxies: true
+  # FCM：Google FCM 域名分流目标（命中规则 RULE-SET,googlefcm,FCM 后进入此组）。
+  # 模板中不隐藏该组，用于表明此代理组确实存在，是配置里真实的分流目标；
+  # 覆写脚本里设置 hidden 则是为了界面简洁：脚本借助 Bettbox 自定义脚本 UI 适配，
+  # 用 FCM直连 开关控制本组的 proxies: 字段（开=仅 DIRECT，关=仅 👉 手动切换），
+  # 方便有需要但不想直接改配置文件的用户。
+  # 开关图标取自本组的 icon 字段，换图标只需改这里一处。
+  - name: FCM
+    icon: "https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/fcm.png"
+    # hidden: true  # 脚本中隐藏该组以保持界面简洁；模板保留可见，以表明该组确实存在
+    type: select
+    proxies:
+      - 👉 手动切换
+      - DIRECT
+
 .templates:
   domain_mrs: &domain_mrs { type: http, interval: 86400, behavior: domain, format: mrs }
   ipcidr_mrs: &ipcidr_mrs { type: http, interval: 86400, behavior: ipcidr, format: mrs }
@@ -423,8 +423,43 @@ rules:
   - "PROCESS-NAME-REGEX,.*telegram.*,📲 Telegram"
   - RULE-SET,telegramcidr,📲 Telegram,no-resolve
   - RULE-SET,telegram_domain,📲 Telegram
-
+  # Claude / Anthropic：进程命中优先，覆盖 Claude Desktop、Claude Code 等客户端
+  - PROCESS-NAME-REGEX,(?i).*claude.*,🤖 AI大模型
+  - PROCESS-NAME-REGEX,(?i).*anthropic.*,🤖 AI大模型
+  # Claude / Anthropic：官方 API、网页登录、OAuth、MCP、CLI 更新和插件依赖
+  - DOMAIN,api.anthropic.com,🤖 AI大模型
+  - DOMAIN,console.anthropic.com,🤖 AI大模型
+  - DOMAIN,statsig.anthropic.com,🤖 AI大模型
+  - DOMAIN,status.anthropic.com,🤖 AI大模型
+  - DOMAIN,sentry.anthropic.com,🤖 AI大模型
+  - DOMAIN,support.anthropic.com,🤖 AI大模型
+  - DOMAIN,mcp-proxy.anthropic.com,🤖 AI大模型
+  - DOMAIN,platform.claude.com,🤖 AI大模型
+  - DOMAIN,code.claude.com,🤖 AI大模型
+  - DOMAIN,downloads.claude.ai,🤖 AI大模型
+  - DOMAIN,bridge.claudeusercontent.com,🤖 AI大模型
+  - DOMAIN,cdn.growthbook.io,🤖 AI大模型
+  - DOMAIN,cdn.usefathom.com,🤖 AI大模型
+  - DOMAIN,registry.npmjs.org,🤖 AI大模型
+  - DOMAIN,storage.googleapis.com,🤖 AI大模型
+  - DOMAIN,raw.githubusercontent.com,🤖 AI大模型
+  - DOMAIN,formulae.brew.sh,🤖 AI大模型
+  - DOMAIN,http-intake.logs.us5.datadoghq.com,🤖 AI大模型
+  - DOMAIN,browser-intake-us5-datadoghq.com,🤖 AI大模型
+  - DOMAIN,servd-anthropic-website.b-cdn.net,🤖 AI大模型
+  - DOMAIN,claudemcpclient.com,🤖 AI大模型
+  - DOMAIN,claudemcpcontent.com,🤖 AI大模型
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI大模型
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI大模型
+  - DOMAIN-SUFFIX,claude.com,🤖 AI大模型
+  - DOMAIN-SUFFIX,claudeusercontent.com,🤖 AI大模型
+  - DOMAIN-SUFFIX,clau.de,🤖 AI大模型
+  - DOMAIN-SUFFIX,frame.claudeusercontent.com,🤖 AI大模型
+  - DOMAIN-SUFFIX,modelcontextprotocol.io,🤖 AI大模型
+  - IP-CIDR,160.79.104.0/21,🤖 AI大模型,no-resolve
+  - IP-CIDR6,2607:6bc0::/48,🤖 AI大模型,no-resolve
   - RULE-SET,Gemini_Domain,🤖 AI大模型
+
   - RULE-SET,Grok_Domain,🤖 AI大模型
  # - RULE-SET,Grok_IP,🤖 AI大模型
   - IP-CIDR,17.253.4.0/23,🤖 AI大模型,no-resolve
@@ -439,11 +474,7 @@ rules:
   - DOMAIN,browser-intake-us5-datadoghq.com,🤖 AI大模型
   - DOMAIN-KEYWORD,datadog,🤖 AI大模型
   - DOMAIN-KEYWORD,sift,🤖 AI大模型
-  # 客服 / 第三方 widget
-  - DOMAIN,cdn.usefathom.com,🤖 AI大模型
-  # IP 段兜底
-  - IP-CIDR,160.79.104.0/21,🤖 AI大模型,no-resolve
-  - IP-CIDR6,2607:6bc0::/32,🤖 AI大模型,no-resolve
+  # 兼容旧版 AI 规则中的第三方监控条目
   - RULE-SET,ai-1,🤖 AI大模型
   - RULE-SET,ai-2,🤖 AI大模型
 

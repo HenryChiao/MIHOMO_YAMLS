@@ -37,7 +37,7 @@ proxy-groups:
   - {
       name: 🚀 节点选择,
       type: select,
-      proxies: [ A机场全线路自动优选, B机场全线路自动优选, C全线路优选, A机场常用, B机场常用, 🎯 全球直连 ],
+      proxies: [ A机场全线路自动优选, B机场全线路自动优选, C全线路自选, A机场常用, B机场常用, 🎯 全球直连 ],
     }
 
   # --- 机场常用入口 ---
@@ -70,11 +70,8 @@ proxy-groups:
       proxies: [ B-美国节点, B-新加坡节点, B-香港节点, B-日本节点, B-韩国节点, B-台湾节点, B-欧洲节点, B-其他地区 ],
     }
   - {
-      name: C全线路优选,
-      type: url-test,
-      url: "https://www.gstatic.com/generate_204",
-      interval: 120,
-      tolerance: 50,
+      name: C全线路自选,
+      type: select,
       use: [ C机场 ],
     }
 
@@ -99,12 +96,12 @@ proxy-groups:
   - {
       name: 🤖 人工智能,
       type: select,
-      proxies: [ C全线路优选, B-美国节点, 🇺🇸 全线路美国优选, B-新加坡节点, 🇸🇬 全线路新加坡优选, A-美国节点, 🚀 节点选择 ],
+      proxies: [ C全线路自选, B-美国节点, 🇺🇸 全线路美国优选, B-新加坡节点, 🇸🇬 全线路新加坡优选, A-美国节点, 🚀 节点选择 ],
     }
   - {
       name: 📲 电报消息,
       type: select,
-      proxies: [ C全线路优选, 🇸🇬 全线路新加坡优选, A-新加坡节点, B-新加坡节点, A-香港节点, B-香港节点, 🚀 节点选择 ],
+      proxies: [ C全线路自选, 🇸🇬 全线路新加坡优选, A-新加坡节点, B-新加坡节点, A-香港节点, B-香港节点, 🚀 节点选择 ],
     }
   - {
       name: 🎮 游戏服务,
