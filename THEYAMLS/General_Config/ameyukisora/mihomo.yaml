@@ -53,14 +53,15 @@ dns:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   nameserver:
-    - 119.29.29.29
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
 
 # ==> 代理策略组 (Proxy Groups)
 proxy-groups:
   - name: "节点选择"
     <<: *common-group
     icon: https://raw.githubusercontent.com/amenorira/Clash-Rule/master/icon/start.png
-    filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵)'
+    filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG)'
     proxies:
       - 其他节点
 
@@ -74,7 +75,7 @@ proxy-groups:
   - name: "其他节点"
     <<: *common-group
     icon: https://raw.githubusercontent.com/amenorira/Clash-Rule/master/icon/Global.png
-    exclude-filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵)'
+    exclude-filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG)'
     proxies:
       - DIRECT
 
