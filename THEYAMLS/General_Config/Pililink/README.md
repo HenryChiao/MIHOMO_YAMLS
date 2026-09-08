@@ -8,31 +8,29 @@
 
 | 特性 | `2-subscription-clash-rule-set.yaml` | `base-clash-ruleset.yaml` | `3-subscription-clash-rule-set.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 18.0 KB | 15.8 KB | 18.5 KB |
+| **大小** | 16.7 KB | 15.8 KB | 17.2 KB |
 | **混合端口** | - | - | - |
 | **面板地址** | - | - | - |
 | **运行模式** | rule | rule | rule |
 | **TUN** | 🚫 | 🚫 | 🚫 |
-| **策略组** | **38** | **27** | **39** |
+| **策略组** | **36** | **27** | **37** |
 | **规则数** | **36** | **36** | **36** |
 
 ## 📄 配置详情
 
 #### 📝 2-subscription-clash-rule-set.yaml
-- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 18.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
+- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 16.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (38个)</summary>
+<summary>🔍 策略组 (36个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 🚀 节点选择 | `select` |
 | 👆 A机场常用 | `select` |
 | 👆 B机场常用 | `select` |
-| ♻️ A机场全线路自动优选 | `url-test` |
-| ♻️ B机场全线路自动优选 | `url-test` |
-| ♻️ 🇺🇸 全线路美国优选 | `url-test` |
-| ♻️ 🇸🇬 全线路新加坡优选 | `url-test` |
+| 👆 A全线路自选 | `select` |
+| 👆 B全线路自选 | `select` |
 | 👆 🤖 人工智能 | `select` |
 | 👆 📲 电报消息 | `select` |
 | 👆 🎮 游戏服务 | `select` |
@@ -46,7 +44,9 @@
 | 👆 🏠 家庭网络 | `select` |
 | 👆 🛑 广告拦截 | `select` |
 | 👆 🔒 私有网络 | `select` |
-| ... | 还有 18 个 |
+| 👆 🇨🇳 直连域名 | `select` |
+| 👆 🇨🇳 直连 IP | `select` |
+| ... | 还有 16 个 |
 </details>
 
 #### 📝 base-clash-ruleset.yaml
@@ -81,21 +81,19 @@
 </details>
 
 #### 📝 3-subscription-clash-rule-set.yaml
-- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 18.5 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
+- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 17.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (39个)</summary>
+<summary>🔍 策略组 (37个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 🚀 节点选择 | `select` |
 | 👆 A机场常用 | `select` |
 | 👆 B机场常用 | `select` |
-| ♻️ A机场全线路自动优选 | `url-test` |
-| ♻️ B机场全线路自动优选 | `url-test` |
+| 👆 A全线路自选 | `select` |
+| 👆 B全线路自选 | `select` |
 | 👆 C全线路自选 | `select` |
-| ♻️ 🇺🇸 全线路美国优选 | `url-test` |
-| ♻️ 🇸🇬 全线路新加坡优选 | `url-test` |
 | 👆 🤖 人工智能 | `select` |
 | 👆 📲 电报消息 | `select` |
 | 👆 🎮 游戏服务 | `select` |
@@ -108,5 +106,7 @@
 | 👆 🎯 全球直连 | `select` |
 | 👆 🏠 家庭网络 | `select` |
 | 👆 🛑 广告拦截 | `select` |
-| ... | 还有 19 个 |
+| 👆 🔒 私有网络 | `select` |
+| 👆 🇨🇳 直连域名 | `select` |
+| ... | 还有 17 个 |
 </details>
