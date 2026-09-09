@@ -58,8 +58,8 @@ tun:
   route-exclude-cidr: ["192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12", "100.64.0.0/10", "fc00::/7", "fe80::/10"]
 
 dns-anchor:
-  cn-dns: &cn-dns ["https://223.5.5.5/dns-query", "https://doh.pub/dns-query"]
-  global-dns: &global-dns ["https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query", "https://9.9.9.9/dns-query", "tls://1.1.1.1:853", "tls://8.8.8.8:853"]
+  cn-dns: &cn-dns ["https://223.5.5.5/dns-query#🎯直连", "https://doh.pub/dns-query#🎯直连"]
+  global-dns: &global-dns ["https://1.1.1.1/dns-query#🌍全球加速", "https://8.8.8.8/dns-query#🌐Google服务", "https://9.9.9.9/dns-query#🌍全球加速", "tls://1.1.1.1:853#🌍全球加速", "tls://8.8.8.8:853#🌐Google服务"]
 
 dns:
   enable: true
@@ -78,7 +78,7 @@ dns:
   fake-ip-filter: ["localhost","+.lan","+.local","+.arpa","+.ntp.org","captive.apple.com","connectivitycheck.gstatic.com","msftconnecttest.com","msftncsi.com","openai.*","+.openai.*","report-v2.samsung.japps.cn","rule-set:private"]
   direct-nameserver: ["system"]
   default-nameserver: ["223.5.5.5", "119.29.29.29"]
-  nameserver: ["https://223.5.5.5/dns-query", "https://doh.pub/dns-query", "https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query", "https://9.9.9.9/dns-query", "tls://1.1.1.1:853", "tls://8.8.8.8:853"]
+  nameserver: ["https://223.5.5.5/dns-query#🎯直连", "https://doh.pub/dns-query#🎯直连", "https://1.1.1.1/dns-query#🌍全球加速", "https://8.8.8.8/dns-query#🌐Google服务", "https://9.9.9.9/dns-query#🌍全球加速", "tls://1.1.1.1:853#🌍全球加速", "tls://8.8.8.8:853#🌐Google服务"]
   proxy-server-nameserver: ["https://1.1.1.1/dns-query", "https://8.8.8.8/dns-query", "https://9.9.9.9/dns-query"]
   direct-nameserver-follow-policy: true
   nameserver-policy:
