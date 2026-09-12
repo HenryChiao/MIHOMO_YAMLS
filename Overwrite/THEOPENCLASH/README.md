@@ -17,7 +17,7 @@
 | 📁 **[General_Config/Lanlan13-14](./General_Config/Lanlan13-14/README.md)** | 3 个 | [点击浏览详细列表](./General_Config/Lanlan13-14/README.md) |
 | 📁 **[General_Config/Mitchell](./General_Config/Mitchell/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/Mitchell/README.md) |
 | 📁 **[General_Config/Pililink](./General_Config/Pililink/README.md)** | 3 个 | [点击浏览详细列表](./General_Config/Pililink/README.md) |
-| 📁 **[General_Config/Repcz](./General_Config/Repcz/README.md)** | 2 个 | [点击浏览详细列表](./General_Config/Repcz/README.md) |
+| 📁 **[General_Config/Repcz](./General_Config/Repcz/README.md)** | 3 个 | [点击浏览详细列表](./General_Config/Repcz/README.md) |
 | 📁 **[General_Config/SHICHUNHUI88](./General_Config/SHICHUNHUI88/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/SHICHUNHUI88/README.md) |
 | 📁 **[General_Config/Seven1echo](./General_Config/Seven1echo/README.md)** | 2 个 | [点击浏览详细列表](./General_Config/Seven1echo/README.md) |
 | 📁 **[General_Config/Sgraqwq](./General_Config/Sgraqwq/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/Sgraqwq/README.md) |
@@ -32,7 +32,7 @@
 | 📁 **[General_Config/liuran001](./General_Config/liuran001/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/liuran001/README.md) |
 | 📁 **[General_Config/loneshu7](./General_Config/loneshu7/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/loneshu7/README.md) |
 | 📁 **[General_Config/lvbibir](./General_Config/lvbibir/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/lvbibir/README.md) |
-| 📁 **[General_Config/qichiyuhub](./General_Config/qichiyuhub/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/qichiyuhub/README.md) |
+| 📁 **[General_Config/qichiyuhub](./General_Config/qichiyuhub/README.md)** | 2 个 | [点击浏览详细列表](./General_Config/qichiyuhub/README.md) |
 | 📁 **[General_Config/sfssup](./General_Config/sfssup/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/sfssup/README.md) |
 | 📁 **[General_Config/wanswu](./General_Config/wanswu/README.md)** | 1 个 | [点击浏览详细列表](./General_Config/wanswu/README.md) |
 | 📁 **[General_Config/yyhhyyyyyy](./General_Config/yyhhyyyyyy/README.md)** | 2 个 | [点击浏览详细列表](./General_Config/yyhhyyyyyy/README.md) |
