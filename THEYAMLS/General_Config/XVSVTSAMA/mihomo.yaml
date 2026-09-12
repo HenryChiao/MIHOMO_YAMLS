@@ -392,6 +392,7 @@ rules:
   - RULE-SET,HijackingPlus,REJECT
 
   - SUB-RULE,(PROCESS-NAME,com.dragon.read.oversea.gp),fanqie
+  - DOMAIN-KEYWORD,ikuuu,🌍 PROXY
   - RULE-SET,applications,DIRECT
   - RULE-SET,echs_cn,DIRECT
   - RULE-SET,echs_cn_ip,DIRECT,no-resolve

@@ -1,0 +1,633 @@
+# ============================================================
+# Clash 社区模板：单机场地区分类版
+# 社区公开分享，按现状提供；DNS、WebRTC 与分流结果需在你的环境中复测。
+# 文件会连接第三方 DNS，并下载远程规则集与图标；导入前请先阅读完整源码。
+#
+# DNS 测试异常时：
+# 1. 先确保 Clash 处于启动代理状态。
+# 2. 进入“更多 → DNS → DNS 查询”。
+# 3. 依次点击“清空 DNS 缓存”和“清空 Fake-IP 缓存”。
+# 4. 保持当前配置运行，再重新进行 DNS Leak Test。
+# 从其他或旧配置切换后尤其建议先清理这两项缓存，避免旧结果干扰测试。
+# 注意：Clash 必须在启动代理状态下，才能使用 DNS 缓存清理功能。
+# Mihomo / Clash 通用型配置
+# 适用目标：
+# Windows / macOS / Android / iOS
+#
+# 核心模式：
+# 中国大陆流量 → DIRECT
+# 明确指定的海外服务 → PROXY-Gate
+# 广告/隐私规则 → REJECT
+# 未匹配流量 → PROXY-Gate（代理兜底）
+#
+# 注意：
+# 1. 将 proxy-providers.Primary-VPS.url 替换为你的订阅地址
+# 2. 不要公开包含订阅 Token 的配置文件
+# 3. 本配置默认不开放局域网代理
+# 4. external-controller 仅允许本机访问
+# ============================================================
+
+proxy-providers:
+
+  Primary-VPS:
+    type: http
+
+    # 将下面的地址替换为你的机场订阅地址
+    url: "" # 在英文双引号内粘贴你的机场订阅链接
+
+    interval: 600
+
+
+
+# General
+
+
+mixed-port: 7890
+
+# 默认关闭局域网代理共享
+# 如果需要让其他设备通过本机代理，再改为 true
+allow-lan: false
+# 保留通用监听方式，不强制绑定 127.0.0.1
+bind-address: '*'
+
+mode: rule
+log-level: info
+# Mihomo 控制 API
+# 仅允许本机访问
+external-controller: '127.0.0.1:9090'
+# 统一延迟计算
+unified-delay: true
+# TCP 并发连接
+tcp-concurrent: true
+# IPv6
+ipv6: true
+
+# TUN
+
+tun:
+  enable: true
+  # 跨平台通用 TUN 栈
+  stack: gvisor
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: true
+  dns-hijack:
+    - any:53
+
+# DNS
+
+dns:
+  enable: true
+  # DNS 请求遵守代理规则
+  respect-rules: true
+  ipv6: true
+  # 与 respect-rules: true 搭配时关闭
+  prefer-h3: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+
+
+
+  # 用于基础 DNS 解析
+  default-nameserver:
+
+    - 223.5.5.5
+    - 119.29.29.29
+    - 2400:3200::1
+
+  # Main Nameserver
+  # 常规域名 DNS
+  nameserver:
+    # 🇺🇸 Cloudflare
+    - https://dns.cloudflare.com/dns-query
+    - https://dns.google/dns-query
+
+  # Proxy Server Nameserver Policy
+  # 用于解析代理节点域名。
+  # 如果你的节点是：
+  # node.example.com
+  # 可以在下方针对特定节点指定解析 DNS。
+  proxy-server-nameserver-policy:
+
+    # 示例：
+    # 'node.example.com':
+    #   - 223.5.5.5
+
+    # 可以在此处指定代理节点域名的 DNS 解析策略
+
+
+
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+
+
+  direct-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+
+
+  nameserver-policy:
+
+    # Cloudflare DoH 域名本身
+    'dns.cloudflare.com':
+      - 1.1.1.1
+      - 1.0.0.1
+    # Google DoH 域名本身
+    'dns.google':
+      - 8.8.8.8
+      - 8.8.4.4
+    # Quad9 DoH 域名本身
+    'dns.quad9.net':
+      - 9.9.9.9
+      - 149.112.112.112
+    # AliDNS DoH 域名本身
+    'dns.alidns.com':
+      - 223.5.5.5
+      - 223.6.6.6
+    # DNSPod DoH 域名本身
+    'doh.pub':
+      - 1.12.12.12
+      - 120.53.53.53
+    # 中国大陆域名
+    'geosite:cn':
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+
+
+  fallback:
+
+    # 🇩🇰 UncensoredDNS Anycast
+    - https://anycast.uncensoreddns.org/dns-query
+
+
+  fallback-filter:
+
+    geoip: true
+
+    geoip-code: CN
+
+    ipcidr:
+      - 240.0.0.0/4
+      - 127.0.0.0/8
+      - 0.0.0.0/32
+
+  # 以下域名不使用 Fake-IP。
+  fake-ip-filter:
+
+    # LAN / Local
+    - '*.lan'
+    - '*.local'
+    - 'localhost'
+    # Windows Connectivity Check
+    - '*.msftconnecttest.com'
+    - '*.msftncsi.com'
+    - '*.msidentity.com'
+    # Apple
+    - 'captive.apple.com'
+    - '*.push.apple.com'
+    # STUN / WebRTC / VoIP
+    - 'stun.*'
+    - '+.stun.*.*'
+    - '+.stun.*.*.*'
+    - '+.stun.*.*.*.*'
+    - '+.stun.*.*.*.*.*'
+    # WeChat / QQ / Tencent
+    - '+.weixin.com'
+    - '+.wechat.com'
+    - '+.qq.com'
+    - '+.tencent.com'
+    # Speedtest
+    - 'speedtest.net'
+
+profile:
+
+  # 保存策略组选择
+  store-selected: true
+  # 保存 Fake-IP 映射
+  store-fake-ip: true
+
+
+proxy-groups:
+  # 主控制组
+  # 所有需要代理的流量最终进入这里。
+  - name: PROXY-Gate
+    type: select
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Final.png
+    proxies:
+      - 🌎 Global-Manual
+      - 🗺️ EUR-Manual
+      - 🇺🇸 US-Auto
+      - 🇸🇬 SG-Auto
+      - 🇭🇰 HK-Auto
+      - 🇯🇵 JP-Auto
+      - 🇹🇼 TW-Auto
+      - DIRECT
+
+  - name: Apple Push
+    type: fallback
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Apple.png
+    proxies:
+      - APNs-Fallback
+      - DIRECT
+    url: http://captive.apple.com/hotspot-detect.html
+    interval: 300
+
+  # 全节点手动选择
+  # include-all: true
+  # 自动包含所有 Proxy Providers 中的节点。
+  - name: 🌎 Global-Manual
+    type: select
+    include-all: true
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Global.png
+
+
+  # 欧洲手动选择
+  - name: 🗺️ EUR-Manual
+    type: select
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Europe_Map.png
+    proxies:
+      - 🇬🇧 UK-Auto
+      - 🇩🇪 DE-Auto
+      - 🇫🇷 FR-Auto
+      - 🇷🇺 RU-Auto
+
+
+  # ==========================================================
+  # 自动测速组
+  # 默认情况下自动测速并选择延迟较低的节点。
+  # 注意：
+  # 用户在客户端手动选择某个节点后，部分 Mihomo 客户端
+  # 可能进入固定选择状态。
+  # 再次测速/清除固定选择后恢复自动选择。
+
+  - name: APNs-Fallback
+    type: fallback
+    include-all: true
+    exclude-filter: (?i)^(Apple Push|APNs-Fallback)$
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Apple.png
+    url: http://captive.apple.com/hotspot-detect.html
+    interval: 300
+
+  # 🇺🇸 United States
+  - name: 🇺🇸 US-Auto
+    type: url-test
+    include-all: true
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/United_States.png
+    filter: '(?i)(\[US\]|^US$|USA|United States|\bUS\b|美国)'
+    url: http://www.gstatic.com/generate_204
+    interval: 600
+    tolerance: 50
+
+
+  # 🇸🇬 Singapore
+  - name: 🇸🇬 SG-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Singapore.png
+
+    filter: '(?i)(\[SG\]|^SG$|Singapore|\bSG\b|新加坡|狮城)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+  # 🇭🇰 Hong Kong
+  - name: 🇭🇰 HK-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Hong_Kong.png
+
+    filter: '(?i)(\[HK\]|^HK$|Hong Kong|\bHK\b|香港|🇨🇳香港)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+  # 🇯🇵 Japan
+  - name: 🇯🇵 JP-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Japan.png
+
+    filter: '(?i)(\[JP\]|^JP$|Japan|\bJP\b|日本|东京|大阪|🇯🇵日本)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+  # 🇹🇼 Taiwan
+  - name: 🇹🇼 TW-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Taiwan.png
+
+    filter: '(?i)(\[TW\]|^TW$|Taiwan|Taibei|\bTW\b|台湾|台北|🇹🇼)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+  # 🇬🇧 United Kingdom
+
+  - name: 🇬🇧 UK-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/United_Kingdom.png
+
+    filter: '(?i)(\[UK\]|^UK$|UK|United Kingdom|Britain|\bUK\b|英国|伦敦)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+  # 🇩🇪 Germany
+
+  - name: 🇩🇪 DE-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Germany.png
+
+    filter: '(?i)(\[DE\]|^DE$|Germany|Deutschland|\bDE\b|德国|法兰克福)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+
+  # 🇫🇷 France
+
+  - name: 🇫🇷 FR-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/France.png
+
+    filter: '(?i)(\[FR\]|^FR$|France|\bFR\b|法国|巴黎)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+
+  # 🇷🇺 Russia
+
+  - name: 🇷🇺 RU-Auto
+    type: url-test
+
+    include-all: true
+
+    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/Color/Russia.png
+
+    filter: '(?i)(\[RU\]|^RU$|Russia|Russian Federation|\bRU\b|俄罗斯|莫斯科|伯力)'
+
+    url: http://www.gstatic.com/generate_204
+
+    interval: 600
+
+    tolerance: 50
+
+
+
+# Rules
+
+
+rules:
+
+  # ① LAN / 本机网络
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+
+  - GEOIP,LAN,DIRECT,no-resolve
+
+
+  # ② Apple APNs
+  - DOMAIN-SUFFIX,push.apple.com,Apple Push
+  - DOMAIN-SUFFIX,push-apple.com.akadns.net,Apple Push
+
+  - DOMAIN-KEYWORD,apple.com.edgekey.net,Apple Push
+
+  - IP-CIDR,17.249.0.0/16,Apple Push,no-resolve
+  - IP-CIDR,17.252.0.0/16,Apple Push,no-resolve
+  - IP-CIDR,17.57.144.0/22,Apple Push,no-resolve
+  - IP-CIDR,17.188.128.0/18,Apple Push,no-resolve
+  - IP-CIDR,17.188.20.0/23,Apple Push,no-resolve
+
+  - IP-CIDR6,2620:149:a44::/48,Apple Push,no-resolve
+  - IP-CIDR6,2403:300:a42::/48,Apple Push,no-resolve
+  - IP-CIDR6,2403:300:a51::/48,Apple Push,no-resolve
+  - IP-CIDR6,2a01:b740:a42::/48,Apple Push,no-resolve
+
+  # ③ GitHub
+  - DOMAIN-SUFFIX,github.com,PROXY-Gate
+  - DOMAIN-SUFFIX,githubusercontent.com,PROXY-Gate
+  - DOMAIN-SUFFIX,githubassets.com,PROXY-Gate
+  - DOMAIN-SUFFIX,raw.githubusercontent.com,PROXY-Gate
+
+  # ④ Apple 通用规则
+  - RULE-SET,Apple,DIRECT
+  - RULE-SET,Apple_Domain,DIRECT
+
+
+  # ⑤ 广告 / 隐私拦截
+  - RULE-SET,AdvertisingLite,REJECT
+  - RULE-SET,AdvertisingLite_Domain,REJECT
+  - RULE-SET,Privacy,REJECT
+  - RULE-SET,Privacy_Domain,REJECT
+  - RULE-SET,ACL4SSR_BanAD,REJECT
+  - RULE-SET,ACL4SSR_BanProgramAD,REJECT
+
+
+  # ⑥ AI 服务
+  - DOMAIN-KEYWORD,openai,PROXY-Gate
+  - DOMAIN-KEYWORD,chatgpt,PROXY-Gate
+
+  - DOMAIN-SUFFIX,auth0.com,PROXY-Gate
+  - DOMAIN-SUFFIX,identrust.com,PROXY-Gate
+
+  - DOMAIN-SUFFIX,oaistatic.com,PROXY-Gate
+  - DOMAIN-SUFFIX,oaiusercontent.com,PROXY-Gate
+
+  - DOMAIN-SUFFIX,anthropic.com,PROXY-Gate
+  - DOMAIN-SUFFIX,claude.ai,PROXY-Gate
+
+  - DOMAIN-SUFFIX,deepmind.com,PROXY-Gate
+  - DOMAIN-SUFFIX,gemini.google.com,PROXY-Gate
+
+  - DOMAIN-KEYWORD,copilot,PROXY-Gate
+  - DOMAIN-SUFFIX,designer.microsoft.com,PROXY-Gate
+  - DOMAIN-SUFFIX,copilot.microsoft.com,PROXY-Gate
+  - DOMAIN-SUFFIX,ai.microsoft.com,PROXY-Gate
+
+
+  # ⑦ OneDrive
+  - DOMAIN,onedrive.live.com,PROXY-Gate
+  - DOMAIN-SUFFIX,1drv.com,PROXY-Gate
+
+
+
+  # ⑧ Google / YouTube
+  - DOMAIN-KEYWORD,google,PROXY-Gate
+  - DOMAIN-SUFFIX,gmail.com,PROXY-Gate
+  - DOMAIN-SUFFIX,googlevideo.com,PROXY-Gate
+
+  - DOMAIN-SUFFIX,youtube.com,PROXY-Gate
+  - DOMAIN-SUFFIX,ytimg.com,PROXY-Gate
+  - DOMAIN-SUFFIX,ggpht.com,PROXY-Gate
+
+  # ⑨ Telegram
+  - DOMAIN-SUFFIX,telegram.org,PROXY-Gate
+  - DOMAIN-SUFFIX,telegram.me,PROXY-Gate
+  - DOMAIN-SUFFIX,t.me,PROXY-Gate
+  - DOMAIN-SUFFIX,tdesktop.com,PROXY-Gate
+
+  - IP-CIDR,91.108.4.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,91.108.8.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,91.108.12.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,91.108.16.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,91.108.20.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,91.108.56.0/22,PROXY-Gate,no-resolve
+  - IP-CIDR,149.154.160.0/20,PROXY-Gate,no-resolve
+  - IP-CIDR6,2001:b28:f23d::/48,PROXY-Gate,no-resolve
+  - IP-CIDR6,2001:b28:f23f::/48,PROXY-Gate,no-resolve
+  - IP-CIDR6,2001:67c:4e8::/48,PROXY-Gate,no-resolve
+
+
+  # ⑩ TikTok / ByteDance
+  - DOMAIN-KEYWORD,tiktok,PROXY-Gate
+  - DOMAIN-KEYWORD,tiktokcdn,PROXY-Gate
+  - DOMAIN-KEYWORD,tiktokv,PROXY-Gate
+
+
+  # ⑪ 中国大陆直连
+  # ChinaMax 三套规则共同使用：
+  # ChinaMax         → 综合规则
+  # ChinaMax_Domain  → 域名规则
+  # ChinaMax_IP      → IP 规则
+  # GEOIP,CN/GEOSITE,CN直连兜底
+  - RULE-SET,ChinaMax,DIRECT
+  - RULE-SET,ChinaMax_Domain,DIRECT
+  - RULE-SET,ChinaMax_IP,DIRECT
+  - GEOSITE,CN,DIRECT
+  - GEOIP,CN,DIRECT,no-resolve
+
+  # ⑫ 最终流量
+  # 所有没有被前面规则匹配的流量：
+  # → PROXY-Gate进入代理
+  - MATCH,PROXY-Gate
+
+
+rule-providers:
+
+  Apple:
+    type: http
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.yaml
+
+  Apple_Domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/Sydney-Moses/Network-Profiles/refs/heads/main/MRS/Apple_Domain.mrs
+
+  AdvertisingLite:
+    type: http
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/AdvertisingLite/AdvertisingLite.yaml
+
+  AdvertisingLite_Domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/Sydney-Moses/Network-Profiles/refs/heads/main/MRS/AdvertisingLite_Domain.mrs
+
+  Privacy:
+    type: http
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Privacy/Privacy.yaml
+
+  Privacy_Domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/Sydney-Moses/Network-Profiles/refs/heads/main/MRS/Privacy_Domain.mrs
+
+  ACL4SSR_BanAD:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/mrs/BanAD_domain.mrs
+
+  ACL4SSR_BanProgramAD:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/mrs/BanProgramAD_domain.mrs
+
+  ChinaMax:
+    type: http
+    behavior: classical
+    format: yaml
+    interval: 86400
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/ChinaMax/ChinaMax.yaml
+
+  ChinaMax_Domain:
+    type: http
+    behavior: domain
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/Sydney-Moses/Network-Profiles/refs/heads/main/MRS/ChinaMax_Domain.mrs
+
+  ChinaMax_IP:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    interval: 86400
+    url: https://raw.githubusercontent.com/Sydney-Moses/Network-Profiles/refs/heads/main/MRS/ChinaMax_IP.mrs
