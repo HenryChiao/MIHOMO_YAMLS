@@ -72,6 +72,9 @@ https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/refs/heads/ma
 https://raw.githubusercontent.com/YiXuanZX/rules/refs/heads/main/mihomo.yaml|THEYAMLS/General_Config/YiXuanZX/mihomo.yaml
 https://raw.githubusercontent.com/XVSVTsama/mihomo-config-self/refs/heads/main/mihomo.yaml|THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml
 https://raw.githubusercontent.com/Sfssup/mihomo-set/refs/heads/main/config/config.yaml|THEYAMLS/General_Config/sfssup/mihomo.yaml
+https://clash.md/configs/region-single-provider.yaml|THEYAMLS/General_Config/From_clash_by_hako/region-single-provider.yaml
+https://clash.md/configs/region-dual-provider.yaml|THEYAMLS/General_Config/From_clash_by_hako/region-dual-provider.yaml
+https://clash.md/configs/service-single-provider.yaml|THEYAMLS/General_Config/From_clash_by_hako/service-single-provider.yaml
 EOF
 )
 
