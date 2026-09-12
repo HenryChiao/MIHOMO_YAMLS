@@ -31,7 +31,9 @@ https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/configfull.y
 https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/configfull_lite.yaml|THEYAMLS/General_Config/Lanlan13-14/configfull_lite.yaml
 https://raw.githubusercontent.com/Lanlan13-14/Rules/refs/heads/main/configfull_NoAd.yaml|THEYAMLS/General_Config/Lanlan13-14/configfull_NoAd.yaml
 https://raw.githubusercontent.com/echs-top/proxy/heads/main/mihomo.yaml|THEYAMLS/General_Config/echs-top/mihomo.yaml
-https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/config/mihomo/config.yaml|THEYAMLS/General_Config/qichiyuhub/config.yaml
+https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/config/mihomo/config/config.yaml|THEYAMLS/General_Config/qichiyuhub/config.yaml
+https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/config/mihomo/other/fuxie.yaml|THEYAMLS/General_Config/qichiyuhub/fuxie.yaml
+https://raw.githubusercontent.com/qichiyuhub/rule/refs/heads/main/config/mihomo/other/proxychain.yaml|THEYAMLS/General_Config/qichiyuhub/proxychain.yaml
 https://raw.githubusercontent.com/luestr/ProxyResource/main/Tool/Clash/Config/Clash_Sample_Config_By_iKeLee.yaml|THEYAMLS/General_Config/iKeLee/Clash_Sample.yaml
 https://raw.githubusercontent.com/sunfing/iNg/refs/heads/main/Config/ConfigForClash|THEYAMLS/General_Config/fufu/ConfigForClash.yaml
 https://gist.githubusercontent.com/liuran001/5ca84f7def53c70b554d3f765ff86a33/raw/9de058af0600fbbcfb480f9cbc23bd7dafe9d039/config.yaml|THEYAMLS/General_Config/liuran001/config.yaml
