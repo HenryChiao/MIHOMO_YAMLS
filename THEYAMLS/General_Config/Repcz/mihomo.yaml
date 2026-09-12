@@ -1,0 +1,74 @@
+proxy-providers:
+  Sub:
+    url: http://your-service-provider
+    type: http
+    interval: 86400
+    health-check: {enable: true, url: http://1.1.1.1/generate_204, interval: 1800, timeout: 5000}
+
+mixed-port: 7893
+tcp-concurrent: true
+allow-lan: true
+ipv6: false
+log-level: info
+unified-delay: true
+
+geodata-mode: false
+geox-url:
+  mmdb: "https://github.com/Repcz/Tool/raw/X/GeoIP/CN.mmdb"
+
+profile: { store-selected: true, store-fake-ip: false }
+sniffer: { enable: true, sniff: { HTTP: { ports: [80], override-destination: true }, TLS: { ports: [443, 8443] }, QUIC: { ports: [443, 8443] } } }
+
+tun:
+  enable: true
+  stack: mixed
+  dns-hijack: [any:53]
+        
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  listen: :1053
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-filter: ['+.lan', '*', '+.local', '+.cmpassport.com', 'id6.me', 'open.e.189.cn', 'mdn.open.wo.cn', 'opencloud.wostore.cn', 'auth.wosms.cn', '+.10099.com.cn', '+.msftconnecttest.com', '+.msftncsi.com', 'lancache.steamcontent.com']
+  default-nameserver: [223.5.5.5, 119.29.29.29]
+  nameserver: 
+    - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+
+# 锚点参数
+c: &c {type: http, behavior: classical, format: text, interval: 86400}
+
+proxy-groups:
+  - {name: Proxy, type: select, use:[Sub], proxies: [Fallback],icon: https://github.com/shindgewongxj/WHATSINStash/raw/main/icon/applesafari.png}
+  - {name: AI, type: select, use:[Sub], proxies: [Proxy, Fallback], icon: https://raw.githubusercontent.com/Orz-3/mini/master/Color/OpenAI.png}
+  - {name: Telegram, type: select, use:[Sub], proxies: [Proxy, Fallback], icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png}
+  - {name: Fallback, type: fallback, use:[Sub], icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Available_1.png}
+  - {name: Final, type: select, use:[Sub], proxies: [Proxy, Fallback], icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Final.png}
+
+rule-providers:
+  
+  Direct: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Direct.list}
+  Lan: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Lan.list}
+  Reject: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Reject.list}
+  Microsoft: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Microsoft.list}
+  Github: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Github.list}
+  Google: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Google.list}
+  Telegram: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Telegram.list}
+  Twitter: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Twitter.list}
+  AI: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/AI.list}
+  Proxy: {<<: *c, url: https://github.com/Repcz/Tool/raw/X/mihomo/Rules/Proxy.list}
+
+rules:
+  - RULE-SET,Direct,DIRECT
+  - RULE-SET,Reject,REJECT
+  - RULE-SET,AI,AI
+  - RULE-SET,Telegram,Telegram
+  - RULE-SET,Twitter,Fallback
+  - RULE-SET,Google,Fallback
+  - RULE-SET,Github,Fallback
+  - RULE-SET,Microsoft,Fallback
+  - RULE-SET,Proxy,Proxy
+  - RULE-SET,Lan,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,Final

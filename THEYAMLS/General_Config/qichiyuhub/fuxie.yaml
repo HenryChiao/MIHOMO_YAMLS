@@ -1,21 +1,3 @@
-# 必读！！！
-# 此配置不防DNS泄露，想使用防泄漏专业版本请使用同目录下另一个名字为mihomo的版本
-# 机场订阅
-proxy-providers:
-  Airport1:
-    url: "订阅url"
-    type: http
-    interval: 0
-    health-check:
-      enable: true
-      url: https://www.gstatic.com/generate_204
-      interval: 300
-    proxy: 直连
-
-# 节点信息
-proxies:
-  - {name: 直连, type: direct}
-
 # 全局配置 
 mixed-port: 7890
 allow-lan: true
@@ -29,11 +11,6 @@ keep-alive-interval: 15
 profile:
   store-selected: true
   store-fake-ip: true
-
-external-controller: 0.0.0.0:9090
-secret: ""
-external-ui: ui
-external-ui-url: "https://gh-proxy.com/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip"
 
 # 嗅探
 sniffer:
