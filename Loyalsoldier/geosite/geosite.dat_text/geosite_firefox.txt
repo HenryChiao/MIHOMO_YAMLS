@@ -1,0 +1,8 @@
+full:mozilla-ohttp.fastly-edge.com
+full:mozilla.map.fastly.net
+extendfirefox.com
+firefox-portal-detection.com
+firefox.com
+firefox.hu
+firefoxtweetmachine.com
+firefoxusercontent.com
