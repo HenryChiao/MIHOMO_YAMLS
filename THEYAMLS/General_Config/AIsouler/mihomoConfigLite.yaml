@@ -89,6 +89,7 @@ dns:
   fake-ip-filter: ['rule-set:private', 'rule-set:fakeip_filter', 'rule-set:geolocation-cn']
   default-nameserver: *defaultDNS
   proxy-server-nameserver: *proxyServerDNS
+  nameserver: *foreignDNS
   nameserver-policy:
     'rule-set:private': 'system'
     'rule-set:douyin': ['system', '180.184.1.1', '180.184.2.2']
