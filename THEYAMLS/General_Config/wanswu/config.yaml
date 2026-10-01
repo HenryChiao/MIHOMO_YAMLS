@@ -24,7 +24,7 @@ PF: &PF { exclude-filter: *FilterPP, type: file, interval: 600, health-check: { 
 proxy-providers:
   main:
     <<: *PU
-    url: https://anyland.club/#/register?code=R7vdKxbE
+    url: https://www.sibker.com/register?invite_code=IuA1vdgT
     path: ./proxy_provider/main.yaml
     header:
       User-Agent:
@@ -60,6 +60,14 @@ keep-alive-interval: 15
 keep-alive-idle: 600
 etag-support: true
 
+# 入站
+tun:
+  enable: true
+  stack: mips
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  dns-hijack: [ any:53, tcp://any:53 ]
 
 # 规则选择缓存
 profile:
@@ -70,7 +78,7 @@ profile:
 # DNS配置
 dns:
   enable: true
-  ipv6: true
+  ipv6: false
   prefer-h3: false
   use-hosts: true
   use-system-hosts: true
@@ -94,17 +102,21 @@ dns:
     - https://dns.cloudflare.com/dns-query#ecs=1.1.1.1/24&ecs-override=true
     - https://dns.google/dns-query#ecs=1.1.1.1/24&ecs-override=true
   nameserver-policy: # 指定域名查询的解析服务器，优先于 nameserver/fallback 查询
-    "RULE-SET:China,Lan": 
+    "RULE-SET:China,Lan":
       - https://dns.alidns.com/dns-query#ecs=223.5.5.5/24&ecs-override=true
       - https://doh.pub/dns-query#ecs=223.5.5.5/24&ecs-override=true
   proxy-server-nameserver:  # 代理节点域名解析服务器，仅用于解析代理节点的域名，如果不填则遵循 nameserver-policy、nameserver 和 fallback 的配置
     - https://dns.alidns.com/dns-query#ecs=223.5.5.5/24&ecs-override=true
     - https://doh.pub/dns-query#ecs=223.5.5.5/24&ecs-override=true
   proxy-server-nameserver-policy: # 格式同nameserver-policy，仅用于节点域名解析，优先于proxy-server-nameserver查询，自定义机场在此添加DNS
-    '*.llguanglisf.com':  # 飞鸟
-      - https://appdsv1.apiv2.a047.com/api-v2
-      - https://appdsv1.web.ak005.com/api-v2
-      - https://appdsv1.llguangli25n.com/api-v2
+    # "*.llguanglisf.com":
+    #   - https://appdsv1.apiv2.a047.com/api-v2
+    #   - https://appdsv1.web.ak005.com/api-v2
+    #   - https://appdsv1.llguangli25n.com/api-v2
+    # "*.digital-nvme.com":
+    #   - 8.138.94.132:8053
+    # "*.yunsmartdns.com":
+    #   - 8.138.94.132:8053
 
 
 # GEO配置
@@ -113,19 +125,10 @@ geo-auto-update: true
 geo-update-interval: 24
 geodata-loader: memconservative
 geox-url:
-  geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
-  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
-  geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
-  asn: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb"
-
-# 入站
-tun:
-  enable: false
-  stack: mips
-  auto-route: true
-  auto-redirect: true
-  auto-detect-interface: true
-  dns-hijack: [ any:53, tcp://any:53 ]
+  geoip: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  mmdb: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+  geosite: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  asn: "https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb"
 
 # 嗅探
 sniffer:
@@ -191,73 +194,73 @@ SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 
 SelectDR: &SelectDR { type: select, include-all: true, proxies: [ DIRECT, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, REJECT ] }
 # 代理组
 proxy-groups:
-  - { name: 手动选择,     <<: *SelectUL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Rocket.png }
-  - { name: 家宽选择,     <<: *BaseFB, filter: *FilterHM, hidden: false, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
-  - { name: GLOBAL,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Global.png }
+  - { name: 手动选择,     <<: *SelectUL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Rocket.png }
+  - { name: 家宽选择,     <<: *BaseFB, filter: *FilterHM, hidden: false, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Hong_Kong.png }
+  - { name: GLOBAL,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Global.png }
 
   # ===================== AI大模型 =====================
-  - { name: Claude,     <<: *SelectTW, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/claude-color.png }
-  - { name: Gemini,     <<: *SelectSG, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/gemini-color.png, url: "https://www.google.com/generate_204" }
-  - { name: OpenAI,     <<: *SelectUS, icon: https://fastly.jsdelivr.net/gh/lobehub/lobe-icons@master/packages/static-png/light/openai.png }
+  - { name: Claude,     <<: *SelectTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/claude-color.png }
+  - { name: Gemini,     <<: *SelectSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/gemini-color.png, url: "https://www.google.com/generate_204" }
+  - { name: OpenAI,     <<: *SelectUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/openai.png }
 
   # ===================== 媒体 & 娱乐 =====================
-  - { name: Apple,      <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Apple.png, url: "https://www.apple.com/library/test/success.html" }
-  - { name: Disney,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Disney.png }
-  - { name: Netflix,    <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Netflix.png }
-  - { name: Spotify,    <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Spotify.png }
-  - { name: TikTok,     <<: *SelectTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/TikTok.png }
-  - { name: YouTube,    <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/YouTube.png, url: "https://www.youtube.com/generate_204" }
+  - { name: Apple,      <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Apple.png, url: "https://www.apple.com/library/test/success.html" }
+  - { name: Disney,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Disney.png }
+  - { name: Netflix,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Netflix.png }
+  - { name: Spotify,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Spotify.png }
+  - { name: TikTok,     <<: *SelectTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/TikTok.png }
+  - { name: YouTube,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/YouTube.png, url: "https://www.youtube.com/generate_204" }
 
   # ===================== 生产力 & 常用 =====================
-  - { name: Emby,       <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Emby.png }
-  - { name: Github,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/GitHub.png }
-  - { name: Google,     <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Google_Search.png, url: "https://www.google.com/generate_204" }
-  - { name: Microsoft,  <<: *SelectDR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Microsoft.png, url: "http://www.msftconnecttest.com/connecttest.txt" }
-  - { name: OneDrive,   <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/OneDrive.png }
+  - { name: Emby,       <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Emby.png }
+  - { name: Github,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/GitHub.png }
+  - { name: Google,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Google_Search.png, url: "https://www.google.com/generate_204" }
+  - { name: Microsoft,  <<: *SelectDR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Microsoft.png, url: "http://www.msftconnecttest.com/connecttest.txt" }
+  - { name: OneDrive,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/OneDrive.png }
 
   # ===================== 社交 & 即时通讯 ===================== https://macosicons.com/#/
-  - { name: Twitter(X), <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Twitter(X).png }
-  - { name: Telegram,   <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Telegram.png }
-  - { name: WhatsApp,   <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/WhatsApp.png }
+  - { name: Twitter(X), <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Twitter(X).png }
+  - { name: Telegram,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Telegram.png }
+  - { name: WhatsApp,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/WhatsApp.png }
 
   # ===================== 游戏 & 下载 =====================
-  - { name: Steam,      <<: *SelectSL, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Steam.png }
+  - { name: Steam,      <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Steam.png }
 
   # ===================== 地区分组(自动测速+隐藏) =====================
-  - { name: 香港自动,       <<: *BaseUT, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
-  - { name: 台湾自动,       <<: *BaseUT, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 狮城自动,       <<: *BaseUT, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
-  - { name: 日本自动,       <<: *BaseUT, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
-  - { name: 韩国自动,       <<: *BaseUT, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
-  - { name: 美国自动,       <<: *BaseUT, filter: *FilterUS, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_States.png }
-  - { name: 英国自动,       <<: *BaseUT, filter: *FilterUK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_Kingdom.png }
+  - { name: 香港自动,       <<: *BaseUT, filter: *FilterHK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Hong_Kong.png }
+  - { name: 台湾自动,       <<: *BaseUT, filter: *FilterTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Taiwan.png }
+  - { name: 狮城自动,       <<: *BaseUT, filter: *FilterSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Singapore.png }
+  - { name: 日本自动,       <<: *BaseUT, filter: *FilterJP, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Japan.png }
+  - { name: 韩国自动,       <<: *BaseUT, filter: *FilterKR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Korea.png }
+  - { name: 美国自动,       <<: *BaseUT, filter: *FilterUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_States.png }
+  - { name: 英国自动,       <<: *BaseUT, filter: *FilterUK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_Kingdom.png }
 
   # ===================== 地区分组 (回退) =====================
-  - { name: 香港-回退,       <<: *BaseFB, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
-  - { name: 台湾-回退,       <<: *BaseFB, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 狮城-回退,       <<: *BaseFB, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
-  - { name: 日本-回退,       <<: *BaseFB, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
-  - { name: 韩国-回退,       <<: *BaseFB, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
-  - { name: 美国-回退,       <<: *BaseFB, filter: *FilterUS, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_States.png }
-  - { name: 英国-回退,       <<: *BaseFB, filter: *FilterUK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_Kingdom.png }
+  - { name: 香港-回退,       <<: *BaseFB, filter: *FilterHK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Hong_Kong.png }
+  - { name: 台湾-回退,       <<: *BaseFB, filter: *FilterTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Taiwan.png }
+  - { name: 狮城-回退,       <<: *BaseFB, filter: *FilterSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Singapore.png }
+  - { name: 日本-回退,       <<: *BaseFB, filter: *FilterJP, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Japan.png }
+  - { name: 韩国-回退,       <<: *BaseFB, filter: *FilterKR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Korea.png }
+  - { name: 美国-回退,       <<: *BaseFB, filter: *FilterUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_States.png }
+  - { name: 英国-回退,       <<: *BaseFB, filter: *FilterUK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_Kingdom.png }
 
   # =====================地区分组(负载均衡-散列) =====================
-  - { name: 香港均衡-散列,       <<: *BaseCH, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
-  - { name: 台湾均衡-散列,       <<: *BaseCH, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 狮城均衡-散列,       <<: *BaseCH, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
-  - { name: 日本均衡-散列,       <<: *BaseCH, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
-  - { name: 韩国均衡-散列,       <<: *BaseCH, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
-  - { name: 美国均衡-散列,       <<: *BaseCH, filter: *FilterUS, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_States.png }
-  - { name: 英国均衡-散列,       <<: *BaseCH, filter: *FilterUK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_Kingdom.png }
+  - { name: 香港均衡-散列,       <<: *BaseCH, filter: *FilterHK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Hong_Kong.png }
+  - { name: 台湾均衡-散列,       <<: *BaseCH, filter: *FilterTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Taiwan.png }
+  - { name: 狮城均衡-散列,       <<: *BaseCH, filter: *FilterSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Singapore.png }
+  - { name: 日本均衡-散列,       <<: *BaseCH, filter: *FilterJP, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Japan.png }
+  - { name: 韩国均衡-散列,       <<: *BaseCH, filter: *FilterKR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Korea.png }
+  - { name: 美国均衡-散列,       <<: *BaseCH, filter: *FilterUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_States.png }
+  - { name: 英国均衡-散列,       <<: *BaseCH, filter: *FilterUK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_Kingdom.png }
 
   # ===================== 地区分组 (负载均衡-轮询) =====================
-  - { name: 香港均衡-轮询,       <<: *BaseCR, filter: *FilterHK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Hong_Kong.png }
-  - { name: 台湾均衡-轮询,       <<: *BaseCR, filter: *FilterTW, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Taiwan.png }
-  - { name: 狮城均衡-轮询,       <<: *BaseCR, filter: *FilterSG, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Singapore.png }
-  - { name: 日本均衡-轮询,       <<: *BaseCR, filter: *FilterJP, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Japan.png }
-  - { name: 韩国均衡-轮询,       <<: *BaseCR, filter: *FilterKR, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/Korea.png }
-  - { name: 美国均衡-轮询,       <<: *BaseCR, filter: *FilterUS, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_States.png }
-  - { name: 英国均衡-轮询,       <<: *BaseCR, filter: *FilterUK, icon: https://fastly.jsdelivr.net/gh/0xWans/Qure@master/IconSet/Color/United_Kingdom.png }
+  - { name: 香港均衡-轮询,       <<: *BaseCR, filter: *FilterHK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Hong_Kong.png }
+  - { name: 台湾均衡-轮询,       <<: *BaseCR, filter: *FilterTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Taiwan.png }
+  - { name: 狮城均衡-轮询,       <<: *BaseCR, filter: *FilterSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Singapore.png }
+  - { name: 日本均衡-轮询,       <<: *BaseCR, filter: *FilterJP, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Japan.png }
+  - { name: 韩国均衡-轮询,       <<: *BaseCR, filter: *FilterKR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Korea.png }
+  - { name: 美国均衡-轮询,       <<: *BaseCR, filter: *FilterUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_States.png }
+  - { name: 英国均衡-轮询,       <<: *BaseCR, filter: *FilterUK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_Kingdom.png }
 
 # 规则锚点
 rule-anchor:
@@ -269,49 +272,54 @@ rule-anchor:
 # 规则集配置
 rule-providers:
   # 域名规则集
-  category-ads-all: { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ads-all.mrs }
-  Apple:            { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple@cn.mrs }
-  China:            { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs }
-  Claude:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/anthropic.mrs }
-  Disney:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/disney.mrs }
-  Emby:             { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-emby.mrs }
-  Gemini:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs }
-  Github:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs }
-  Google:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs }
-  Lan:              { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs }
-  Microsoft:        { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs  }
-  Netflix:          { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs }
-  OpenAI:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs }
-  OneDrive:         { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/onedrive.mrs }
-  Steam:            { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam.mrs }
-  Spotify:          { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/spotify.mrs }
-  TikTok:           { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs }
-  WhatsApp:         { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/whatsapp.mrs }
-  Twitter:          { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/x.mrs }
-  Telegram:         { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs }
-  YouTube:          { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs }
-  DNSLeak:          { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/DNSLeak.mrs }
+  category-ads-all: { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ads-all.mrs }
+  Apple:            { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/apple@cn.mrs }
+  China:            { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs }
+  Claude:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/anthropic.mrs }
+  Disney:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/disney.mrs }
+  Emby:             { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-emby.mrs }
+  Gemini:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google-gemini.mrs }
+  Github:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs }
+  Google:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs }
+  Lan:              { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs }
+  Microsoft:        { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs  }
+  Netflix:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/netflix.mrs }
+  OpenAI:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/openai.mrs }
+  OneDrive:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/onedrive.mrs }
+  Steam:            { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/steam.mrs }
+  Spotify:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/spotify.mrs }
+  TikTok:           { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tiktok.mrs }
+  WhatsApp:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/whatsapp.mrs }
+  Twitter:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/x.mrs }
+  Telegram:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs }
+  YouTube:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs }
+  DNSLeak:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/DNSLeak.mrs }
 
   # IP规则集
-  ChinaIP:          { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs }
-  GoogleIP:         { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs }
-  LanIP:            { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs }
-  NetflixIP:        { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs }
-  TwitterIP:        { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs }
-  TelegramIP:       { <<: *BehaviorIP, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs }
+  ChinaIP:          { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs }
+  GoogleIP:         { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs }
+  LanIP:            { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs }
+  NetflixIP:        { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/netflix.mrs }
+  TwitterIP:        { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs }
+  TelegramIP:       { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs }
 
   # 应用规则集
-  ChinaAPP:       { <<: *BehaviorCL, url: https://fastly.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Process/ChinaAPP.yaml }
-  Direct:         { <<: *BehaviorDN, url: https://fastly.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Direct.mrs }
+  ChinaAPP:       { <<: *BehaviorCL, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Process/ChinaAPP.yaml }
+  Direct:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Direct.mrs }
 
 # 官方配置文档: https://wiki.metacubex.one/config/rules/
 rules:
   # 自定义规则集
   - RULE-SET,Direct,DIRECT
   - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((RULE-SET,ChinaIP))),(NOT,((RULE-SET,China)))),REJECT  # 阻止海外 QUIC 流量泄漏
-  
+
   # 应用规则集
   - RULE-SET,ChinaAPP,DIRECT
+
+  # 自定义域名规则
+  - DOMAIN-SUFFIX,hybgzs.com,DIRECT
+  - DOMAIN-SUFFIX,air-outer.com,DIRECT
+  - DOMAIN-SUFFIX,zzzcoding.org,DIRECT
 
   # 域名规则集-按照优先级顺序排列
   - RULE-SET,category-ads-all,REJECT

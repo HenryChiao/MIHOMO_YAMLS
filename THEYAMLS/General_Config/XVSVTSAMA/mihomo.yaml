@@ -21,7 +21,7 @@ tun:
   auto-route: true 
   auto-redirect: true
   strict-route: true
-  stack: gvisor                                           
+  stack: mips
   dns-hijack:
     - "any:53"  
     - "udp://any:53"
@@ -155,6 +155,7 @@ sniffer:
 
 dns:
   enable: true                                             
+  cache-algorithm: arc
  #prefer-h3: true                                             
   ipv6: true                                       
   listen: '0.0.0.0:1053'  
@@ -163,12 +164,14 @@ dns:
   use-system-hosts: false                                            
   default-nameserver:     
     - tls://223.5.5.5#DIRECT
-    - tls://223.6.6.6#DIRECT
+    - 114.114.114.114#DIRECT
+    - https://1.12.12.12/dns-query#DIRECT
   proxy-server-nameserver: 
     - https://hrbgyitz34.cloudflare-gateway.com/dns-query#DIRECT
   direct-nameserver: 
     - https://dns.alidns.com/dns-query#DIRECT
     - https://doh.pub/dns-query#DIRECT
+  direct-nameserver-follow-policy: true
   nameserver:
     - https://cloudflare-dns.com/dns-query#👉 手动切换
   # - https://dns.adguard-dns.com/dns-query     # AdGuard 公共 DNS  # 94.140.14.14        94.140.15.15
@@ -178,7 +181,13 @@ dns:
   # - https://doh.dns.sb/dns-query              # DNS.SB 公共 DNS   # 185.222.222.222     45.11.45.11
   # - https://dns.twnic.tw/dns-query            # Quad101 公共 DNS  # 101.101.101.10      101.102.103.10
   nameserver-policy:
-    'rule-set:private,direct,proxy@direct,cn,echs_cn,echs_direct':
+    'rule-set:douyin':
+    - system
+    - 180.184.1.1
+    - 180.184.2.2
+    'rule-set:private':
+    - system
+    'rule-set:proxy@direct,cn,echs_cn,echs_direct':
     - https://dns.alidns.com/dns-query#DIRECT
   prefer-h3: false
   respect-rules: false                                            
@@ -189,10 +198,10 @@ dns:
   fake-ip-filter: 
     - rule-set:fakeip-filter_domain
     - rule-set:private
-    - rule-set:direct
     - rule-set:cn
     - rule-set:echs_cn
     - rule-set:echs_direct
+    - rule-set:googlefcm
     - rule-set:applications
     - rule-set:pixiv
     - pixshaft.com
@@ -306,11 +315,11 @@ rule-providers:
   TikTok: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tiktok.mrs', path: ./ruleset/tiktok.mrs }
   ai-1: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs', path: ./ruleset/ai-1.mrs }
   ai-2: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs', path: ./ruleset/ai-2.mrs }
-  apple: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt', path: ./ruleset/apple.yaml }
+  apple@cn: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs', path: ./ruleset/apple@cn.mrs }
   applications: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt', path: ./ruleset/applications.yaml }
   cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs', path: ./ruleset/cn.mrs }
   cncidr: { <<: *ipcidr_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs', path: ./ruleset/cncidr.mrs }
-  direct: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt', path: ./ruleset/direct.yaml }
+  douyin: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/douyin.mrs', path: ./ruleset/douyin.mrs }
   echs_cn: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/cn.mrs', path: ./ruleset/echs_cn.mrs }
   echs_cn_ip: { <<: *ipcidr_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/ip/cn.mrs', path: ./ruleset/echs_cn_ip.mrs }
   echs_direct: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/direct.mrs', path: ./ruleset/echs_direct.mrs }
@@ -322,7 +331,6 @@ rule-providers:
   google: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt', path: ./ruleset/google.yaml }
   google-cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs', path: ./ruleset/google-cn.mrs }
   googlefcm: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/googlefcm.mrs', path: ./ruleset/googlefcm.mrs }
-  icloud: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt', path: ./ruleset/icloud.yaml }
   lancidr: { <<: *ipcidr_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt', path: ./ruleset/lancidr.yaml }
   pixiv: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pixiv.mrs', path: ./ruleset/pixiv.mrs }
   private: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt', path: ./ruleset/private.yaml }
@@ -387,7 +395,7 @@ sub-rules:
 
     - MATCH,DIRECT                                           
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,direct))),(NOT,((RULE-SET,cncidr))),(NOT,((RULE-SET,cn))),(NOT,((RULE-SET,applications))),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,games-cn)))),REJECT
+  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,cncidr))),(NOT,((RULE-SET,cn))),(NOT,((RULE-SET,applications))),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,games-cn)))),REJECT
   - RULE-SET,HijackingPlus,REJECT
 
   - SUB-RULE,(PROCESS-NAME,com.dragon.read.oversea.gp),fanqie
@@ -483,15 +491,12 @@ rules:
   - RULE-SET,google,🌍 PROXY
   - RULE-SET,google-cn,🌍 PROXY
 
-  - RULE-SET,direct,DIRECT
-
   - PROCESS-NAME-REGEX,.*twitter.*,✖️ Twitter
   - RULE-SET,twitter-x-domain,✖️ Twitter
   - RULE-SET,twitter-x-ip,✖️ Twitter,no-resolve
   - RULE-SET,twitter-x-blackmatrix7-No_Resolve,✖️ Twitter
 
-  - RULE-SET,icloud,DIRECT
-  - RULE-SET,apple,DIRECT
+  - RULE-SET,apple@cn,DIRECT
   - RULE-SET,games-cn,DIRECT
 
   - PROCESS-NAME,bf6.exe,🎮 Games-Global

@@ -263,7 +263,7 @@ LoadBalance: &LoadBalance
   disable-udp: false
   hidden: false
   use:
-     - A-Kuromis #这里为了瘦斤节点池因为博主本人有多个主用和备用节点机场 负载均衡不会选择最好的机场 需要填写需要加进负载均衡的机场 比如填写proxy-providers内的“机场1”
+     - 机场1 #这里为了瘦斤节点池因为博主本人有多个主用和备用节点机场 负载均衡不会选择最好的机场 需要填写需要加进负载均衡的机场 比如填写proxy-providers内的“机场1”
 
 Select_Proxies: &Select_Proxies
   type: select
