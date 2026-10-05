@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Rule-Set
-# 版本： V2026.9.28
+# 版本： V2026.10.4
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -74,13 +74,13 @@ tun:
 # ══ 嗅探功能 ══
 sniffer:
   enable: true                                                          # 启用嗅探  提升分流准确性
-  override-destination: true                                            # 成功解析  使用嗅探到的域名覆盖原始目标地址
   parse-pure-ip: true                                                   # 反向解析  解析纯 IP 连接（尝试反向解析获得域名）
   force-dns-mapping: true                                               # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
+  override-destination: false                                           # 成功解析  使用嗅探到的域名覆盖原始目标地址
   sniff:
     QUIC: { ports: [443] }                                              # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
     TLS:  { ports: [443, 8443] }                                        # 嗅探参数  HTTPS（TLS）常用及备用端口
-    HTTP: { ports: [80, 8080-8880] }                                    # 嗅探参数  HTTP 及常见 Web / 代理端口段
+    HTTP: { ports: [80, 8080-8880], override-destination: true }        # 嗅探参数  HTTP 及常见 Web / 代理端口段
   force-domain:
     - "+.netflix.com"                                                   # 强制嗅探  Netflix 主域名
     - "+.nflxvideo.net"                                                 # 强制嗅探  Netflix CDN

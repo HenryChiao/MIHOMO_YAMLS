@@ -336,6 +336,11 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/paypal.mrs'
     path: './ruleset/paypal.mrs'
     path-in-bundle: 'geo/geosite/paypal.mrs'
+  patreon:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/patreon.mrs'
+    path: './ruleset/patreon.mrs'
+    path-in-bundle: 'geo/geosite/patreon.mrs'
   ehentai:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/ehentai.mrs'
@@ -349,11 +354,11 @@ rule-providers:
 
   # --- 其他规则集 ---
 
-  adblockmihomolite:
+  category-ads:
     <<: *rule_providers_domain
-    url: 'https://fastly.jsdelivr.net/gh/217heidai/adblockfilters@main/rules/adblockmihomolite.mrs'
-    path: './ruleset/adblockmihomolite.mrs'
-    path-in-bundle: 'geo/geosite/category-ads-all.mrs'
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/category-ads.mrs'
+    path: './ruleset/category-ads.mrs'
+    path-in-bundle: 'geo/geosite/category-ads.mrs'
   fakeip_filter:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/fakeip-filter.mrs'
@@ -594,8 +599,14 @@ proxy-groups:
     icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/Bitcoin.svg'
 
   - name: 'PayPal'
+    default-selected: '美国'
     <<: [*group_common_select, *proxies_default]
     icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/PayPal.svg'
+
+  - name: 'Patreon'
+    default-selected: '香港'
+    <<: [*group_common_select, *proxies_default]
+    icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/Patreon.svg'
 
   - name: 'EHentai'
     default-selected: '美国'
@@ -701,7 +712,7 @@ rules:
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_additional),(RULE-SET,cn_ip,no-resolve)))))),REJECT
 
   # 广告拦截
-  - RULE-SET,adblockmihomolite,AdBlock
+  - RULE-SET,category-ads,AdBlock
 
   # 代理规则
   - RULE-SET,googlefcm,FCM
@@ -744,6 +755,7 @@ rules:
   - RULE-SET,spotify_ip,Spotify,no-resolve
   - RULE-SET,cryptocurrency,Crypto
   - RULE-SET,paypal,PayPal
+  - RULE-SET,patreon,Patreon
   - RULE-SET,ehentai,EHentai
 
   # 兜底规则

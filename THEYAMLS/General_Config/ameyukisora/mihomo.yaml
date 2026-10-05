@@ -56,14 +56,20 @@ dns:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   direct-nameserver:
-    - system
+    - 119.29.29.29
+
+# ==> TUN 配置
+tun:
+  device: mihomo
+  stack: mips
+  congestion-controller: bbr3
 
 # ==> 代理策略组 (Proxy Groups)
 proxy-groups:
   - name: "节点选择"
     <<: *common-group
     icon: https://raw.githubusercontent.com/amenorira/Clash-Rule/master/icon/start.png
-    filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG)'
+    filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG|新)'
     proxies:
       - 其他节点
 
@@ -77,7 +83,7 @@ proxy-groups:
   - name: "其他节点"
     <<: *common-group
     icon: https://raw.githubusercontent.com/amenorira/Clash-Rule/master/icon/Global.png
-    exclude-filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG)'
+    exclude-filter: '(港|HK|Hong Kong|日本|JP|Japan|🇭🇰|🇯🇵|SG|新)'
     proxies:
       - DIRECT
 
@@ -104,6 +110,7 @@ proxy-groups:
   - name: "OpenAI"
     <<: *common-group
     icon: https://raw.githubusercontent.com/amenorira/Clash-Rule/master/icon/OpenAI.png
+    #filter: '(SG|新加)'
 
   - name: "秋风净化"
     type: select
