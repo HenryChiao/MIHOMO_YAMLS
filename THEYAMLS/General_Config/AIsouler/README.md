@@ -8,13 +8,13 @@
 
 | 特性 | `mihomoConfigLite.yaml` | `mihomoconfig.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 18.2 KB | 27.6 KB |
+| **大小** | 18.2 KB | 28.1 KB |
 | **混合端口** | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
-| **策略组** | **26** | **42** |
-| **规则数** | **21** | **56** |
+| **策略组** | **26** | **43** |
+| **规则数** | **21** | **57** |
 
 ## 📄 配置详情
 
@@ -50,10 +50,10 @@
 </details>
 
 #### 📝 mihomoconfig.yaml
-- **路径**: `mihomoconfig.yaml` | **大小**: 27.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
+- **路径**: `mihomoconfig.yaml` | **大小**: 28.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (42个)</summary>
+<summary>🔍 策略组 (43个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -77,5 +77,5 @@
 | 👆 Emby | `select` |
 | 👆 PikPak | `select` |
 | 👆 Spotify | `select` |
-| ... | 还有 22 个 |
+| ... | 还有 23 个 |
 </details>
