@@ -8,21 +8,21 @@
 
 | 特性 | `3-subscription-clash-rule-set.yaml` | `2-subscription-clash-rule-set.yaml` | `base-clash-ruleset.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 17.6 KB | 17.1 KB | 16.2 KB |
+| **大小** | 19.3 KB | 18.8 KB | 18.0 KB |
 | **混合端口** | - | - | - |
 | **面板地址** | - | - | - |
 | **运行模式** | rule | rule | rule |
 | **TUN** | 🚫 | 🚫 | 🚫 |
-| **策略组** | **37** | **36** | **27** |
-| **规则数** | **38** | **38** | **38** |
+| **策略组** | **39** | **38** | **29** |
+| **规则数** | **40** | **40** | **40** |
 
 ## 📄 配置详情
 
 #### 📝 3-subscription-clash-rule-set.yaml
-- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 17.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
+- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 19.3 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (37个)</summary>
+<summary>🔍 策略组 (39个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -33,6 +33,8 @@
 | 👆 B全线路自选 | `select` |
 | 👆 C全线路自选 | `select` |
 | 👆 🤖 人工智能 | `select` |
+| 👆 🛫 AI 出口 | `select` |
+| 👆 🔗 AI 前置 | `select` |
 | 👆 📲 电报消息 | `select` |
 | 👆 🎮 游戏服务 | `select` |
 | 👆 📈 网络测试 | `select` |
@@ -44,16 +46,14 @@
 | 👆 🎯 全球直连 | `select` |
 | 👆 🏠 家庭网络 | `select` |
 | 👆 🛑 广告拦截 | `select` |
-| 👆 🔒 私有网络 | `select` |
-| 👆 🇨🇳 直连域名 | `select` |
-| ... | 还有 17 个 |
+| ... | 还有 19 个 |
 </details>
 
 #### 📝 2-subscription-clash-rule-set.yaml
-- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 17.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
+- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 18.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (36个)</summary>
+<summary>🔍 策略组 (38个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -63,6 +63,8 @@
 | 👆 A全线路自选 | `select` |
 | 👆 B全线路自选 | `select` |
 | 👆 🤖 人工智能 | `select` |
+| 👆 🛫 AI 出口 | `select` |
+| 👆 🔗 AI 前置 | `select` |
 | 👆 📲 电报消息 | `select` |
 | 👆 🎮 游戏服务 | `select` |
 | 👆 📈 网络测试 | `select` |
@@ -75,21 +77,21 @@
 | 👆 🏠 家庭网络 | `select` |
 | 👆 🛑 广告拦截 | `select` |
 | 👆 🔒 私有网络 | `select` |
-| 👆 🇨🇳 直连域名 | `select` |
-| 👆 🇨🇳 直连 IP | `select` |
-| ... | 还有 16 个 |
+| ... | 还有 18 个 |
 </details>
 
 #### 📝 base-clash-ruleset.yaml
-- **路径**: `base-clash-ruleset.yaml` | **大小**: 16.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/base-clash-ruleset.yaml)
+- **路径**: `base-clash-ruleset.yaml` | **大小**: 18.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/base-clash-ruleset.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
-<summary>🔍 策略组 (27个)</summary>
+<summary>🔍 策略组 (29个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 🚀 节点选择 | `select` |
 | 👆 🤖 人工智能 | `select` |
+| 👆 🛫 AI 出口 | `select` |
+| 👆 🔗 AI 前置 | `select` |
 | 👆 📲 电报消息 | `select` |
 | 👆 🐟 漏网之鱼 | `select` |
 | 👆 🎯 全球直连 | `select` |
@@ -106,7 +108,5 @@
 | ♻️ 🇷🇺 俄罗斯节点 | `url-test` |
 | 👆 🌏 其他地区 | `select` |
 | 👆 🎮 游戏服务 | `select` |
-| 👆 🪜 代理域名 | `select` |
-| 👆 📈 网络测试 | `select` |
-| ... | 还有 7 个 |
+| ... | 还有 9 个 |
 </details>
