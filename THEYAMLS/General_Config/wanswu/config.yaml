@@ -1,6 +1,6 @@
 # 地址: https://github.com/Wans-OS/my-backup
 # 作者: Wans
-# 更新: 2026-04-29 19:38:17
+# 更新: 2026-10-06 06:30:18
 # 描述: 在proxy-providers加入您的机场订阅链接 (代理提供者)
 
 # 订阅锚点，排除了一些节点，例如 包含剩余, 官网, 到期, 也可以在exclude-filter添加你需要排除的节点
@@ -8,18 +8,17 @@ FilterPP: &FilterPP "Expire|到期|剩余|Traffic|网址|官网|过期|地址"
 
 # 测速地址
 # YouTube
-# https://www.youtube.com/generate_204
+# http://www.youtube.com/generate_204
 # Google
-# https://www.gstatic.com/generate_204
-# https://www.google.com/generate_204
-# https://www.google.cn/generate_204
+# http://www.gstatic.com/generate_204
+# http://www.google.com/generate_204
 # Cloudflare
-# https://cp.cloudflare.com/generate_204
-# https://www.qualcomm.cn/generate_204
-UrlTest:  &UrlTest 'https://www.gstatic.com/generate_204'
+# http://cp.cloudflare.com/generate_204
+# http://www.qualcomm.cn/generate_204
+UrlTest:  &UrlTest 'http://www.gstatic.com/generate_204'
 
-PU: &PU { exclude-filter: *FilterPP, type: http, interval: 600, health-check: { enable: true, url: *UrlTest, interval: 300 } }
-PF: &PF { exclude-filter: *FilterPP, type: file, interval: 600, health-check: { enable: true, url: *UrlTest, interval: 300 } }
+PU: &PU { exclude-filter: *FilterPP, type: http, interval: 43200, health-check: { enable: true, url: *UrlTest, interval: 300 } }
+PF: &PF { exclude-filter: *FilterPP, type: file, interval: 43200, health-check: { enable: true, url: *UrlTest, interval: 300 } }
 # 官方配置文档: https://wiki.metacubex.one/config/proxy-providers/
 proxy-providers:
   main:
@@ -65,6 +64,7 @@ tun:
   enable: true
   stack: mips
   auto-route: true
+  strict-route: true
   auto-redirect: true
   auto-detect-interface: true
   dns-hijack: [ any:53, tcp://any:53 ]
@@ -79,35 +79,43 @@ profile:
 dns:
   enable: true
   ipv6: false
-  prefer-h3: false
+  prefer-h3: true
   use-hosts: true
   use-system-hosts: true
-  respect-rules: true
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  fake-ip-range6: fdfe:dcba:9876::/64
+  respect-rules: false
+  enhanced-mode: "fake-ip"
+  fake-ip-range: "198.18.0.1/16"
+  fake-ip-range6: "fdfe:dcba:9876::/64"
+  fake-ip-filter-mode: "blacklist"
+  fake-ip-ttl: 1
   fake-ip-filter:
-    - RULE-SET:Lan
-    - RULE-SET:China
+    - "RULE-SET:Lan"
   fallback:
-    - https://dns.adguard-dns.com/dns-query#ecs=1.1.1.1/24&ecs-override=true
-    - https://dns.cloudflare.com/dns-query#ecs=1.1.1.1/24&ecs-override=true
-    - https://dns.google/dns-query#ecs=1.1.1.1/24&ecs-override=true
+    - "https://dns.cloudflare.com/dns-query"
+    - "https://dns.google/dns-query"
+  fallback-filter:
+    geoip: false
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+  direct-nameserver:
+    - "system"
   direct-nameserver-follow-policy: true # 用于 direct 出口域名解析的 DNS 服务器，如果不填则遵循 nameserver-policy、nameserver 和 fallback 的配置
   default-nameserver: # 默认 DNS, 用于解析 DNS 服务器 的域名，必须为 IP, 可为加密 DNS
-    - tls://223.5.5.5
-    - tls://119.29.29.29
+    - "tls://223.5.5.5"
+    - "tls://119.29.29.29"
   nameserver: # 默认的域名解析服务器，如不配置 fallback/proxy-server-nameserver , 则所有域名都由 nameserver 解析
-    - https://dns.adguard-dns.com/dns-query#ecs=1.1.1.1/24&ecs-override=true
-    - https://dns.cloudflare.com/dns-query#ecs=1.1.1.1/24&ecs-override=true
-    - https://dns.google/dns-query#ecs=1.1.1.1/24&ecs-override=true
+    - "https://dns.cloudflare.com/dns-query"
+    - "https://dns.google/dns-query"
   nameserver-policy: # 指定域名查询的解析服务器，优先于 nameserver/fallback 查询
-    "RULE-SET:China,Lan":
-      - https://dns.alidns.com/dns-query#ecs=223.5.5.5/24&ecs-override=true
-      - https://doh.pub/dns-query#ecs=223.5.5.5/24&ecs-override=true
+    "RULE-SET:China":
+      - "https://dns.alidns.com/dns-query"
+      - "https://doh.pub/dns-query"
+    +.qinyues4.cc:
+      - "https://dns.alidns.com/dns-query"
   proxy-server-nameserver:  # 代理节点域名解析服务器，仅用于解析代理节点的域名，如果不填则遵循 nameserver-policy、nameserver 和 fallback 的配置
-    - https://dns.alidns.com/dns-query#ecs=223.5.5.5/24&ecs-override=true
-    - https://doh.pub/dns-query#ecs=223.5.5.5/24&ecs-override=true
+    - "https://dns.alidns.com/dns-query"
+    - "https://doh.pub/dns-query"
   proxy-server-nameserver-policy: # 格式同nameserver-policy，仅用于节点域名解析，优先于proxy-server-nameserver查询，自定义机场在此添加DNS
     # "*.llguanglisf.com":
     #   - https://appdsv1.apiv2.a047.com/api-v2
@@ -121,7 +129,7 @@ dns:
 
 # GEO配置
 geodata-mode: false
-geo-auto-update: true
+geo-auto-update: false
 geo-update-interval: 24
 geodata-loader: memconservative
 geox-url:

@@ -83,7 +83,6 @@ ntp:
   # - 'time1.cloud.tencent.com' 
   port: 123
 
-
 sniffer:
   enable: true
   parse-pure-ip: true
@@ -236,7 +235,7 @@ hosts                             :
 proxies: ~
 proxy-groups:
   - name: 🌍 PROXY
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/proxy.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-proxy.png"
     type: select
     proxies:
         - 👉 手动切换
@@ -244,7 +243,7 @@ proxy-groups:
         - 🔄 负载均衡
         - DIRECT
   - name: 🔄 负载均衡
-    icon: "https://www.clashverge.dev/assets/icons/balance.svg"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-clash-verge-rev-balance.svg"
     type: load-balance
     proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
     url: 'https://www.gstatic.com/generate_204'
@@ -252,39 +251,52 @@ proxy-groups:
     lazy: true
     strategy: sticky-sessions
   - name: 👉 手动切换
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/select.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-select.png"
     type: select
     proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
   - name: ♻️ 自动选择
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/auto.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-auto.png"
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
     proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+  - name: 🍎 海外苹果
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-AIsouler-MyClash-Apple.svg
+    type: select
+    proxies: null
+  - name: 💠 海外微软
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/self-Microsoft.svg
+    type: select
+    proxies: null
+  - name: 🎮 Steam平台（非下载/CDN）
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-AIsouler-MyClash-Steam.svg
+    type: select
+    default-selected: DIRECT
+    proxies: null
   - name: 📲 Telegram
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/telegram.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-telegram.png"
     type: select
     proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
   - name: 🎮 Games-Global
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/games-cn.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-games-cn.png"
     type: select
     proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
 
   - name: ✖️ Twitter
-    icon: "https://www.clashverge.dev/assets/icons/twitter.svg"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-clash-verge-rev-twitter.svg"
     type: select
-    filter: "美国|住宅"
+    filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
   - name: 🤖 AI大模型
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/ai.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-ai.png"
     type: select
-    filter: "美国|住宅"
+    filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
   - name: 🎵 TikTok
-    icon: "https://github.com/DustinWin/ruleset_geodata/releases/download/icons/tiktok.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-tiktok.png"
     type: select
-    filter: "美国|住宅"
+    filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
   # FCM：Google FCM 域名分流目标（命中规则 RULE-SET,googlefcm,FCM 后进入此组）。
   # 模板中不隐藏该组，用于表明此代理组确实存在，是配置里真实的分流目标；
@@ -293,7 +305,7 @@ proxy-groups:
   # 方便有需要但不想直接改配置文件的用户。
   # 开关图标取自本组的 icon 字段，换图标只需改这里一处。
   - name: FCM
-    icon: "https://fastly.jsdelivr.net/gh/MiToverG422/Qure@master/IconSet/Color/fcm.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-MiToverG422-Qure-fcm.png"
     # hidden: true  # 脚本中隐藏该组以保持界面简洁；模板保留可见，以表明该组确实存在
     type: select
     proxies:
@@ -315,7 +327,9 @@ rule-providers:
   TikTok: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/tiktok.mrs', path: ./ruleset/tiktok.mrs }
   ai-1: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs', path: ./ruleset/ai-1.mrs }
   ai-2: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs', path: ./ruleset/ai-2.mrs }
+  apple: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple.mrs', path: ./ruleset/apple.mrs }
   apple@cn: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs', path: ./ruleset/apple@cn.mrs }
+  apple_ip: { <<: *ipcidr_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/apple.mrs', path: ./ruleset/apple_ip.mrs }
   applications: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt', path: ./ruleset/applications.yaml }
   cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs', path: ./ruleset/cn.mrs }
   cncidr: { <<: *ipcidr_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs', path: ./ruleset/cncidr.mrs }
@@ -332,10 +346,15 @@ rule-providers:
   google-cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs', path: ./ruleset/google-cn.mrs }
   googlefcm: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/googlefcm.mrs', path: ./ruleset/googlefcm.mrs }
   lancidr: { <<: *ipcidr_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt', path: ./ruleset/lancidr.yaml }
+  microsoft_ip: { <<: *ipcidr_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/microsoft.mrs', path: ./ruleset/microsoft_ip.mrs }
+  microsoft: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/microsoft.mrs', path: ./ruleset/microsoft.mrs }
+  microsoft@cn: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/microsoft@cn.mrs', path: ./ruleset/microsoft@cn.mrs }
   pixiv: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pixiv.mrs', path: ./ruleset/pixiv.mrs }
   private: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt', path: ./ruleset/private.yaml }
   proxy: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs', path: ./ruleset/proxy.mrs }
   proxy@direct: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/proxy@direct.mrs', path: ./rules/proxy@direct.mrs }
+  steam_ip: { <<: *ipcidr_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/steam.mrs', path: ./ruleset/steam_ip.mrs }
+  steam: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/steam.mrs', path: ./ruleset/steam.mrs }
   telegram_domain: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs', path: ./rules/telegram_domain.mrs }
   telegramcidr: { <<: *ipcidr_mrs, url: 'https://raw.githubusercontent.com/reddishJade/private_proxy/main/Mihomo/Provider/telegram%40ip.mrs', path: ./ruleset/telegramcidr.mrs }
   twitter-x-blackmatrix7-No_Resolve: { <<: *classical_yaml, format: yaml, url: 'https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Twitter/Twitter_No_Resolve.yaml', path: ./ruleset/twitter-x-blackmartix7-noreslove.mrs }
@@ -400,6 +419,13 @@ rules:
 
   - SUB-RULE,(PROCESS-NAME,com.dragon.read.oversea.gp),fanqie
   - DOMAIN-KEYWORD,ikuuu,🌍 PROXY
+  - RULE-SET,microsoft@cn,DIRECT
+  - RULE-SET,apple@cn,DIRECT
+  - RULE-SET,games-cn,DIRECT
+  - RULE-SET,microsoft,💠 海外微软
+  - RULE-SET,microsoft_ip,💠 海外微软,no-resolve
+  - RULE-SET,apple,🍎 海外苹果
+  - RULE-SET,apple_ip,🍎 海外苹果,no-resolve
   - RULE-SET,applications,DIRECT
   - RULE-SET,echs_cn,DIRECT
   - RULE-SET,echs_cn_ip,DIRECT,no-resolve
@@ -452,7 +478,6 @@ rules:
   - DOMAIN,cdn.usefathom.com,🤖 AI大模型
   - DOMAIN,registry.npmjs.org,🤖 AI大模型
   - DOMAIN,storage.googleapis.com,🤖 AI大模型
-  - DOMAIN,raw.githubusercontent.com,🤖 AI大模型
   - DOMAIN,formulae.brew.sh,🤖 AI大模型
   - DOMAIN,http-intake.logs.us5.datadoghq.com,🤖 AI大模型
   - DOMAIN,browser-intake-us5-datadoghq.com,🤖 AI大模型
@@ -496,9 +521,8 @@ rules:
   - RULE-SET,twitter-x-ip,✖️ Twitter,no-resolve
   - RULE-SET,twitter-x-blackmatrix7-No_Resolve,✖️ Twitter
 
-  - RULE-SET,apple@cn,DIRECT
-  - RULE-SET,games-cn,DIRECT
-
+  - RULE-SET,steam,🎮 Steam平台（非下载/CDN）
+  - RULE-SET,steam_ip,🎮 Steam平台（非下载/CDN）,no-resolve
   - PROCESS-NAME,bf6.exe,🎮 Games-Global
   - RULE-SET,games,🎮 Games-Global
   - RULE-SET,TikTok,🎵 TikTok
