@@ -44,8 +44,8 @@
 | ♻️ 美国-自动选择 | `url-test` |
 | 👆 新加坡 | `select` |
 | ♻️ 新加坡-自动选择 | `url-test` |
-| 👆 台湾省 | `select` |
-| ♻️ 台湾省-自动选择 | `url-test` |
+| 👆 台湾 | `select` |
+| ♻️ 台湾-自动选择 | `url-test` |
 | ... | 还有 6 个 |
 </details>
 
