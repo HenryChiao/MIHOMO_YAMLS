@@ -1,6 +1,6 @@
 # Clash.Meta(mihomo)
 # Version: v1.19.31
-# Updated: 2026-09-16 17:32:00
+# Updated: 2026-10-11 15:00:00
 
 JNTM: &JNTM
     interval: 43200
@@ -673,6 +673,7 @@ proxy-groups:
   - name: 中转
     <<: *Dialer
     filter: *FilterAll
+    default-selected: ⛔阻断
     icon: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/icon/Server.png"
 
   - name: 落地

@@ -302,10 +302,6 @@ rules:
   - DOMAIN-REGEX,^dl-[A-Za-z0-9-]+\.mypikpak\.com$,国内直连
  
 # --- BT/PT 下载 ---
-  - DOMAIN-KEYWORD,ipv6tracker,Tracker
-  - DOMAIN-KEYWORD,bittorrent,Tracker
-  - DOMAIN-KEYWORD,torrent,Tracker
-  - DOMAIN-KEYWORD,tracker,Tracker
   - RULE-SET,PublicTracker,Tracker
   - RULE-SET,Trackers,Tracker
   - RULE-SET,Xunlei,Tracker

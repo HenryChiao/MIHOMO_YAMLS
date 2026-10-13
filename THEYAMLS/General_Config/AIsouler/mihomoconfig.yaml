@@ -441,7 +441,7 @@ proxies_common:
           '日本',
           '美国',
           '新加坡',
-          '台湾省',
+          '台湾',
           '低倍率节点',
           '高倍率节点',
           '其他节点',
@@ -461,7 +461,7 @@ proxies_common:
           '日本',
           '美国',
           '新加坡',
-          '台湾省',
+          '台湾',
           '低倍率节点',
           '高倍率节点',
           '其他节点',
@@ -504,7 +504,7 @@ proxy-groups:
         '日本',
         '美国',
         '新加坡',
-        '台湾省',
+        '台湾',
         '低倍率节点',
         '高倍率节点',
         '手动选择',
@@ -660,12 +660,12 @@ proxy-groups:
   - name: '新加坡-自动选择'
     <<: [*group_common_auto, *SG_filter]
 
-  - name: '台湾省'
+  - name: '台湾'
     <<: [*group_common_select, *TW_filter]
     include-all: true
-    proxies: ['台湾省-自动选择']
+    proxies: ['台湾-自动选择']
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Taiwan.svg'
-  - name: '台湾省-自动选择'
+  - name: '台湾-自动选择'
     <<: [*group_common_auto, *TW_filter]
 
   - name: '低倍率节点'

@@ -34,12 +34,12 @@ proxy-providers:
 
   AI出口:
     type: http
-    # 自建 AI 出口节点订阅（如 Sub-Store 中只含 SOCKS5 节点的订阅），经 🔗 AI 前置 链式出站
+    # 自建 AI 出口节点订阅（如 Sub-Store 中只含 SOCKS5 节点的订阅），经 🔗 AI前置节点 链式出站
     url: ""
     path: ./proxy_provider/air3-ai.yaml
     interval: 3600
     override:
-      dialer-proxy: 🔗 AI 前置
+      dialer-proxy: 🔗 AI前置节点
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204
@@ -53,7 +53,7 @@ proxy-groups:
   - {
       name: 🚀 节点选择,
       type: select,
-      proxies: [A机场常用, B机场常用, A全线路自选, B全线路自选, C全线路自选, 🛫 AI 出口, 🎯 全球直连],
+      proxies: [A机场常用, B机场常用, A全线路自选, B全线路自选, C全线路自选, 🛫 AI出口节点, 🎯 全球直连],
     }
 
   # --- 机场常用入口 ---
@@ -88,13 +88,20 @@ proxy-groups:
   - {
       name: 🤖 人工智能,
       type: select,
-      proxies: [C全线路自选, A全线路自选, B全线路自选, 🚀 节点选择, 🛫 AI 出口],
+      proxies: [🛫 AI出口节点, C全线路自选, A全线路自选, B全线路自选, 🚀 节点选择],
     }
-  # 🛫 AI 出口：节点来自 AI出口 订阅并经 🔗 AI 前置 链式出站；未填订阅时组内为 COMPATIBLE（等同直连），
-  # 因此放在 🤖 人工智能 末尾、不作默认，需手动选择。
-  - { name: 🛫 AI 出口, type: select, use: [AI出口] }
-  # 🔗 AI 前置：AI 出口节点的上游线路，建议选与出口同地区的节点；不得包含 🛫 AI 出口或 🚀 节点选择（后者含 AI 出口），否则形成循环。
-  - { name: 🔗 AI 前置, type: select, proxies: [A机场常用, B机场常用, C全线路自选] }
+  # 🧠 Claude：从 🤖 人工智能 中单独细分，候选与 🤖 人工智能 相同，可独立选择线路。
+  - {
+      name: 🧠 Claude,
+      type: select,
+      proxies: [🛫 AI出口节点, C全线路自选, A全线路自选, B全线路自选, 🚀 节点选择],
+    }
+  # 🛫 AI出口节点：节点来自 AI出口 订阅并经 🔗 AI前置节点 链式出站；未填订阅时组内为 COMPATIBLE（等同直连），
+  # 放在 🤖 人工智能 / 🧠 Claude 首位作为默认；未填 AI出口 订阅时请改选其他线路。
+  # 多个出口节点时按订阅顺序取首个可用节点，失效自动切换下一个。
+  - { name: 🛫 AI出口节点, type: fallback, use: [AI出口], url: "https://www.google.com/generate_204", interval: 300, timeout: 5000, max-failed-times: 2, lazy: true }
+  # 🔗 AI前置节点：AI 出口节点的上游线路，建议选与出口同地区的节点；不得包含 🛫 AI出口节点或 🚀 节点选择（后者含 AI 出口），否则形成循环。末尾 🎯 全球直连 表示出口节点直连（SOCKS5 为明文，国内直连慎用）。
+  - { name: 🔗 AI前置节点, type: select, proxies: [A机场常用, B机场常用, C全线路自选, 🎯 全球直连] }
   - {
       name: 📲 电报消息,
       type: select,
@@ -350,6 +357,14 @@ rule-providers:
     url: "https://raw.githubusercontent.com/Pililink/AirRules/refs/heads/main/clash/ruleset/ai.list"
     interval: 7200
 
+  myclaude:
+    type: http
+    behavior: classical
+    format: text
+    path: ./rule_provider/myclaude.list
+    url: "https://raw.githubusercontent.com/Pililink/AirRules/refs/heads/main/clash/ruleset/claude.list"
+    interval: 7200
+
   myspeedtest:
     type: http
     behavior: classical
@@ -535,8 +550,9 @@ rules:
   # 100.64.0.0/10 已覆盖 100.65.0.0/24。
   - IP-CIDR,100.64.0.0/10,🏠 家庭网络,no-resolve
   # 本仓库维护的覆盖规则必须优先于所有第三方规则集：Mihomo 从上到下首次命中即停止。
-  # ignore 为明确直连覆盖，ai 为人工智能服务覆盖，proxy 为明确代理覆盖。
+  # ignore 为明确直连覆盖，claude 为 Claude 细分覆盖（须先于 ai），ai 为人工智能服务覆盖，proxy 为明确代理覆盖。
   - RULE-SET,myignore,DIRECT
+  - RULE-SET,myclaude,🧠 Claude
   - RULE-SET,myai,🤖 人工智能
   - RULE-SET,myproxy,🪜 代理域名
   - RULE-SET,private,🔒 私有网络

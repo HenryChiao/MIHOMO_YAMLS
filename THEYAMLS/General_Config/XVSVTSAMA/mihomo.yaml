@@ -186,8 +186,9 @@ dns:
     - 180.184.2.2
     'rule-set:private':
     - system
-    'rule-set:proxy@direct,cn,echs_cn,echs_direct':
+    'rule-set:proxy@direct,cn,echs_direct':
     - https://dns.alidns.com/dns-query#DIRECT
+    - https://doh.pub/dns-query#DIRECT
   prefer-h3: false
   respect-rules: false                                            
   enhanced-mode: fake-ip                  
@@ -198,7 +199,6 @@ dns:
     - rule-set:fakeip-filter_domain
     - rule-set:private
     - rule-set:cn
-    - rule-set:echs_cn
     - rule-set:echs_direct
     - rule-set:googlefcm
     - rule-set:applications
@@ -235,7 +235,7 @@ hosts                             :
 proxies: ~
 proxy-groups:
   - name: 🌍 PROXY
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-proxy.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-proxy.png"
     type: select
     proxies:
         - 👉 手动切换
@@ -243,70 +243,70 @@ proxy-groups:
         - 🔄 负载均衡
         - DIRECT
   - name: 🔄 负载均衡
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-clash-verge-rev-balance.svg"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-clash-verge-rev-balance.svg"
     type: load-balance
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    proxies:
     url: 'https://www.gstatic.com/generate_204'
     interval: 300
     lazy: true
     strategy: sticky-sessions
   - name: 👉 手动切换
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-select.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-select.png"
     type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    proxies:
   - name: ♻️ 自动选择
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-auto.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-auto.png"
     type: url-test
     url: https://www.gstatic.com/generate_204
     interval: 300
     tolerance: 50
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    proxies:
   - name: 🍎 海外苹果
-    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-AIsouler-MyClash-Apple.svg
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-AIsouler-MyClash-Apple.svg
     type: select
     proxies: null
   - name: 💠 海外微软
-    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/self-Microsoft.svg
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/self-Microsoft.svg
     type: select
     proxies: null
   - name: 🎮 Steam平台（非下载/CDN）
-    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-AIsouler-MyClash-Steam.svg
+    icon: https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-AIsouler-MyClash-Steam.svg
     type: select
     default-selected: DIRECT
     proxies: null
   - name: 📲 Telegram
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-telegram.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-telegram.png"
     type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    proxies:
   - name: 🎮 Games-Global
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-games-cn.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-games-cn.png"
     type: select
-    proxies: # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    proxies:
 
   - name: ✖️ Twitter
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-clash-verge-rev-twitter.svg"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-clash-verge-rev-twitter.svg"
     type: select
     filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
   - name: 🤖 AI大模型
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-ai.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-ai.png"
     type: select
     filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
   - name: 🎵 TikTok
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-DustinWin-ruleset_geodata-tiktok.png"
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-tiktok.png"
     type: select
     filter: '(?i)^(?!.*(?:🇭🇰|香港|Hong\s*Kong|\bHK\b|🇸🇬|新加坡|Singapore|\bSG\b)).*(?:住宅|家宽|家寬|家庭宽带|家庭寬頻|原生住宅|住宅\s*IP|residential|home\s*broadband|home\s*internet|🇺🇸|美国|美國|\bUnited\s+States\b|\bU\.?S\.?(?:A\.?)?\b).*$'
     include-all-proxies: true
-  # FCM：Google FCM 域名分流目标（命中规则 RULE-SET,googlefcm,FCM 后进入此组）。
-  # 模板中不隐藏该组，用于表明此代理组确实存在，是配置里真实的分流目标；
-  # 覆写脚本里设置 hidden 则是为了界面简洁：脚本借助 Bettbox 自定义脚本 UI 适配，
-  # 用 FCM直连 开关控制本组的 proxies: 字段（开=仅 DIRECT，关=仅 👉 手动切换），
-  # 方便有需要但不想直接改配置文件的用户。
-  # 开关图标取自本组的 icon 字段，换图标只需改这里一处。
+  # FCM：Google FCM 域名分流目标，由 FCM直连 开关控制本组的 proxies。
+  # 开启时使用 DIRECT，关闭时使用 👉 手动切换；开关图标取自本组的 icon 字段。
   - name: FCM
-    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/mihomo-config-self@main/assets/icons/upstream-MiToverG422-Qure-fcm.png"
-    # hidden: true  # 脚本中隐藏该组以保持界面简洁；模板保留可见，以表明该组确实存在
+    icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-MiToverG422-Qure-fcm.png"
     type: select
     proxies:
       - 👉 手动切换
@@ -334,8 +334,6 @@ rule-providers:
   cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs', path: ./ruleset/cn.mrs }
   cncidr: { <<: *ipcidr_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs', path: ./ruleset/cncidr.mrs }
   douyin: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/douyin.mrs', path: ./ruleset/douyin.mrs }
-  echs_cn: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/cn.mrs', path: ./ruleset/echs_cn.mrs }
-  echs_cn_ip: { <<: *ipcidr_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/ip/cn.mrs', path: ./ruleset/echs_cn_ip.mrs }
   echs_direct: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/direct.mrs', path: ./ruleset/echs_direct.mrs }
   echs_direct_ip: { <<: *ipcidr_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/ip/direct.mrs', path: ./ruleset/echs_direct_ip.mrs }
   fakeip-filter_domain: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs', path: ./ruleset/fakeip-filter_domain.mrs }
@@ -427,8 +425,6 @@ rules:
   - RULE-SET,apple,🍎 海外苹果
   - RULE-SET,apple_ip,🍎 海外苹果,no-resolve
   - RULE-SET,applications,DIRECT
-  - RULE-SET,echs_cn,DIRECT
-  - RULE-SET,echs_cn_ip,DIRECT,no-resolve
   - RULE-SET,echs_direct,DIRECT
   - RULE-SET,echs_direct_ip,DIRECT,no-resolve
   - RULE-SET,cn,DIRECT
@@ -460,6 +456,17 @@ rules:
   # Manus AI：覆盖 Manus Desktop、Manus Helper 及 Android 客户端进程
   - PROCESS-NAME-REGEX,(?i).*(manus|tech\.butterfly\.app).*,🤖 AI大模型
   # Claude / Anthropic：进程命中优先，覆盖 Claude Desktop、Claude Code 等客户端
+  - DOMAIN-SUFFIX,muse.ai,🤖 AI大模型
+  - DOMAIN,hatch-api.meta.ai,🤖 AI大模型
+  - DOMAIN,api.meta.ai,🤖 AI大模型
+  - DOMAIN,agent.meta.ai,🤖 AI大模型
+  - DOMAIN-SUFFIX,metaaivm.com,🤖 AI大模型
+  - DOMAIN,auth.meta.com,🤖 AI大模型
+  - DOMAIN,meta.graph.meta.com,🤖 AI大模型
+  - DOMAIN,edge-metaclaw-http.c10r.facebook.com,🤖 AI大模型
+  - DOMAIN,shortwave.facebook.com,🤖 AI大模型
+  - DOMAIN,node.hatch.one,🤖 AI大模型
+  - PROCESS-NAME,com.facebook.aura,🤖 AI大模型
   - PROCESS-NAME-REGEX,(?i).*claude.*,🤖 AI大模型
   - PROCESS-NAME-REGEX,(?i).*anthropic.*,🤖 AI大模型
   # Claude / Anthropic：官方 API、网页登录、OAuth、MCP、CLI 更新和插件依赖
