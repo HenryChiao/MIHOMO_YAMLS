@@ -285,8 +285,10 @@ proxy-groups:
   - name: 🎮 Games-Global
     icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-DustinWin-ruleset_geodata-games-cn.png"
     type: select
-    # 此处为所有单节点（由覆写脚本自动填入订阅全部节点）
+    default-selected: 🎮 Steam平台（非下载/CDN）
+    # 保留 Steam 嵌套组；覆写脚本会追加订阅全部节点
     proxies:
+      - 🎮 Steam平台（非下载/CDN）
 
   - name: ✖️ Twitter
     icon: "https://fastly.jsdelivr.net/gh/XVSVTsama/XVSVT-Clash-Config@main/assets/icons/upstream-clash-verge-rev-twitter.svg"
@@ -328,7 +330,6 @@ rule-providers:
   ai-1: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/ai.mrs', path: ./ruleset/ai-1.mrs }
   ai-2: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs', path: ./ruleset/ai-2.mrs }
   apple: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple.mrs', path: ./ruleset/apple.mrs }
-  apple@cn: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs', path: ./ruleset/apple@cn.mrs }
   apple_ip: { <<: *ipcidr_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/apple.mrs', path: ./ruleset/apple_ip.mrs }
   applications: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt', path: ./ruleset/applications.yaml }
   cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs', path: ./ruleset/cn.mrs }
@@ -338,7 +339,6 @@ rule-providers:
   echs_direct_ip: { <<: *ipcidr_mrs, url: 'https://raw.githubusercontent.com/echs-top/proxy/main/mrs/ip/direct.mrs', path: ./ruleset/echs_direct_ip.mrs }
   fakeip-filter_domain: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs', path: ./ruleset/fakeip-filter_domain.mrs }
   games: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games.mrs', path: ./ruleset/games.mrs }
-  games-cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs', path: ./ruleset/games-cn.mrs }
   gfw: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/gfw.mrs', path: ./ruleset/gfw.mrs }
   google: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt', path: ./ruleset/google.yaml }
   google-cn: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/google-cn.mrs', path: ./ruleset/google-cn.mrs }
@@ -346,7 +346,6 @@ rule-providers:
   lancidr: { <<: *ipcidr_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt', path: ./ruleset/lancidr.yaml }
   microsoft_ip: { <<: *ipcidr_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geoip/microsoft.mrs', path: ./ruleset/microsoft_ip.mrs }
   microsoft: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/microsoft.mrs', path: ./ruleset/microsoft.mrs }
-  microsoft@cn: { <<: *domain_mrs, url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/microsoft@cn.mrs', path: ./ruleset/microsoft@cn.mrs }
   pixiv: { <<: *domain_mrs, url: 'https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/pixiv.mrs', path: ./ruleset/pixiv.mrs }
   private: { <<: *domain_yaml, url: 'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt', path: ./ruleset/private.yaml }
   proxy: { <<: *domain_mrs, url: 'https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/proxy.mrs', path: ./ruleset/proxy.mrs }
@@ -412,23 +411,22 @@ sub-rules:
 
     - MATCH,DIRECT                                           
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,cncidr))),(NOT,((RULE-SET,cn))),(NOT,((RULE-SET,applications))),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,games-cn)))),REJECT
+  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,cncidr))),(NOT,((RULE-SET,cn))),(NOT,((RULE-SET,applications))),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,echs_direct)))),REJECT
   - RULE-SET,HijackingPlus,REJECT
 
   - SUB-RULE,(PROCESS-NAME,com.dragon.read.oversea.gp),fanqie
   - DOMAIN-KEYWORD,ikuuu,🌍 PROXY
-  - RULE-SET,microsoft@cn,DIRECT
-  - RULE-SET,apple@cn,DIRECT
-  - RULE-SET,games-cn,DIRECT
-  - RULE-SET,microsoft,💠 海外微软
-  - RULE-SET,microsoft_ip,💠 海外微软,no-resolve
-  - RULE-SET,apple,🍎 海外苹果
-  - RULE-SET,apple_ip,🍎 海外苹果,no-resolve
   - RULE-SET,applications,DIRECT
+  # 国内 Apple、Microsoft、Games 分类直连统一交给 echs_direct。
   - RULE-SET,echs_direct,DIRECT
   - RULE-SET,echs_direct_ip,DIRECT,no-resolve
   - RULE-SET,cn,DIRECT
   - RULE-SET,cncidr,DIRECT,no-resolve
+  # 通用直连规则优先，剩余 Apple / Microsoft 域名和 IP 再进入海外组。
+  - RULE-SET,microsoft,💠 海外微软
+  - RULE-SET,microsoft_ip,💠 海外微软,no-resolve
+  - RULE-SET,apple,🍎 海外苹果
+  - RULE-SET,apple_ip,🍎 海外苹果,no-resolve
   - RULE-SET,googlefcm,FCM
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT

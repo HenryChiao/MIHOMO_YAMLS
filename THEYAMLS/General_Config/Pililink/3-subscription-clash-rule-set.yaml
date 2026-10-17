@@ -127,7 +127,7 @@ proxy-groups:
       type: select,
       proxies: [🚀 节点选择, A机场常用, B机场常用, A全线路自选, B全线路自选, C全线路自选, 🎯 全球直连],
     }
-  - {name: 🍎 苹果服务, type: select, proxies: [🚀 节点选择, A机场常用, B机场常用, A全线路自选, B全线路自选, C全线路自选, 🎯 全球直连]}
+  - {name: 🍎 苹果服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择, A机场常用, B机场常用, A全线路自选, B全线路自选, C全线路自选]}
 
   # --- 规则承接层 ---
   - {
@@ -477,6 +477,110 @@ rule-providers:
     url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/Nintendo.yaml"
     interval: 7200
 
+  game-blizzard:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-blizzard-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Blizzard/Blizzard_No_Resolve.yaml"
+    interval: 86400
+
+  game-battle:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-battle-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Battle/Battle_No_Resolve.yaml"
+    interval: 86400
+
+  game-ea:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-ea-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/EA/EA_No_Resolve.yaml"
+    interval: 86400
+
+  game-playstation:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-playstation-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PlayStation/PlayStation_No_Resolve.yaml"
+    interval: 86400
+
+  game-riot:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-riot-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Riot/Riot_No_Resolve.yaml"
+    interval: 86400
+
+  game-ubisoft:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-ubisoft-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Ubisoft/Ubisoft_No_Resolve.yaml"
+    interval: 86400
+
+  game-ubi:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-ubi-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/UBI/UBI_No_Resolve.yaml"
+    interval: 86400
+
+  game-rockstar:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-rockstar-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Rockstar/Rockstar_No_Resolve.yaml"
+    interval: 86400
+
+  game-hoyoverse:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-hoyoverse-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/HoYoverse/HoYoverse_No_Resolve.yaml"
+    interval: 86400
+
+  game-garena:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-garena-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Garena/Garena_No_Resolve.yaml"
+    interval: 86400
+
+  game-gog:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-gog-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Gog/Gog_No_Resolve.yaml"
+    interval: 86400
+
+  game-2k:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-2kgames-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/2KGames/2KGames_No_Resolve.yaml"
+    interval: 86400
+
+  game-supercell:
+    type: http
+    behavior: classical
+    format: yaml
+    path: ./rule_provider/blackmatrix7-supercell-no-resolve.yaml
+    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Supercell/Supercell_No_Resolve.yaml"
+    interval: 86400
+
   game-xbox:
     type: http
     behavior: classical
@@ -589,6 +693,20 @@ rules:
   - RULE-SET,game-sony,🎮 游戏服务
   - RULE-SET,game-steam,🎮 游戏服务
   - RULE-SET,game-nintendo,🎮 游戏服务
+  # 补充平台（blackmatrix7 No_Resolve）：国服 .cn / 163.com / netease.com 已由前置 ChinaDomain 直连。
+  - RULE-SET,game-blizzard,🎮 游戏服务
+  - RULE-SET,game-battle,🎮 游戏服务
+  - RULE-SET,game-ea,🎮 游戏服务
+  - RULE-SET,game-playstation,🎮 游戏服务
+  - RULE-SET,game-riot,🎮 游戏服务
+  - RULE-SET,game-ubisoft,🎮 游戏服务
+  - RULE-SET,game-ubi,🎮 游戏服务
+  - RULE-SET,game-rockstar,🎮 游戏服务
+  - RULE-SET,game-hoyoverse,🎮 游戏服务
+  - RULE-SET,game-garena,🎮 游戏服务
+  - RULE-SET,game-gog,🎮 游戏服务
+  - RULE-SET,game-2k,🎮 游戏服务
+  - RULE-SET,game-supercell,🎮 游戏服务
   - RULE-SET,speedtest,📈 网络测试
   - RULE-SET,myspeedtest,📈 网络测试
   - RULE-SET,proxy,🪜 代理域名

@@ -10,7 +10,7 @@
 # >>=========================================================<<
 # 名称: OneSmartPro
 # 修改: Edison
-# 更新: 2026 年 9 月 22 日
+# 更新: 2026 年 10 月 17 日
 # 覆盖AI、流媒体、TikTok等应用场景，提供多种监听协议支持
 # 配合手选节点+故转Smart算法智能选择最优节点和节点可用性保证
 # YAML模板原作者: YYDS666 | 频道: https://t.me/Pinched666 | Github地址: https://github.com/666OS/YYDS
@@ -18,24 +18,20 @@
 
 # === 锚点配置 ====
 # 节点筛选正则表达式 - 基于地理位置和关键词过滤
-BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'https://cp.cloudflare.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
+BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'www.gstatic.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
  exclude-filter: '(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|剩余|重置|套餐|距离)' }
 
-
 # 策略组基础配置模板
-BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true }
-BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://cp.cloudflare.com/generate_204', hidden: true }
-BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://cp.cloudflare.com/generate_204' }
-BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://cp.cloudflare.com/generate_204' }
+BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, timeout: 3000, max-failed-times: 2, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204', hidden: true }
+BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204', hidden: true, uselightgbm: true }
+BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204' }
+BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204' }
 
 # 策略组代理列表锚点
 SelectAL: &SelectAL { type: select, proxies: [香港-故转, 香港-智能, 日本-故转, 日本-智能, 狮城-故转, 狮城-智能, 美国-故转, 美国-智能, 台湾-故转, 台湾-智能, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
-OneSmart: &OneSmart { type: select, proxies: [香港-智能, 日本-智能, 狮城-智能, 台湾-智能, 美国-智能, 低倍率-智能, 冷门节点-智能, 全部节点-手选, 国内直连] } # 智能节点组
-SelectHQ: &SelectHQ { type: select, proxies: [香港-手选, 日本-手选, 狮城-手选, 台湾-手选, 美国-手选, 低倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 手选节点组 
-SelectFB: &SelectFB { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 台湾-故转, 美国-故转, 低倍率-故转, 全部节点-手选, 国内直连] } # 故转节点组 
+SelectLD: &SelectLD { type: select, proxies: [国内直连,  香港-故转, 香港-智能, 日本-故转, 日本-智能, 狮城-故转, 狮城-智能, 美国-故转, 美国-智能, 台湾-故转, 台湾-智能, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选] } # 全部节点组
 SelectLR: &SelectLR { type: select, proxies: [国内直连, 低倍率-故转, 全部节点-手选] } # 低倍率节点组
 SelectHR: &SelectHR { type: select, proxies: [国内直连, 高倍率-手选, 全部节点-手选] } # 高倍率节点组
-SelectDC: &SelectDC { type: select, proxies: [国内直连, 全部节点-手选] } # 国内直连
 
 # 节点筛选正则表达式
 # --- 全部/冷门节点 ---
@@ -47,11 +43,11 @@ FilterHR: &FilterHR { filter: '^(?i).*(?<![0-9.])(x(1\.[5-9]\d*|[2-9](\.\d+)?|10
 FilterLR: &FilterLR { filter: '^(?i).*(0\.01|0\.[1-8]|下载|实验).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png' } # 低倍率节点
 
 # --- 常用地区节点 ---
-FilterUS: &FilterUS { filter: '^(?i)(?!.*(南美|免费)).*(美|🇺🇸|united\s?states|(?<![a-zA-Z])(US[-_ ]?\d*|USA)|SJC|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
-FilterTW: &FilterTW { filter: '^(?i)(?!.*(烟台|平台|免费)).*(台|🇼🇸|🇹🇼|\bTW\b|TW[-_]|TW\d+|tai|TPE|TSA|KHH).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png' }
-FilterJP: &FilterJP { filter: '^(?i)(?!.*(尼日|免费)).*(日|🇯🇵|\bJP\b|JP[-_]|JP\d+|Japan|NRT|HND|KIX|CTS|FUK).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
-FilterSG: &FilterSG { filter: '^(?i)(?!.*免费).*(坡|🇸🇬|Sing|SIN|\bSG\b|SG[-_]|SG\d+|XSP).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
-FilterHK: &FilterHK { filter: '^(?i)(?!.*免费).*(港|🇭🇰|Hong|HKG|\bHK\b|HK[-_]|HK\d+).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
+FilterUS: &FilterUS { filter: '^(?i)(?!.*(南美|免费)).*(美|🇺🇸|united\s?states|america|(?<![a-zA-Z])(us|usa|sjc|jfk|lax|ord|atl|dfw|sfo|mia|sea|iad)(?![a-zA-Z])).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
+FilterJP: &FilterJP { filter: '^(?i)(?!.*(尼日|免费)).*(日|🇯🇵|japan|tokyo|osaka|(?<![a-zA-Z])(jp|jpn|nrt|hnd|kix|cts|fuk)(?![a-zA-Z])).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
+FilterTW: &FilterTW { filter: '^(?i)(?!.*免费).*(台|🇼🇸|🇹🇼|taiwan|taipei|(?<![a-zA-Z])(tw|twn|tpe|tsa|khh)(?![a-zA-Z])).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Taiwan.png' }
+FilterSG: &FilterSG { filter: '^(?i)(?!.*免费).*(坡|狮城|🇸🇬|singapore|(?<![a-zA-Z])(sg|sgp|sin|xsp)(?![a-zA-Z])).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
+FilterHK: &FilterHK { filter: '^(?i)(?!.*免费).*(港|🇭🇰|hong\s?kong|(?<![a-zA-Z])(hk|hkg)(?![a-zA-Z])).*$', icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
 FilterJK: &FilterJK { filter: '(?i)家宽', icon: 'https://img.icons8.com/fluency/256/home.png' }
 
 # Smart 优先级权重
@@ -59,13 +55,11 @@ PriorityLR: &PriorityLR "0.01:9;0.1:8;0.2:7;实验:7;0.3:6;0.4:5;0.5:4;0.6:3;0.7
 PriorityNR: &PriorityNR "优:3;中:2;次:1;备:0.5" # 按订阅质量排序优先级
 
 # 规则集行为模板
-RuleIntv: &RuleIntv 86400  # 外部规则统一更新时间
-DmnMrs: &DmnMrs { type: http, behavior: domain,    format: mrs,  interval: *RuleIntv }
-DmnYml: &DmnYml { type: http, behavior: domain,    format: yaml, interval: *RuleIntv }
-IpcMrs: &IpcMrs { type: http, behavior: ipcidr,    format: mrs,  interval: *RuleIntv }
-ClsTxt: &ClsTxt { type: http, behavior: classical, format: text, interval: *RuleIntv }
-ClsYml: &ClsYml { type: http, behavior: classical, format: yaml, interval: *RuleIntv }
-# 命名逻辑：Dmn=Domain, Ipc=IPCIDR, Cls=Classical | Mrs=MRS, Yml=YAML, Txt=Text
+RuleIntv: &RuleIntv 86400     # 外部规则统一更新时间 
+DmnMrs: &DmnMrs { type: http, behavior: domain, format: mrs,  interval: *RuleIntv }
+DmnYml: &DmnYml { type: http, behavior: domain, format: yaml, interval: *RuleIntv }
+IpcMrs: &IpcMrs { type: http, behavior: ipcidr, format: mrs,  interval: *RuleIntv }
+# 命名逻辑：Dmn=Domain, Ipc=IPCIDR | Mrs=MRS
 
 
 # ==================== 机场订阅链接 =====================
@@ -86,7 +80,6 @@ proxy-providers:
 
 # ==================== 自建代理节点 =====================
 proxies:
-
 
 
 # ====================   核心配置   =====================
@@ -151,20 +144,20 @@ sniffer:
       ports: [80, 8080-8880]
       override-destination: true 
   force-domain:                           # 强制嗅探识别的域名
-    - "+.netflix.com"
-    - "+.nflxvideo.net"
-    - "+.amazonaws.com"
-    - "+.media.dssott.com"   # Disney+
-    - "+.hbo.com"
-    - "+.hbomaxcdn.com"
-    - "+.tiktok.com"
-  skip-domain:                             # 跳过嗅探的域名 (白名单：防止误杀/断流)
+    - "+.tiktok.com"    
+    - "+.netflix.com"    
+    - "+.nflxvideo.net"   
+    - "+.amazonaws.com"   
+    - "+.media.dssott.com"  
+  skip-domain:                            # 跳过嗅探的域名 (白名单：防止误杀/断流)
     - "Mijia Cloud"
     - dlg.io.mi.com
-    - "+.push.apple.com"
-    - "+.oray.com"      # 向日葵
-    - "+.sunlogin.net"
-    - "+.crashlytics.com"
+    - "+.mi.com" 
+    - "+.xiaomi.com"
+    - "+.miwifi.com" 
+    - "+.oray.com"
+    - "+.sunlogin.net"  
+    - "+.push.apple.com" 
 
 # TUN模式配置
 tun:
@@ -188,10 +181,21 @@ hosts:
 # DNS配置
 dns:
   enable: true                             # 启用内置 DNS 服务器
-  listen: 0.0.0.0:7874                     # DNS 监听端口 (OpenClash 转发目标)
   ipv6: true                               # 启用 IPv6 解析
+  use-system-hosts: true                   # 使用操作系统 hosts 文件中的域名映射
+  cache-algorithm: arc                     # DNS 按访问频率与最近使用情况动态淘汰缓存
+  respect-rules: false                     # 是否遵循规则（false 表示所有 DNS 查询都通过直连查询，不经过代理规则）
   enhanced-mode: fake-ip                   # 模式：fake-ip，redir-host
-  fake-ip-range: 198.18.0.1/16             # Fake-IP 地址池范围（私有地址段，不会与真实 IP 冲突）
+  fake-ip-range: 198.18.0.1/16             # Fake-IP IPv4地址池范围
+  fake-ip-range6: 2001:2::1/48             # Fake-IP IPv6地址池范围
+  fake-ip-filter-mode: blacklist           # Fake-IP 过滤模式：blacklist（黑名单）/ whitelist（白名单）
+  fake-ip-filter:                        # Fake-IP 过滤列表（这些域名将返回真实 IP 而非 Fake-IP）
+    - "+.lan"
+    - "+.local"
+    - rule-set:fakeip-filter                 
+    - rule-set:Private
+    - rule-set:China
+    - rule-set:Trackers
   default-nameserver:                      # 用于解析下方 nameserver 中 DoH/DoT 的域名
     - tls://223.5.5.5
     - tls://1.12.12.12
@@ -200,29 +204,6 @@ dns:
   nameserver:                              # 主 DNS 服务器列表（用于实际域名解析）        
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
-
-  fake-ip-filter:                          # Fake-IP 过滤列表（这些域名将返回真实 IP 而非 Fake-IP）
-  - rule-set:fakeip-filter                 
-  - rule-set:Private
-  - rule-set:China
-  - rule-set:Trackers
-  - "+.lan"
-  - "+.local"
-  - "checkip.dyndns.org"
-  - "connectivitycheck.gstatic.com"
-  - "+.push.apple.com"
-  - "time.nist.gov"
-  - "time.windows.com"
-  - "+.battlenet.com"
-  - "+.blzstatic.cn"
-  - "+.nintendo.net"
-  - "+.xboxlive.com"
-  - "+.stun.playstation.net"
-  - "+.docker.io"
-  - "+.miwifi.com"
-  - "+.stun.*"
-  fake-ip-filter-mode: blacklist           # Fake-IP 过滤模式：blacklist（黑名单）/ whitelist（白名单）
-  respect-rules: false                     # 是否遵循规则（false 表示所有 DNS 查询都通过直连查询，不经过代理规则）
 
 
 # ==================== 代理策略组 ====================
@@ -234,14 +215,14 @@ proxy-groups:
   - {name: ProxyGame,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Game.png}
   - {name: Streaming,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/DomesticMedia.png}
   - {name: Google,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Google_Search.png}
-  - {name: Microsoft,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
+  - {name: Microsoft,     <<: *SelectLD, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
   - {name: Bing,          <<: *SelectAL, icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Bing.png}
   - {name: Speedtest,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Speedtest.png}
   - {name: TikTok,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/TikTok_1.png}
   - {name: Emby,          <<: *SelectLR, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
   - {name: PayPal,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/PayPal.png}  
   - {name: Crypto,        <<: *SelectAL, icon: https://raw.githubusercontent.com/chaoscard/proxyrules/master/Bitcoin.png}
-  - {name: Apple,         <<: *SelectDC, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
+  - {name: Apple,         <<: *SelectLD, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
   - {name: 漏网之鱼,        <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
   - {name: Tracker,       <<: *SelectLR, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Download.png}
   - {name: 国内直连,        type: select,  proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
@@ -281,15 +262,15 @@ rules:
 #- IP-CIDR,你需要的代理IP/32,Proxy                 # 需要强制走代理的IP
 #- SRC-IP-CIDR,你需要走直连的IP/32,国内直连         # 需要强制走国内的IP
 
+# --- 基础直连 ---
+  - RULE-SET,Private,国内直连                      # 局域网域名直连 (路由后台/NAS)
+  - RULE-SET,Private-IP,国内直连,no-resolve        # 局域网 IP 直连 (防止环路)
+
 # ==================== 阻止 QUIC/APP内置DOH ====================
   - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((RULE-SET,China))),(NOT,((RULE-SET,China-IP,no-resolve)))),REJECT
   - RULE-SET,DNS-IP,REJECT,no-resolve
   - RULE-SET,Category-DoH,REJECT
   - RULE-SET,HTTPDNS-CN,REJECT              
-
-# --- 基础直连 ---
-  - RULE-SET,Private,国内直连                      # 局域网域名直连 (路由后台/NAS)
-  - RULE-SET,Private-IP,国内直连,no-resolve        # 局域网 IP 直连 (防止环路)
 
 # ==================== 独立/特定分流规则 ====================
   # --- PikPak (屏蔽地区检测/直连下载) ---
@@ -324,21 +305,6 @@ rules:
   - RULE-SET,GOG,ProxyGame                        # GOG
   - RULE-SET,EA,ProxyGame                         # EA Origin
   - RULE-SET,GamesGlobal,ProxyGame                # 非中国区游戏平台走代理兜底
-
-# --- Microsoft 服务 ---
-# --- Copilot 核心对话与网页 ---
-  - DOMAIN-SUFFIX,copilot.microsoft.com,AI         # Copilot 主域名
-  - DOMAIN-SUFFIX,api.microsoftapp.net,AI          # 手机端 Copilot 依赖
-  - DOMAIN-SUFFIX,copilot.azure.com,AI             # Azure Copilot
-  - DOMAIN-SUFFIX,openai.azure.com,AI              # Azure OpenAI 服务  
-  - DOMAIN,edgeservices.bing.com,AI                # Edge 浏览器侧边栏 AI
-  - DOMAIN,sydney.bing.com,AI                      # Copilot 对话核心接口
-  - DOMAIN,img.bing.com,AI                         # Bing AI 绘图功能
-
-# --- Bing 搜索 & MSN ---
-# Copilot 走 AI 策略组，Bing/MSN 走Proxy  (Bing/MSN如需访问国内版，请改为直连)
-  - RULE-SET,Bing,Bing                             # Bing 搜索引擎 
-  - RULE-SET,MSN,Bing                              # MSN
 
 # --- 支付/货币平台 ---
   - RULE-SET,Crypto,Crypto                         # Bybit 等虚拟货币
@@ -389,6 +355,8 @@ rules:
   - RULE-SET,Scholar,Proxy                         # 国际学术 (Google Scholar等)
 
 # --- 微软兜底 ---
+  - RULE-SET,Bing,Bing                             # Bing 搜索引擎 
+  - RULE-SET,MSN,Bing                              # MSN
   - RULE-SET,MicrosoftCN,国内直连                   # 微软中国服务直连
   - RULE-SET,Microsoft,Microsoft                   # 微软国际服务走代理
   
@@ -476,11 +444,11 @@ rule-providers:
   GamesCN:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-games-cn.mrs, path: ./ruleset/category-games-cn.mrs }
   PlayStation:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/playstation.mrs, path: ./ruleset/playstation.mrs }
   Epic:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/epicgames.mrs, path: ./ruleset/epicgames.mrs }
-  Origin:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/origin.mrs, path: ./rule_provider/origin.mrs }
+  Origin:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/origin.mrs, path: ./ruleset/origin.mrs }
   Blizzard:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/blizzard.mrs, path: ./ruleset/blizzard.mrs }
   Nintendo:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/nintendo.mrs, path: ./ruleset/nintendo.mrs }
   Ubisoft:        { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ubisoft.mrs, path: ./ruleset/ubisoft.mrs }
-  GOG:            { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog.mrs, path: ./rule_provider/gog.mrs }
+  GOG:            { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/gog.mrs, path: ./ruleset/gog.mrs }
   Steam:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/steam.mrs, path: ./ruleset/steam.mrs }
   Xbox:           { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/xbox.mrs, path: ./ruleset/xbox.mrs }
   EA:             { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/ea.mrs, path: ./ruleset/ea.mrs }

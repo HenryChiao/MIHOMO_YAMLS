@@ -1,5 +1,5 @@
 # 名称： Seven1_fallback_Rule-Set
-# 版本： V2026.10.4
+# 版本： V2026.10.14
 # 频道： https://t.me/Seven1gogogo
 # 地址： https://github.com/Seven1echo/Yaml
 # 说明： ①使用前需补充完整 “订阅链接” 与 “机场名”，可将 “nameserver” 修改为运营商提供的 DNS 地址; ②已隐藏“区域-故转”、“区域-自动”这两个策略组，使用时按需手动选取对应地区策略组即可。
@@ -44,79 +44,77 @@ proxy-providers:
 
 # ███████████████████████████ 核心配置 ███████████████████████████
 # ══ 基础配置 ══
-mode: rule                                                              # 工作模式  rule（规则模式）/ global（全局模式）/ direct（直连模式）
-ipv6: true                                                              # 网络协议  是否启用 IPv6 支持
-mixed-port: 7893                                                        # 监听端口  HTTP + SOCKS5 混合代理端口
-allow-lan: true                                                         # 局域连接  是否允许局域网设备连接
-bind-address: "*"                                                       # 监听接口  监听的网络接口（* 表示所有接口）
-log-level: warning                                                      # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
-unified-delay: true                                                     # 统一延迟  减少节点延迟抖动
-tcp-concurrent: true                                                    # 并发连接  提升多任务性能
-global-ua: clash.meta                                                   # 用户代理  全局默认UA
-profile: { store-selected: true, store-fake-ip: true }                  # 保存选择  记住选择的节点和策略组、Fake-IP 映射
+mode: rule                                                                # 工作模式  rule（规则模式）/ global（全局模式）/ direct（直连模式）
+ipv6: true                                                                # 网络协议  是否启用 IPv6 支持
+mixed-port: 7893                                                          # 监听端口  HTTP + SOCKS5 混合代理端口
+allow-lan: true                                                           # 局域连接  是否允许局域网设备连接
+bind-address: "*"                                                         # 监听接口  监听的网络接口（* 表示所有接口）
+log-level: warning                                                        # 日志级别  silent（静默）/ error（错误）/ warning（警告）/ info（信息）/ debug（调试）
+unified-delay: true                                                       # 统一延迟  减少节点延迟抖动
+tcp-concurrent: true                                                      # 并发连接  提升多任务性能
+global-ua: clash.meta                                                     # 用户代理  全局默认UA
+profile: {store-selected: true, store-fake-ip: true}                      # 保存选择  记住选择的节点和策略组、Fake-IP 映射
 # ══ 管理面板 ══
 external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip
-external-controller: 0.0.0.0:9090                                       # 面板地址
-external-ui-name: zashboard                                             # 面板名称
-external-ui: ui                                                         # 面板目录
-secret: ""                                                              # 面板密码
+external-controller: 0.0.0.0:9090                                         # 面板地址
+external-ui-name: zashboard                                               # 面板名称
+external-ui: ui                                                           # 面板目录
+secret: ""                                                                # 面板密码
 # ══ TUN配置 ══
 tun:
-  enable: true                                                          # 网卡模式  是否启用 TUN 虚拟网卡模式  
-  stack: mixed                                                          # 协议类型  网络栈：mixed（混合）/ system（系统栈）/ gvisor（用户态栈）/ mips（Mihomo IP 栈）
-  dns-hijack: [udp://any:53, tcp://any:53]                              # 劫持请求  劫持所有 UDP/TCP 53 端口的 DNS 请求
-  auto-detect-interface: true                                           # 自动出口  自动识别默认出口网络接口 （仅内核模式有效）
-  auto-route: true                                                      # 自动路由  自动添加系统路由表      （仅内核模式有效）
-  auto-redirect: true                                                   # 自动定向  自动将流量重定向至 TUN  （仅内核模式有效）
-  strict-route: false                                                   # 路由模式  严格路由模式
-  endpoint-independent-nat: true                                        # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
-  route-exclude-address-set: [bps_cn_ip]                                # 绕过大陆  中国大陆直连/绕过代理（仅支持 Linux）
+  enable: true                                                            # 网卡模式  是否启用 TUN 虚拟网卡模式  
+  stack: mixed                                                            # 协议类型  网络栈：mixed（混合）/ system（系统栈）/ gvisor（用户态栈）/ mips（Mihomo IP 栈）
+  strict-route: true                                                      # 路由模式  严格路由模式
+  auto-route: true                                                        # 自动路由  自动添加系统路由表      （仅内核模式有效）
+  auto-redirect: true                                                     # 自动定向  自动将流量重定向至 TUN  （仅内核模式有效）
+  auto-detect-interface: true                                             # 自动出口  自动识别默认出口网络接口 （仅内核模式有效）
+  endpoint-independent-nat: true                                          # 端点无关  NAT（提高 NAT 类型兼容性，适用于 P2P 和游戏）
+  dns-hijack: ["any:53", "tcp://any:53"]                                  # 劫持请求  劫持所有 UDP/TCP 53 端口的 DNS 请求
+  route-exclude-address-set: [bps_cn_ip]                                  # 绕过大陆  中国大陆直连/绕过代理（仅支持 Linux）
 # ══ 嗅探功能 ══
 sniffer:
-  enable: true                                                          # 启用嗅探  提升分流准确性
-  parse-pure-ip: true                                                   # 反向解析  解析纯 IP 连接（尝试反向解析获得域名）
-  force-dns-mapping: true                                               # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
-  override-destination: false                                           # 成功解析  使用嗅探到的域名覆盖原始目标地址
+  enable: true                                                            # 启用嗅探  提升分流准确性
+  parse-pure-ip: true                                                     # 反向解析  解析纯 IP 连接（尝试反向解析获得域名）
+  force-dns-mapping: true                                                 # 强制映射  DNS 映射（对纯 IP 连接尝试 DNS 映射）
+  override-destination: false                                             # 成功解析  使用嗅探到的域名覆盖原始目标地址
   sniff:
-    QUIC: { ports: [443] }                                              # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
-    TLS:  { ports: [443, 8443] }                                        # 嗅探参数  HTTPS（TLS）常用及备用端口
-    HTTP: { ports: [80, 8080-8880], override-destination: true }        # 嗅探参数  HTTP 及常见 Web / 代理端口段
+    QUIC: {ports: [443]}                                                  # 嗅探参数  QUIC 协议流量（HTTP/3 常用端口）
+    TLS:  {ports: [443, 8443]}                                            # 嗅探参数  HTTPS（TLS）常用及备用端口
+    HTTP: {ports: [80, 8080-8880], override-destination: true}            # 嗅探参数  HTTP 及常见 Web / 代理端口段
   force-domain:
-    - "+.netflix.com"                                                   # 强制嗅探  Netflix 主域名
-    - "+.nflxvideo.net"                                                 # 强制嗅探  Netflix CDN
-    - "+.amazonaws.com"                                                 # 强制嗅探  AWS 云服务
-    - "+.media.dssott.com"                                              # 强制嗅探  Disney+ 流媒体
-    - "+.tiktok.com"                                                    # 强制嗅探  TikTok 流媒体
+    - "+.tiktok.com"                                                      # 强制嗅探  TikTok 流媒体
+    - "+.netflix.com"                                                     # 强制嗅探  Netflix 主域名
+    - "+.nflxvideo.net"                                                   # 强制嗅探  Netflix CDN
+    - "+.amazonaws.com"                                                   # 强制嗅探  AWS 云服务
+    - "+.media.dssott.com"                                                # 强制嗅探  Disney+ 流媒体
   skip-domain:
-    - "dlg.io.mi.com"                                                   # 跳过嗅探  小米设备通信
-    - "+.mi.com"                                                        # 跳过嗅探  小米相关服务
-    - "+.xiaomi.com"                                                    # 跳过嗅探  小米官方服务
-    - "+.miwifi.com"                                                    # 跳过嗅探  小米网络服务
-    - "+.oray.com"                                                      # 跳过嗅探  花生壳服务
-    - "+.sunlogin.net"                                                  # 跳过嗅探  向日葵远程控制
-    - "+.push.apple.com"                                                # 跳过嗅探  苹果推送服务
+    - "+.mi.com"                                                          # 跳过嗅探  小米相关服务
+    - "+.xiaomi.com"                                                      # 跳过嗅探  小米官方服务
+    - "+.miwifi.com"                                                      # 跳过嗅探  小米网络服务
+    - "+.oray.com"                                                        # 跳过嗅探  花生壳服务
+    - "+.sunlogin.net"                                                    # 跳过嗅探  向日葵远程控制
+    - "+.push.apple.com"                                                  # 跳过嗅探  苹果推送服务
 # ══ hosts配置 ══
 hosts:
-  'services.googleapis.cn': ['services.googleapis.com']                 # 谷歌商店  解决无法下载的问题
+  'services.googleapis.cn': ['services.googleapis.com']                   # 谷歌商店  解决无法下载的问题
 # ══ DNS配置 ══
 dns:
-  enable: true                                                          # 解析服务  启用 Clash 内置 DNS 服务
-  ipv6: true                                                            # 网络协议  启用 IPv6 DNS 解析支持
-  use-hosts: true                                                       # 配置映射  使用 Mihomo 配置中的 hosts 映射
-  use-system-hosts: true                                                # 系统映射  使用操作系统 hosts 文件中的域名映射
-  cache-algorithm: arc                                                  # 缓存策略  DNS 按访问频率与最近使用情况动态淘汰缓存
-  listen: 0.0.0.0:7874                                                  # 监听服务  DNS 服务监听地址与端口
-  enhanced-mode: fake-ip                                                # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
-  fake-ip-range: 198.18.0.1/16                                          # 虚拟地址  Fake-IP IPv4虚拟地址池范围
-  fake-ip-range6: 2001:2::1/48                                          # 虚拟地址  Fake-IP IPv6虚拟地址池范围
-  fake-ip-filter-mode: blacklist                                        # 过滤模式  Fake-IP 过滤模式（命中规则则返回真实 IP）
-  respect-rules: false                                                  # 遵循规则  不强制遵循规则顺序
+  enable: true                                                            # 解析服务  启用 Clash 内置 DNS 服务
+  ipv6: true                                                              # 网络协议  启用 IPv6 DNS 解析支持
+  use-hosts: true                                                         # 配置映射  使用 Mihomo 配置中的 hosts 映射
+  use-system-hosts: true                                                  # 系统映射  使用操作系统 hosts 文件中的域名映射
+  cache-algorithm: arc                                                    # 缓存策略  DNS 按访问频率与最近使用情况动态淘汰缓存
+  respect-rules: false                                                    # 遵循规则  不强制遵循规则顺序
+  enhanced-mode: fake-ip                                                  # 增强模式  FDNS 增强模式（Fake-IP，用于防止 DNS 泄露）
+  fake-ip-range: 198.18.0.1/16                                            # 虚拟地址  Fake-IP IPv4虚拟地址池范围
+  fake-ip-range6: 2001:2::1/48                                            # 虚拟地址  Fake-IP IPv6虚拟地址池范围
+  fake-ip-filter-mode: blacklist                                          # 过滤模式  Fake-IP 过滤模式（命中规则则返回真实 IP）
   fake-ip-filter:
-    - "+.lan"                                                           # 真实解析  常见局域网域名后缀
-    - "+.local"                                                         # 真实解析  常见局域网域名后缀
-    - "rule-set:add_cn_domain"                                          # 真实解析  大陆冷门域名
-    - "rule-set:cn_domain"                                              # 真实解析  大陆域名数据
-  nameserver:                                                           # 解析服务  请使用运营商提供的 DNS
+    - "+.lan"                                                             # 真实解析  常见局域网域名后缀
+    - "+.local"                                                           # 真实解析  常见局域网域名后缀
+    - "rule-set:cn_domain"                                                # 真实解析  大陆域名数据
+    - "rule-set:add_cn_domain"                                            # 真实解析  大陆冷门域名
+  nameserver:                                                             # 解析服务  请使用运营商提供的 DNS
     - 114.114.114.114
     - 223.5.5.5
 
@@ -135,7 +133,7 @@ proxy-groups:
   - {name: Apple,        <<: *Anchor_LD, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Apple.png}
   - {name: Steam,        <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Steam.png}
   - {name: TikTok,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/TikTok.png}
-  - {name: Twitter(X),   <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Twitter.png}
+  - {name: X,            <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/X.png}
   - {name: Telegram,     <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Telegram.png}
   - {name: Netflix,      <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Netflix.png}
   - {name: Disney,       <<: *Anchor_OP, icon: https://github.com/Seven1echo/Yaml/raw/main/icons/Disney.png}
@@ -174,70 +172,68 @@ proxy-groups:
 
 # ███████████████████████████ 规则匹配 ███████████████████████████
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_domain),(RULE-SET,cn_ip,no-resolve)))))),REJECT
-  - RULE-SET,private_domain,国内直连                                    # Private
-  - RULE-SET,private_ip,国内直连,no-resolve                             # Private
-  - RULE-SET,games@cn_domain,国内直连                                   # 游戏直连 
-  - RULE-SET,ai-!cn_domain,AI                                           # AI(国际)
-  - RULE-SET,youtube_domain,YouTube                                     # YouTube
-  - RULE-SET,google_domain,Google                                       # Google
-  - RULE-SET,github_domain,GitHub                                       # GitHub
-  - RULE-SET,onedrive_domain,OneDrive                                   # OneDrive
-  - RULE-SET,microsoft_domain,Microsoft                                 # 微软服务
-  - RULE-SET,apple_domain,Apple                                         # 苹果服务
-  - RULE-SET,steam_domain,Steam                                         # Steam
-  - RULE-SET,tiktok_domain,TikTok                                       # TikTok
-  - RULE-SET,twitter_domain,Twitter(X)                                  # Twitter(X)
-  - RULE-SET,telegram_domain,Telegram                                   # Telegram
-  - RULE-SET,netflix_domain,Netflix                                     # Netflix
-  - RULE-SET,disney_domain,Disney                                       # Disney+
-  - RULE-SET,spotify_domain,Spotify                                     # Spotify
-  - RULE-SET,paypal_domain,PayPal                                       # PayPal
-  - RULE-SET,speedtest_domain,Speedtest                                 # Speedtest
-  - RULE-SET,google_ip,Google,no-resolve                                # Google
-  - RULE-SET,telegram_ip,Telegram,no-resolve                            # Telegram
-  - RULE-SET,twitter_ip,Twitter(X),no-resolve                           # Twitter
-  - RULE-SET,netflix_ip,Netflix,no-resolve                              # Netflix
-  - RULE-SET,geolocation-!cn,一键代理                                    # 排除国内
-  - RULE-SET,add_cn_domain,国内直连                                      # 直连域名
-  - RULE-SET,cn_domain,国内直连                                          # 中国域名
-  - RULE-SET,cn_ip,国内直连,no-resolve                                   # 中国IP
-  - MATCH,漏网之鱼                                                       # 兜底规则
+  - AND,((RULE-SET,cn!_domain),(DST-PORT,443),(NETWORK,UDP)),REJECT       # 禁用国外 QUIC 流量
+  - RULE-SET,private_domain,国内直连                                       # 私有域名
+  - RULE-SET,private_ip,国内直连,no-resolve                                # 私有IP
+  - RULE-SET,games@cn_domain,国内直连                                      # 国内游戏 
+  - RULE-SET,ai-!cn_domain,AI                                             # 国外AI
+  - RULE-SET,youtube_domain,YouTube                                       # YouTube
+  - RULE-SET,google_domain,Google                                         # Google
+  - RULE-SET,github_domain,GitHub                                         # GitHub
+  - RULE-SET,onedrive_domain,OneDrive                                     # OneDrive
+  - RULE-SET,microsoft_domain,Microsoft                                   # 微软服务
+  - RULE-SET,apple_domain,Apple                                           # 苹果服务
+  - RULE-SET,steam_domain,Steam                                           # Steam
+  - RULE-SET,tiktok_domain,TikTok                                         # TikTok
+  - RULE-SET,x_domain,X                                                   # X(Twitter)
+  - RULE-SET,telegram_domain,Telegram                                     # Telegram
+  - RULE-SET,netflix_domain,Netflix                                       # Netflix
+  - RULE-SET,disney_domain,Disney                                         # Disney
+  - RULE-SET,spotify_domain,Spotify                                       # Spotify
+  - RULE-SET,paypal_domain,PayPal                                         # PayPal
+  - RULE-SET,speedtest_domain,Speedtest                                   # Speedtest
+  - RULE-SET,cn!_domain,一键代理                                           # 境外代理
+  - RULE-SET,google_ip,Google,no-resolve                                  # Google
+  - RULE-SET,telegram_ip,Telegram,no-resolve                              # Telegram
+  - RULE-SET,netflix_ip,Netflix,no-resolve                                # Netflix
+  - RULE-SET,cn_domain,国内直连                                            # 国内域名
+  - RULE-SET,add_cn_domain,国内直连                                        # 直连补充
+  - RULE-SET,bps_cn_ip,国内直连,no-resolve                                 # 国内IP（聚合版）
+  - MATCH,漏网之鱼                                                         # 兜底规则
 
 
 
 # ███████████████████████████ 规则来源 ███████████████████████████
 rule-providers: 
 # ══ 域名规则 ══
-  private_domain:           { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
-  games@cn_domain:          { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs"}
-  ai-!cn_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
-  youtube_domain:           { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
-  google_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
-  github_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
-  onedrive_domain:          { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
-  microsoft_domain:         { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
-  apple_domain:             { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
-  steam_domain:             { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs"} 
-  tiktok_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
-  twitter_domain:           { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"}
-  telegram_domain:          { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
-  netflix_domain:           { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
-  disney_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
-  spotify_domain:           { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
-  paypal_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
-  speedtest_domain:         { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-speedtest.mrs"}
-  geolocation-!cn:          { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
-  cn_domain:                { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
-  add_cn_domain:            { <<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}
+  private_domain:           {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"}
+  games@cn_domain:          {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-games@cn.mrs"}
+  ai-!cn_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-ai-!cn.mrs" }
+  youtube_domain:           {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"}
+  google_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"}
+  github_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/github.mrs"}
+  onedrive_domain:          {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/onedrive.mrs"}
+  microsoft_domain:         {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"}
+  apple_domain:             {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"}
+  steam_domain:             {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/steam.mrs"} 
+  tiktok_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"}
+  x_domain:                 {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/x.mrs"}
+  telegram_domain:          {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"}
+  netflix_domain:           {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"}
+  disney_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/disney.mrs"}
+  spotify_domain:           {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"}
+  paypal_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/paypal.mrs"}
+  speedtest_domain:         {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-speedtest.mrs"}
+  cn!_domain:               {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"}
+  cn_domain:                {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"}
+  add_cn_domain:            {<<: *Anchor_DN, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Direct_Domain.mrs"}
 # ══ IP规则 ══
-  private_ip:               { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
-  google_ip:                { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
-  telegram_ip:              { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
-  twitter_ip:               { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"}
-  netflix_ip:               { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
-  cn_ip:                    { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"}
-  bps_cn_ip:                { <<: *Anchor_IP, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Bypass_China.mrs"}
+  private_ip:               {<<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"}
+  google_ip:                {<<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"}
+  telegram_ip:              {<<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"}
+  netflix_ip:               {<<: *Anchor_IP, url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"}
+  bps_cn_ip:                {<<: *Anchor_IP, url: "https://raw.githubusercontent.com/Seven1echo/Yaml/refs/heads/main/rules/Seven1_Bypass_China.mrs"}
+
 
 
 # ███████████████████████████ 配置结束 ███████████████████████████

@@ -482,7 +482,7 @@ group_filter:
   TW_filter: &TW_filter { filter: '(?i)(🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)' }
   low_filter:
     &low_filter {
-      filter: '(?i)(^(?!.*(?:剩|期)).*(?:(?<!\d)0(\.[0-5]|[*×✕✖⨯⨉x倍]))|(?:[*×✕✖⨯⨉x]0)|^(?!.*(?:客户端|软件)).*下载|低倍|免费|(?<![A-Za-z])free(?![A-Za-z]))',
+      filter: '(?i)(^(?!.*(?:剩|期)).*(?:(?<![\d.])0(\.[0-5]|[*×✕✖⨯⨉x倍]))|(?:[*×✕✖⨯⨉x]0)|^(?!.*(?:客户端|软件)).*下载|低倍|免费|(?<![A-Za-z])free(?![A-Za-z]))',
     }
   high_filter:
     &high_filter {
@@ -543,6 +543,10 @@ proxy-groups:
     <<: [*group_common_select, *proxies_default]
     default-selected: '美国'
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/OpenAI.svg'
+
+  - name: 'GitHub'
+    <<: [*group_common_select, *proxies_default]
+    icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/GitHub.svg'
 
   - name: 'Microsoft'
     <<: [*group_common_select, *proxies_direct]
@@ -720,7 +724,7 @@ rules:
   - RULE-SET,google,Google
   - RULE-SET,google_ip,Google,no-resolve
   - RULE-SET,ai,AI
-  - RULE-SET,github,默认代理
+  - RULE-SET,github,GitHub
   - RULE-SET,microsoft,Microsoft
   - RULE-SET,microsoft_ip,Microsoft,no-resolve
   - RULE-SET,apple,Apple
