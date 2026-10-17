@@ -8,13 +8,13 @@
 
 | 特性 | `Seven1_fallback_Geo.yaml` | `Seven1_fallback_Rule-Set.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 22.1 KB | 25.2 KB |
+| **大小** | 22.1 KB | 24.7 KB |
 | **混合端口** | 7893 | 7893 |
 | **面板地址** | 0.0.0.0:9090 | 0.0.0.0:9090 |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
 | **策略组** | **41** | **41** |
-| **规则数** | **29** | **29** |
+| **规则数** | **28** | **28** |
 
 ## 📄 配置详情
 
@@ -36,7 +36,7 @@
 | 👆 Apple | `select` |
 | 👆 Steam | `select` |
 | 👆 TikTok | `select` |
-| 👆 Twitter(X) | `select` |
+| 👆 X | `select` |
 | 👆 Telegram | `select` |
 | 👆 Netflix | `select` |
 | 👆 Disney | `select` |
@@ -50,7 +50,7 @@
 </details>
 
 #### 📝 Seven1_fallback_Rule-Set.yaml
-- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 25.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
+- **路径**: `Seven1_fallback_Rule-Set.yaml` | **大小**: 24.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Seven1echo/Seven1_fallback_Rule-Set.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (41个)</summary>
@@ -67,7 +67,7 @@
 | 👆 Apple | `select` |
 | 👆 Steam | `select` |
 | 👆 TikTok | `select` |
-| 👆 Twitter(X) | `select` |
+| 👆 X | `select` |
 | 👆 Telegram | `select` |
 | 👆 Netflix | `select` |
 | 👆 Disney | `select` |

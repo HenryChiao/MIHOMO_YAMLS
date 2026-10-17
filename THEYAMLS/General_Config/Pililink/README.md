@@ -8,18 +8,18 @@
 
 | 特性 | `3-subscription-clash-rule-set.yaml` | `2-subscription-clash-rule-set.yaml` | `base-clash-ruleset.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 20.3 KB | 19.7 KB | 19.1 KB |
+| **大小** | 24.5 KB | 23.9 KB | 23.3 KB |
 | **混合端口** | - | - | - |
 | **面板地址** | - | - | - |
 | **运行模式** | rule | rule | rule |
 | **TUN** | 🚫 | 🚫 | 🚫 |
 | **策略组** | **40** | **39** | **30** |
-| **规则数** | **41** | **41** | **41** |
+| **规则数** | **54** | **54** | **54** |
 
 ## 📄 配置详情
 
 #### 📝 3-subscription-clash-rule-set.yaml
-- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 20.3 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
+- **路径**: `3-subscription-clash-rule-set.yaml` | **大小**: 24.5 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/3-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (40个)</summary>
@@ -50,7 +50,7 @@
 </details>
 
 #### 📝 2-subscription-clash-rule-set.yaml
-- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 19.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
+- **路径**: `2-subscription-clash-rule-set.yaml` | **大小**: 23.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/2-subscription-clash-rule-set.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (39个)</summary>
@@ -81,7 +81,7 @@
 </details>
 
 #### 📝 base-clash-ruleset.yaml
-- **路径**: `base-clash-ruleset.yaml` | **大小**: 19.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/base-clash-ruleset.yaml)
+- **路径**: `base-clash-ruleset.yaml` | **大小**: 23.3 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Pililink/base-clash-ruleset.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (30个)</summary>
