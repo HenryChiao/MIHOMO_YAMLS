@@ -83,6 +83,10 @@ proxy-groups:
       exclude-filter: "香港|HK|HKG|HongKong|日本|JP|Japan|韩国|韩|KR|Korea|新加坡|坡|SG|Singapore|美国|美|US|States|台湾|台|TW|Taiwan|英国|UK|西班牙|ES|意大利|IT|荷兰|NL|德国|DE|土耳其|TR|Turkey|印度|IN|India|俄罗斯|RU|Russia"
     }
 
+  # 🕹️ PSN 服务：从 🎮 游戏服务 拆出的 PS/PSN 域名；首项 REJECT 即默认断网，
+  # 可改选 DIRECT（直连）或 🎮 游戏服务（跟随游戏线路，用于需要给 PSN 走代理时）。
+  - { name: 🕹️ PSN 服务, type: select, proxies: [REJECT, DIRECT, 🎮 游戏服务] }
+
   # --- 专项服务（保持原样） ---
   - { name: 🎮 游戏服务, type: select, proxies: [🎯 全球直连, 🚀 节点选择, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🇹🇼 台湾节点, 🇪🇺 欧洲节点, 🇹🇷 土耳其节点, 🇮🇳 印度节点, 🇷🇺 俄罗斯节点, 🌏 其他地区] }
   - { name: 🪜 代理域名, type: select, proxies: [🚀 节点选择, 🇭🇰 香港节点, 🇯🇵 日本节点, 🇰🇷 韩国节点, 🇸🇬 新加坡节点, 🇺🇸 美国节点, 🇹🇼 台湾节点, 🇪🇺 欧洲节点, 🇹🇷 土耳其节点, 🇮🇳 印度节点, 🇷🇺 俄罗斯节点, 🌏 其他地区, 🎯 全球直连] }
@@ -151,6 +155,14 @@ rule-providers:
     format: text
     path: ./rule_provider/myclaude.list
     url: "https://raw.githubusercontent.com/Pililink/AirRules/refs/heads/main/clash/ruleset/claude.list"
+    interval: 7200
+
+  mypsn:
+    type: http
+    behavior: classical
+    format: text
+    path: ./rule_provider/mypsn.list
+    url: "https://raw.githubusercontent.com/Pililink/AirRules/refs/heads/main/clash/ruleset/psn.list"
     interval: 7200
 
   myspeedtest:
@@ -241,14 +253,6 @@ rule-providers:
     url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/Origin.yaml"
     interval: 7200
 
-  game-sony:
-    type: http
-    behavior: classical
-    format: yaml
-    path: ./rule_provider/acl4ssr-game-sony.yaml
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/Sony.yaml"
-    interval: 7200
-
   game-steam:
     type: http
     behavior: classical
@@ -287,14 +291,6 @@ rule-providers:
     format: yaml
     path: ./rule_provider/blackmatrix7-ea-no-resolve.yaml
     url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/EA/EA_No_Resolve.yaml"
-    interval: 86400
-
-  game-playstation:
-    type: http
-    behavior: classical
-    format: yaml
-    path: ./rule_provider/blackmatrix7-playstation-no-resolve.yaml
-    url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/PlayStation/PlayStation_No_Resolve.yaml"
     interval: 86400
 
   game-riot:
@@ -469,6 +465,9 @@ rules:
   - RULE-SET,download,🎯 全球直连
   - RULE-SET,google-cn,🎯 全球直连
   - RULE-SET,steam-cn,🎯 全球直连
+  # PS/PSN 域名统一由本仓库自维护的 clash/ruleset/psn.list（mypsn）提供，
+  # 必须前置到 ChinaDomain 之前：cn 规则集内含 playstation.* / sony.com 等，命中即直连。
+  - RULE-SET,mypsn,🕹️ PSN 服务
   - RULE-SET,cn,🇨🇳 直连域名
   - RULE-SET,ai,🤖 人工智能
   # blackmatrix7 Microsoft 含 xbox.com / xboxlive.com 等，Xbox 需先于微软服务命中游戏服务。
@@ -480,14 +479,12 @@ rules:
   - RULE-SET,game-download,🎮 游戏服务
   - RULE-SET,game-epic,🎮 游戏服务
   - RULE-SET,game-origin,🎮 游戏服务
-  - RULE-SET,game-sony,🎮 游戏服务
   - RULE-SET,game-steam,🎮 游戏服务
   - RULE-SET,game-nintendo,🎮 游戏服务
   # 补充平台（blackmatrix7 No_Resolve）：国服 .cn / 163.com / netease.com 已由前置 ChinaDomain 直连。
   - RULE-SET,game-blizzard,🎮 游戏服务
   - RULE-SET,game-battle,🎮 游戏服务
   - RULE-SET,game-ea,🎮 游戏服务
-  - RULE-SET,game-playstation,🎮 游戏服务
   - RULE-SET,game-riot,🎮 游戏服务
   - RULE-SET,game-ubisoft,🎮 游戏服务
   - RULE-SET,game-ubi,🎮 游戏服务

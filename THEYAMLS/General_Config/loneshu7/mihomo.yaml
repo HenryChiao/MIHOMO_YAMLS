@@ -171,8 +171,6 @@ sniffer:
       override-destination: true
     quic:
       ports: [443, 8443]
-  force-domain:
-    - "+"
   skip-domain:
     - "Mijia Cloud"
     - "dlg.io.mi.com"

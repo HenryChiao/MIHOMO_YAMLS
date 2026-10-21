@@ -11,29 +11,30 @@ unified-delay: true
 tcp-concurrent: true
 log-level: silent
 find-process-mode: strict
-global-client-fingerprint: random
+profile:
+  store-selected: true
+  store-fake-ip: true
 
 external-controller: 127.0.0.1:9090
 secret: "123456"
-external-ui: WebUI/Zashboard
-external-ui-url: "https://github.com/Zephyruso/zashboard/releases/latest/download/dist-no-fonts.zip"
+external-ui: zashboard
+external-ui-url: https://github.com/Zephyruso/zashboard/releases/download/v3.13.1/dist-no-fonts.zip
 external-controller-cors:
   allow-origins:
     - "*"
   allow-private-network: true
-
-profile:
-  store-selected: true
-  store-fake-ip: true
 # —————————
 
 p: &p
   type: http
-  interval: 86400
+  interval: 7200
+  proxy: UPDATA
+  header:
+    User-Agent: [ClashMetaForAndroid]
   health-check:
     enable: true
-    url: https://cp.cloudflare.com
-  proxy: DIRECT
+    url: https://cp.cloudflare.com/generate_204
+    interval: 300
 
 proxy-providers:
   α:
@@ -41,28 +42,56 @@ proxy-providers:
     override:
       additional-prefix: "α-"
     path: ./proxies/α.yaml
-    url: ##"订阅链接"##
+    url: ##订阅链接##
 
   β:
     <<: *p
     override:
       additional-prefix: "β-"
     path: ./proxies/β.yaml
-    url: ##"订阅链接"##
+    url: ##订阅链接##
 
   γ:
     <<: *p
     override:
       additional-prefix: "γ-"
     path: ./proxies/γ.yaml
-    url: ##"订阅链接"##
+    url: ##订阅链接##
 
   δ:
     <<: *p
     override:
       additional-prefix: "δ-"
     path: ./proxies/δ.yaml
-    url: ##"订阅链接"##
+    url: ##订阅链接##
+
+  ε:
+    <<: *p
+    override:
+      additional-prefix: "ε-"
+    path: ./proxies/ε.yaml
+    url: ##订阅链接##
+
+  ζ:
+    <<: *p
+    override:
+      additional-prefix: "ζ-"
+    path: ./proxies/ζ.yaml
+    url: ##订阅链接##
+
+  η:
+    <<: *p
+    override:
+      additional-prefix: "η-"
+    path: ./proxies/η.yaml
+    url: ##订阅链接##
+
+  θ:
+    <<: *p
+    override:
+      additional-prefix: "θ-"
+    path: ./proxies/θ.yaml
+    url: ##订阅链接##
 # —————————
 
 sniffer:
@@ -77,21 +106,16 @@ sniffer:
       ports: [443, 8443]
     QUIC:
       ports: [443, 8443]
-  force-domain:
-    - "+.v2ex.com"
-  skip-domain:
-    - "Mijia Cloud"
-    - "+.push.apple.com"
+  force-domain: ["+.v2ex.com"]
+  skip-domain:  ["Mijia Cloud", "+.push.apple.com"]
 # —————————
 
 tun:
   enable: false
   device: Meta
-  stack: mixed
+  stack: mips
   mtu: 1480
-  dns-hijack:
-    - any:53
-    - tcp://any:53
+  dns-hijack: [any:53, tcp://any:53]
   udp-timeout: 300
   auto-route: true
   strict-route: true
@@ -103,10 +127,10 @@ dns:
   enable: true
   ipv6: false
   listen: 0.0.0.0:1053
-  prefer-h3: false     # 如果DNS服务器支持DoH3会优先使用h3，默认关
-  respect-rules: true  # 让连接DNS服务器时能够遵循规则
-  cache-algorithm: arc # 使用性能更优的 ARC 缓存算法
-  cache-size: 4096     # 限制缓存大小，避免占用过多内存
+  prefer-h3: false
+  respect-rules: true
+  cache-algorithm: arc
+  cache-size: 4096
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter-mode: blacklist
@@ -114,249 +138,175 @@ dns:
     - "*.lan"
     - "*.local"
     - "time.*.com"
+    - "time.*.gov"
     - "ntp.*.com"
+    - "pool.ntp.org"
+    - "*.msftconnecttest.com"
+    - "*.msftncsi.com"
     - "RULE-SET:Lan"
     - "RULE-SET:GoogleFCM"
-  default-nameserver:
-    - 223.5.5.5
-    - 119.29.29.29
-    - 223.6.6.6
-  direct-nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  proxy-server-nameserver:
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
-  nameserver:
-    - https://cloudflare-dns.com/dns-query
-    - https://dns.google/dns-query
+  default-nameserver: [223.5.5.5, 119.29.29.29, 223.6.6.6]
+  direct-nameserver: [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
+  proxy-server-nameserver: [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
+  nameserver: [https://cloudflare-dns.com/dns-query, https://dns.google/dns-query]
   nameserver-policy:
-    "RULE-SET:ChinaMax,Microsoft":
-       - https://dns.alidns.com/dns-query
-       - https://doh.pub/dns-query
+    "RULE-SET:ChinaMax,Microsoft,Apple": [https://dns.alidns.com/dns-query, https://doh.pub/dns-query]
 # —————————
 
-lite: &lite
-    type: select
-    include-all: true
+lite: &lite {type: select, include-all: true, lazy: true}
+pg: &pg {type: select, proxies: [HK,SG,JP,TW,US,WD]}
+md: &md {type: select, proxies: [Media,LowRate,HK,SG,JP,TW,US,WD]}
+zl: &zl {type: select, proxies: [DIRECT,HK,SG,JP,TW,US,WD]}
 
 proxy-groups:
-  - name: PROXY
-    icon: "https://raw.githubusercontent.com/GitMetaio/Surfing@rm/Home/icon/All.svg"
-    type: select
-    proxies:
-      - HK
-      - SG
-      - JP
-      - TW
-      - US
-      - WD
-      - LowRate
-      - DIRECT
-    include-all: true
-
-  - name: HK
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png"
-    filter: "^(?=.*(港|HK|hk|Hong Kong|HongKong|hongkong)).*$"
-    <<: *lite
-
-  - name: SG
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png"
-    filter: "^(?=.*(新加坡|坡|狮城|SG|Singapore)).*$"
-    <<: *lite
-
-  - name: JP
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png"
-    filter: "^(?=.*(日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan)).*$"
-    <<: *lite
-
-  - name: TW
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png"
-    filter: "^(?=.*(台|新北|彰化|TW|Taiwan)).*$"
-    <<: *lite
-
-  - name: US
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png"
-    filter: "^(?=.*(美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|UnitedStates)).*$"
-    <<: *lite
-
-  - name: WD
-    icon: "https://raw.githubusercontent.com/GitMetaio/Surfing/refs/heads/rm/Home/icon/Globe.svg"
-    filter: "^(?!.*(港|HK|hk|Hong Kong|HongKong|hongkong|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|US|United States|UnitedStates|台|新北|彰化|TW|Taiwan|新加坡|坡|狮城|SG|Singapore|灾|网易|Netease|套餐|重置|剩余|到期|订阅|群|账户|流量|有效期|时间|官网)).*$"
-    <<: *lite
-
-  - name: LowRate
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Download.png"
-    filter: (?<![0-9])0\.(?:0[0-9]{1,2}|[1-9])(?![0-9])
-    <<: *lite
-
-  - name: Emby
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png"
-    type: select
-    proxies:
-      - LowRate
-      - HK
-      - SG
-      - JP
-      - TW
-      - US
-      - WD
-
-  - name: Telegram
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png"
-    type: select
-    proxies:
-      - HK
-      - SG
-      - JP
-      - TW
-      - US
-      - WD
-
-  - name: Google
-    icon: "https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png"
-    type: select
-    proxies:
-      - HK
-      - SG
-      - JP
-      - TW
-      - US
-      - WD
-
-  - name: ADS
-    icon: "https://raw.githubusercontent.com/GitMetaio/Surfing/rm/Home/icon/No-ads-all.svg"
-    type: select
-    proxies:
-      - REJECT
-      - PROXY
+  - {name: PROXY, type: select,
+    icon: https://raw.githubusercontent.com/GitMetaio/Surfing/refs/heads/rm/Home/icon/All.svg,
+    url: https://cp.cloudflare.com/generate_204, interval: 300,
+    proxies: [HK,SG,JP,TW,US,WD,DIRECT], include-all: true}
+  - {name: HK, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Hong_Kong.png,
+    filter: '^(?=.*(?:港|HK|hk|Hong ?Kong)).+'}
+  - {name: SG, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Singapore.png,
+    filter: '^(?=.*(?:新加坡|坡|狮城|SG|Singapore)).+'}
+  - {name: JP, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Japan.png,
+    filter: '^(?=.*(?:日本|川日|东京|大阪|泉日|埼玉|沪日|深日|JP|Japan)).+'}
+  - {name: TW, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Taiwan.png,
+    filter: '^(?=.*(?:台|新北|彰化|TW|Taiwan)).+'}
+  - {name: US, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/United_States.png,
+    filter: '^(?=.*(?:美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|USA|United ?States)).+'}
+  - {name: WD, <<: *lite,
+    icon: https://raw.githubusercontent.com/GitMetaio/Surfing/refs/heads/rm/Home/icon/Globe.svg,
+    filter: '^(?i)(?!.*(?:港|hk|hong ?kong|日本|川日|东京|大阪|泉日|埼玉|沪日|深日|jp|japan|美|波特兰|达拉斯|俄勒冈|凤凰城|费利蒙|硅谷|拉斯维加斯|洛杉矶|圣何塞|圣克拉拉|西雅图|芝加哥|us|united ?states|台|新北|彰化|tw|taiwan|新加坡|坡|狮城|sg|singapore|traffic|expire|灾|网易|netease|套餐|重置|剩余|到期|订阅|群|账户|流量|有效期|时间|官网|防走失|建议)).+'}
+  - {name: Steam, <<: *zl,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Steam.png,}
+  - {name: Google, <<: *pg,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Google.png}
+  - {name: Telegram, <<: *pg,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Telegram.png}
+  - {name: LowRate, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Download.png,
+    filter: '(?<![0-9])0\.(?:0[0-9]{1,2}|[1-9])(?![0-9])'}
+  - {name: Media, <<: *lite,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Media.png}
+  - {name: Emby, <<: *md,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Emby.png}
+  - {name: YouTube, <<: *md,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png}
+  - {name: TikTok, <<: *md,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/TikTok.png}
+  - {name: Apple, <<: *zl,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Apple.png}
+  - {name: AI, <<: *pg,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/AI.png}
+  - {name: PayPal, <<: *pg,
+    icon: https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/PayPal.png}
+  - {name: EH, <<: *pg,
+    icon: https://raw.githubusercontent.com/lige47/lige_icon/blob/main/icon/04ProxySoft/exhentai.png}
+  - {name: UPDATA, <<: *zl,
+    icon: https://raw.githubusercontent.com/GitMetaio/Surfing/refs/heads/rm/Home/icon/Update.svg,}
+  - {name: ADS, type: select,
+    icon: https://raw.githubusercontent.com/GitMetaio/Surfing/refs/heads/rm/Home/icon/No-ads-all.svg,
+    proxies: [REJECT-DROP,REJECT,PROXY]}
 # —————————
 
 rule-anchor:
-  IPCIDR: &IPCIDR
-    {type: http, behavior: ipcidr, format: mrs, interval: 86400}
-  Domain: &Domain
-    {type: http, behavior: domain, format: mrs, interval: 86400}
+  IPCIDR: &IPCIDR {type: http, behavior: ipcidr, format: mrs, interval: 86400}
+  Domain: &Domain {type: http, behavior: domain, format: mrs, interval: 86400}
 
 rule-providers:
-
-
 ###国内/私有###
-
-  ChinaMax:
-    <<: *Domain
-    path: ./rules/ChinaMax.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/ChinaMax/ChinaMax_OCD_Domain.mrs"
-  ChinaMax_IP:
-    <<: *IPCIDR
-    path: ./rules/ChinaMax_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/ChinaMax/ChinaMax_OCD_IP.mrs"
-  Lan:
-    <<: *Domain
-    path: ./rules/Lan.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Lan/Lan_OCD_Domain.mrs"
-  Lan_IP:
-    <<: *IPCIDR
-    path: ./rules/Lan_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Lan/Lan_OCD_IP.mrs"
-
+  ChinaMax: {<<: *Domain, path: ./rules/ChinaMax.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaMax/ChinaMax_OCD_Domain.mrs}
+  ChinaMax_IP: {<<: *IPCIDR, path: ./rules/ChinaMax_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaMax/ChinaMax_OCD_IP.mrs}
+  Lan: {<<: *Domain, path: ./rules/Lan.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Lan/Lan_OCD_Domain.mrs}
+  Lan_IP: {<<: *IPCIDR, path: ./rules/Lan_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Lan/Lan_OCD_IP.mrs}
 ###直连/代理规则###
-
-  Direct:
-    <<: *Domain
-    path: ./rules/direct.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Direct/Direct_OCD_Domain.mrs"
-  Global:
-    <<: *Domain
-    path: ./rules/Global.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Global/Global_OCD_Domain.mrs"
-  Global_IP:
-    <<: *IPCIDR
-    path: ./rules/Global_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Global/Global_OCD_IP.mrs"
-
+  Direct: {<<: *Domain, path: ./rules/direct.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Direct/Direct_OCD_Domain.mrs}
+  Global: {<<: *Domain, path: ./rules/Global.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Global/Global_OCD_Domain.mrs}
+  Global_IP: {<<: *IPCIDR, path: ./rules/Global_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Global/Global_OCD_IP.mrs}
 ###去广告###
-
-  AWAvenue_Ads_Rule:
-    <<: *YAML
-    path: ./rules/AWAvenue_Ads_Rule_Clash.yaml
-    url: "https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main//Filters/AWAvenue-Ads-Rule-Clash.yaml"
-  Anti-AD:
-    <<: *Domain
-    path: ./rules/Anti-AD.mrs
-    url: "https://anti-ad.net/mihomo.mrs"
-
+  Anti-AD: {<<: *Domain, path: ./rules/Anti-AD.mrs, url: https://anti-ad.net/mihomo.mrs}
 ###游戏###
-
-  Game:
-    <<: *Domain
-    path: ./rules/Game.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Game/Game_OCD_Domain.mrs"
-  Game_IP:
-    <<: *IPCIDR
-    path: ./rules/Game_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Game/Game_OCD_IP.mrs"
-  GameDownload:
-    <<: *Domain
-    path: ./rules/GameDownload.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Game/GameDownload/GameDownload_OCD_Domain.mrs"
-
+  Game: {<<: *Domain, path: ./rules/Game.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Game/Game_OCD_Domain.mrs}
+  Game_IP: {<<: *IPCIDR, path: ./rules/Game_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Game/Game_OCD_IP.mrs}
+  GameDownload: {<<: *Domain, path: ./rules/GameDownload.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Game/GameDownload/GameDownload_OCD_Domain.mrs}
+  Steam: {<<: *Domain, path: ./rules/Steam.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Steam/Steam_OCD_Domain.mrs}
 ###国外###
-
-  Emby:
-    <<: *Domain
-    path: ./rules/Emby.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Emby/Emby_OCD_Domain.mrs"
-  Telegram:
-    <<: *Domain
-    path: ./rules/Telegram.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_Domain.mrs"
-  Telegram_IP:
-    <<: *IPCIDR
-    path: ./rules/Telegram_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_IP.mrs"
-  Google:
-    <<: *Domain
-    path: ./rules/Google.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_Domain.mrs"
-  Google_IP:
-    <<: *IPCIDR
-    path: ./rules/Google_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_IP.mrs"
-  GoogleFCM:
-    <<: *Domain
-    path: ./rules/GoogleFCM.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_Domain.mrs"
-  GoogleFCM_IP:
-    <<: *IPCIDR
-    path: ./rules/GoogleFCM_IP.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_IP.mrs"
-  Microsoft:
-    <<: *Domain
-    path: ./rules/Microsoft.mrs
-    url: "https://raw.githubusercontent.com/Ayanamikizuna/Rule-for-OCD/master/rule/Clash/Microsoft/Microsoft_OCD_Domain.mrs"
+  Google: {<<: *Domain, path: ./rules/Google.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_Domain.mrs}
+  Google_IP: {<<: *IPCIDR, path: ./rules/Google_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_IP.mrs}
+  Apple: {<<: *Domain, path: ./rules/Apple.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Apple/Apple_OCD_Domain.mrs}
+  Apple_IP: {<<: *IPCIDR, path: ./rules/Apple_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Apple/Apple_OCD_IP.mrs}
+  Telegram: {<<: *Domain, path: ./rules/Telegram.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_Domain.mrs}
+  Telegram_IP: {<<: *IPCIDR, path: ./rules/Telegram_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_IP.mrs}
+  YouTube: {<<: *Domain, path: ./rules/YouTube.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTube/YouTube_OCD_Domain.mrs}
+  YouTube_IP: {<<: *IPCIDR, path: ./rules/YouTube_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTube/YouTube_OCD_IP.mrs}
+  GoogleFCM: {<<: *Domain, path: ./rules/GoogleFCM.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_Domain.mrs}
+  GoogleFCM_IP: {<<: *IPCIDR, path: ./rules/GoogleFCM_IP.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_IP.mrs}
+  PayPal: {<<: *Domain, path: ./rules/PayPal.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/PayPal/PayPal_OCD_Domain.mrs}
+  Microsoft: {<<: *Domain, path: ./rules/Microsoft.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Microsoft/Microsoft_OCD_Domain.mrs}
+  AI: {<<: *Domain, path: ./rules/ai.mrs,
+    url: https://raw.githubusercontent.com/DustinWin/ruleset_geodata/refs/heads/mihomo-ruleset/ai.mrs}
+  TikTok: {<<: *Domain, path: ./rules/TikTok.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/TikTok/TikTok_OCD_Domain.mrs}
+  EH: {<<: *Domain, path: ./rules/EH.mrs,
+    url: https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/EHGallery/EHGallery_OCD_Domain.mrs}
 
 rules:
   - RULE-SET,Lan,DIRECT
   - RULE-SET,Lan_IP,DIRECT,no-resolve
   - RULE-SET,Direct,DIRECT               #直连规则
-  - RULE-SET,AWAvenue_Ads_Rule,ADS       #去广告
-#  - RULE-SET,Anti-AD,ADS                #拦截更严格，默认用秋风去广告
-  - RULE-SET,Game,DIRECT          #游戏，走直连
+  - RULE-SET,Anti-AD,ADS                 #去广告
+  - RULE-SET,Steam,Steam
+  - RULE-SET,Game,DIRECT                 #游戏，走直连
   - RULE-SET,Game_IP,DIRECT
   - RULE-SET,GameDownload,DIRECT
+  - PROCESS-NAME-REGEX,(?i).*steam.*,Steam
   - RULE-SET,GoogleFCM,DIRECT
   - RULE-SET,GoogleFCM_IP,DIRECT
   - RULE-SET,Microsoft,DIRECT
-  - DOMAIN-SUFFIX,immersivetranslate.com,DIRECT
+
+  - PROCESS-NAME,tor.exe,PROXY
+  - RULE-SET,AI,AI
+  - RULE-SET,Apple,Apple
+  - RULE-SET,PayPal,PayPal
+  - RULE-SET,TikTok,TikTok
+  - RULE-SET,EH,EH
+  - IP-CIDR,178.175.128.0/21,EH
+
   - RULE-SET,ChinaMax,DIRECT
   - RULE-SET,ChinaMax_IP,DIRECT
-
-  - RULE-SET,Emby,Emby
-  - RULE-SET,Telegram,PROXY
-  - RULE-SET,Telegram_IP,PROXY,no-resolve
   - RULE-SET,Google,Google
   - RULE-SET,Google_IP,Google
+  - RULE-SET,YouTube,YouTube
+  - RULE-SET,YouTube_IP,YouTube
+  - RULE-SET,Telegram,Telegram
+  - RULE-SET,Telegram_IP,Telegram,no-resolve
   - RULE-SET,Global,PROXY
   - RULE-SET,Global_IP,PROXY
 
