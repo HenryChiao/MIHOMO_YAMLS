@@ -6,17 +6,41 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `region-dual-provider.yaml` | `service-single-provider.yaml` | `region-single-provider.yaml` |
+| 特性 | `region-single-provider.yaml` | `region-dual-provider.yaml` | `service-single-provider.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 20.9 KB | 25.9 KB | 15.1 KB |
+| **大小** | 15.1 KB | 20.9 KB | 25.9 KB |
 | **混合端口** | 7890 | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule | rule |
 | **TUN** | ✅ | ✅ | ✅ |
-| **策略组** | **33** | **33** | **14** |
-| **规则数** | **74** | **192** | **74** |
+| **策略组** | **14** | **33** | **33** |
+| **规则数** | **74** | **74** | **192** |
 
 ## 📄 配置详情
+
+#### 📝 region-single-provider.yaml
+- **路径**: `region-single-provider.yaml` | **大小**: 15.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/region-single-provider.yaml)
+- **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
+<details>
+<summary>🔍 策略组 (14个)</summary>
+
+| 名称 | 类型 |
+| :--- | :--- |
+| 👆 PROXY-Gate | `select` |
+| 🔧 Apple Push | `fallback` |
+| 👆 🌎 Global-Manual | `select` |
+| 👆 🗺️ EUR-Manual | `select` |
+| 🔧 APNs-Fallback | `fallback` |
+| ♻️ 🇺🇸 US-Auto | `url-test` |
+| ♻️ 🇸🇬 SG-Auto | `url-test` |
+| ♻️ 🇭🇰 HK-Auto | `url-test` |
+| ♻️ 🇯🇵 JP-Auto | `url-test` |
+| ♻️ 🇹🇼 TW-Auto | `url-test` |
+| ♻️ 🇬🇧 UK-Auto | `url-test` |
+| ♻️ 🇩🇪 DE-Auto | `url-test` |
+| ♻️ 🇫🇷 FR-Auto | `url-test` |
+| ♻️ 🇷🇺 RU-Auto | `url-test` |
+</details>
 
 #### 📝 region-dual-provider.yaml
 - **路径**: `region-dual-provider.yaml` | **大小**: 20.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/region-dual-provider.yaml)
@@ -78,28 +102,4 @@
 | 👆 Instagram | `select` |
 | 👆 WhatsApp | `select` |
 | ... | 还有 13 个 |
-</details>
-
-#### 📝 region-single-provider.yaml
-- **路径**: `region-single-provider.yaml` | **大小**: 15.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/region-single-provider.yaml)
-- **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
-<details>
-<summary>🔍 策略组 (14个)</summary>
-
-| 名称 | 类型 |
-| :--- | :--- |
-| 👆 PROXY-Gate | `select` |
-| 🔧 Apple Push | `fallback` |
-| 👆 🌎 Global-Manual | `select` |
-| 👆 🗺️ EUR-Manual | `select` |
-| 🔧 APNs-Fallback | `fallback` |
-| ♻️ 🇺🇸 US-Auto | `url-test` |
-| ♻️ 🇸🇬 SG-Auto | `url-test` |
-| ♻️ 🇭🇰 HK-Auto | `url-test` |
-| ♻️ 🇯🇵 JP-Auto | `url-test` |
-| ♻️ 🇹🇼 TW-Auto | `url-test` |
-| ♻️ 🇬🇧 UK-Auto | `url-test` |
-| ♻️ 🇩🇪 DE-Auto | `url-test` |
-| ♻️ 🇫🇷 FR-Auto | `url-test` |
-| ♻️ 🇷🇺 RU-Auto | `url-test` |
 </details>
