@@ -10,7 +10,7 @@
 # >>=========================================================<<
 # 名称: OneSmartPro
 # 修改: Edison
-# 更新: 2026 年 10 月 17 日
+# 更新: 2026 年 10 月 23 日
 # 覆盖AI、流媒体、TikTok等应用场景，提供多种监听协议支持
 # 配合手选节点+故转Smart算法智能选择最优节点和节点可用性保证
 # YAML模板原作者: YYDS666 | 频道: https://t.me/Pinched666 | Github地址: https://github.com/666OS/YYDS
@@ -18,7 +18,7 @@
 
 # === 锚点配置 ====
 # 节点筛选正则表达式 - 基于地理位置和关键词过滤
-BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'www.gstatic.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
+BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
  exclude-filter: '(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|剩余|重置|套餐|距离)' }
 
 # 策略组基础配置模板
@@ -28,8 +28,8 @@ BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, empty-fallba
 BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204' }
 
 # 策略组代理列表锚点
-SelectAL: &SelectAL { type: select, proxies: [香港-故转, 香港-智能, 日本-故转, 日本-智能, 狮城-故转, 狮城-智能, 美国-故转, 美国-智能, 台湾-故转, 台湾-智能, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
-SelectLD: &SelectLD { type: select, proxies: [国内直连,  香港-故转, 香港-智能, 日本-故转, 日本-智能, 狮城-故转, 狮城-智能, 美国-故转, 美国-智能, 台湾-故转, 台湾-智能, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选] } # 全部节点组
+SelectAL: &SelectAL { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 家宽-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
+SelectLD: &SelectLD { type: select, proxies: [国内直连,  香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 家宽-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选] } # 全部节点组
 SelectLR: &SelectLR { type: select, proxies: [国内直连, 低倍率-故转, 全部节点-手选] } # 低倍率节点组
 SelectHR: &SelectHR { type: select, proxies: [国内直连, 高倍率-手选, 全部节点-手选] } # 高倍率节点组
 
@@ -189,11 +189,13 @@ dns:
   fake-ip-range: 198.18.0.1/16             # Fake-IP IPv4地址池范围
   fake-ip-range6: 2001:2::1/48             # Fake-IP IPv6地址池范围
   fake-ip-filter-mode: blacklist           # Fake-IP 过滤模式：blacklist（黑名单）/ whitelist（白名单）
-  fake-ip-filter:                        # Fake-IP 过滤列表（这些域名将返回真实 IP 而非 Fake-IP）
+  fake-ip-filter:                          # Fake-IP 过滤列表（这些域名将返回真实 IP 而非 Fake-IP）
     - "+.lan"
     - "+.local"
-    - rule-set:fakeip-filter                 
     - rule-set:Private
+    - rule-set:APNs
+    - rule-set:GoogleFCM
+    - rule-set:fakeip-filter                 
     - rule-set:China
     - rule-set:Trackers
   default-nameserver:                      # 用于解析下方 nameserver 中 DoH/DoT 的域名
@@ -218,13 +220,15 @@ proxy-groups:
   - {name: Microsoft,     <<: *SelectLD, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Microsoft.png}
   - {name: Bing,          <<: *SelectAL, icon: https://raw.githubusercontent.com/Vbaethon/HOMOMIX/refs/heads/main/Icon/Color/Large/Bing.png}
   - {name: Speedtest,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Speedtest.png}
+  - {name: YouTube,       <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/YouTube.png}
   - {name: TikTok,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/TikTok_1.png}
   - {name: Emby,          <<: *SelectLR, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Emby.png}
   - {name: PayPal,        <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/PayPal.png}  
   - {name: Crypto,        <<: *SelectAL, icon: https://raw.githubusercontent.com/chaoscard/proxyrules/master/Bitcoin.png}
+  - {name: G&A-Push,      <<: *SelectLD, icon: https://img.icons8.com/fluency/256/push-notifications.png}
   - {name: Apple,         <<: *SelectLD, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
-  - {name: 漏网之鱼,        <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
   - {name: Tracker,       <<: *SelectLR, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Download.png}
+  - {name: 漏网之鱼,        <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
   - {name: 国内直连,        type: select,  proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
 
   # 线路特性层 - Fallback故障转移，（适合不想节点总是被切换或者对固定IP有要求，若手动选择节点飘红 会自动切到智能策略组，保证节点可用性）,（不需要该策略可以在组名上添加 # 注释）
@@ -233,9 +237,11 @@ proxy-groups:
   - { name: 日本-故转,     <<: *BaseFB, proxies: [日本-手选, 日本-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Japan.png' }
   - { name: 狮城-故转,     <<: *BaseFB, proxies: [狮城-手选, 狮城-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Singapore.png' }
   - { name: 美国-故转,     <<: *BaseFB, proxies: [美国-手选, 美国-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/United_States.png' }
+  - { name: 家宽-故转,     <<: *BaseFB, proxies: [家宽-手选, 家宽-智能], icon: 'https://img.icons8.com/fluency/256/home.png' }
   - { name: 低倍率-故转,    <<: *BaseFB, proxies: [低倍率-手选, 低倍率-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Round_Robin_1.png' }
 
   # 线路策略层 - Smart智能选择，政策权重数值越大优先级越高，修改为关键词节点，比如 优:2;中:1;备:0.5，默认为1，优>中>备，使用时请修改
+  - { name: 家宽-智能,     <<: [*BaseST, *FilterJK], include-all: true, policy-priority: *PriorityNR }
   - { name: 香港-智能,     <<: [*BaseST, *FilterHK], include-all: true, policy-priority: *PriorityNR }
   - { name: 台湾-智能,     <<: [*BaseST, *FilterTW], include-all: true, policy-priority: *PriorityNR }
   - { name: 日本-智能,     <<: [*BaseST, *FilterJP], include-all: true, policy-priority: *PriorityNR }
@@ -318,14 +324,18 @@ rules:
 # ==================== 规则合集 ====================
 # --- AI (人工智能) ---
   - RULE-SET,AI,AI                                 # ChatGPT/Gemini/Claude 等 AI 服务
-  - RULE-SET,GlobalAI,AI                           # 非中国 AI 兜底规则
+  - RULE-SET,Meta,AI                               # Muse/Meta/Facebook
+  
+#--- Push 推送通知---
+  - RULE-SET,GoogleFCM,G&A-Push                    # Google 推送服务
+  - RULE-SET,APNs,G&A-Push                         # Apple 推送服务
 
 # --- 流媒体 (代理) ---
   - RULE-SET,TikTok,TikTok                         # TikTok 
+  - RULE-SET,YouTube,YouTube                       # YouTube 视频
   - RULE-SET,PrimeVideo,Streaming                  # Amazon Prime Video
   - RULE-SET,AppleTV,Streaming                     # Apple TV+
   - RULE-SET,Spotify,Streaming                     # Spotify 音乐
-  - RULE-SET,YouTube,Streaming                     # YouTube 视频
   - RULE-SET,Netflix,Streaming                     # Netflix 域名规则
   - RULE-SET,Disney,Streaming                      # Disney+
   - RULE-SET,Hulu,Streaming                        # Hulu
@@ -334,7 +344,6 @@ rules:
 #--- Google & Play商店更新---
   - DOMAIN-SUFFIX,xn--ngstr-lra8j.com,Google
   - DOMAIN-SUFFIX,googleapis.cn,Google
-  - RULE-SET,GoogleFCM,Google                      # Google 推送服务
   - RULE-SET,Google,Google                         # Google 全家桶
 
 # --- 常用代理服务 ---
@@ -346,7 +355,6 @@ rules:
   - RULE-SET,Reddit,Proxy                          # Reddit
   - RULE-SET,GitHub,Proxy                          # GitHub
   - RULE-SET,Pixiv,Proxy                           # Pixiv 插画站
-  - RULE-SET,Meta,Proxy                            # Facebook/Meta
 
 # --- 国际大类 ---
   - RULE-SET,Communication,Proxy                   # 国际即时通讯 (WhatsApp/Line等)
@@ -400,8 +408,6 @@ rule-providers:
   Apple:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/apple.mrs, path: ./ruleset/apple.mrs }
 
   # --- 🤖 AI & 微软 ---
-  GlobalAI:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-!cn.mrs, path: ./ruleset/category-ai-!cn.mrs }
-  AI-CN:          { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ai-cn.mrs, path: ./ruleset/category-ai-cn.mrs }
   MicrosoftCN:    { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft@cn.mrs, path: ./ruleset/microsoft-cn.mrs }
   Microsoft:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/microsoft.mrs, path: ./ruleset/microsoft.mrs }
   AI:             { <<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/ai.mrs, path: ./ruleset/Gemini.mrs }
@@ -413,7 +419,8 @@ rule-providers:
   Crypto:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-cryptocurrency.mrs, path: ./ruleset/category-cryptocurrency.mrs }
   Communication:  { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-communication.mrs, path: ./ruleset/category-communication.mrs }
   Ecommerce:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/category-ecommerce.mrs, path: ./ruleset/category-ecommerce.mrs }
-  GoogleFCM:      { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/googlefcm.mrs, path: ./ruleset/googlefcm.mrs }
+  GoogleFCM:      { <<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/googlefcm.mrs, path: ./ruleset/googlefcm.mrs }
+  APNs:           { <<: *DmnMrs, url: https://github.com/QuixoticHeart/rule-set/raw/refs/heads/ruleset/meta/domain/apns.mrs, path: ./ruleset/apns.mrs }
   Telegram:       { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/telegram.mrs, path: ./ruleset/telegram.mrs }
   Google:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/google.mrs, path: ./ruleset/google.mrs }
   Reddit:         { <<: *DmnMrs, url: https://github.com/MetaCubeX/meta-rules-dat/raw/refs/heads/meta/geo/geosite/reddit.mrs, path: ./ruleset/reddit.mrs }

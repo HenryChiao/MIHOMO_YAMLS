@@ -44,6 +44,7 @@ dns:
   enable: true
   cache-algorithm: arc
   enhanced-mode: fake-ip
+  fake-ip-range: 22.0.0.1/8
   fake-ip-filter:
     - "rule-set:fakeip-filter"
   default-nameserver:

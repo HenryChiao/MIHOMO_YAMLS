@@ -12,7 +12,7 @@ proxy_providers_common:
     type: http,
     interval: 86400,
     proxy: DIRECT,
-    exclude-type: 'direct|reject|rematch',
+    exclude-type: 'DIRECT|REJECT|REMATCH',
     health-check: { enable: true, url: https://www.apple.com/library/test/success.html, interval: 600, lazy: true },
   }
 
@@ -491,7 +491,6 @@ group_filter:
   exclude_filter:
     &exclude_filter {
       exclude-filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states|🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore|🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)',
-      exclude-type: 'direct',
     }
 
 # 定义分流策略组
@@ -691,6 +690,7 @@ proxy-groups:
   - name: '其他节点'
     <<: [*group_common_select, *exclude_filter]
     include-all: true
+    exclude-type: 'DIRECT'
     proxies: ['其他节点-自动选择']
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/WorldMap.svg'
   - name: '其他节点-自动选择'
