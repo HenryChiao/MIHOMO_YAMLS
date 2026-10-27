@@ -8,18 +8,18 @@
 
 | 特性 | `mihomoConfigLite.yaml` | `mihomoconfig.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 18.0 KB | 28.0 KB |
+| **大小** | 17.8 KB | 27.7 KB |
 | **混合端口** | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule |
 | **TUN** | ✅ | ✅ |
 | **策略组** | **26** | **44** |
-| **规则数** | **23** | **59** |
+| **规则数** | **22** | **58** |
 
 ## 📄 配置详情
 
 #### 📝 mihomoConfigLite.yaml
-- **路径**: `mihomoConfigLite.yaml` | **大小**: 18.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoConfigLite.yaml)
+- **路径**: `mihomoConfigLite.yaml` | **大小**: 17.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoConfigLite.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (26个)</summary>
@@ -50,7 +50,7 @@
 </details>
 
 #### 📝 mihomoconfig.yaml
-- **路径**: `mihomoconfig.yaml` | **大小**: 28.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
+- **路径**: `mihomoconfig.yaml` | **大小**: 27.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (44个)</summary>

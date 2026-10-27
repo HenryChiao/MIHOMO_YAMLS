@@ -6,9 +6,9 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `geox_config.yaml` | `rule-set_config.yaml` |
+| 特性 | `rule-set_config.yaml` | `geox_config.yaml` |
 | :--- | :--- | :--- |
-| **大小** | 5.1 KB | 7.7 KB |
+| **大小** | 7.7 KB | 5.1 KB |
 | **混合端口** | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule |
@@ -18,8 +18,8 @@
 
 ## 📄 配置详情
 
-#### 📝 geox_config.yaml
-- **路径**: `geox_config.yaml` | **大小**: 5.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Official_Examples/Metacubex/geox_config.yaml)
+#### 📝 rule-set_config.yaml
+- **路径**: `rule-set_config.yaml` | **大小**: 7.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Official_Examples/Metacubex/rule-set_config.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (20个)</summary>
@@ -48,8 +48,8 @@
 | ♻️ 自动选择 | `url-test` |
 </details>
 
-#### 📝 rule-set_config.yaml
-- **路径**: `rule-set_config.yaml` | **大小**: 7.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Official_Examples/Metacubex/rule-set_config.yaml)
+#### 📝 geox_config.yaml
+- **路径**: `geox_config.yaml` | **大小**: 5.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Official_Examples/Metacubex/geox_config.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (20个)</summary>

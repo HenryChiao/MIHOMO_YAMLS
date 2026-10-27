@@ -6,48 +6,17 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `clash-all-fallback-smart.yaml` | `clash-fallback-smart-std.yaml` | `clash-all-smart.yaml` |
+| 特性 | `clash-fallback-smart-std.yaml` | `clash-all-fallback-smart.yaml` | `clash-all-smart.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 18.2 KB | 17.7 KB | 15.1 KB |
+| **大小** | 17.7 KB | 18.2 KB | 15.1 KB |
 | **混合端口** | 7893 | 7893 | 7893 |
 | **面板地址** | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 |
 | **运行模式** | rule | rule | rule |
 | **TUN** | ✅ | ✅ | ✅ |
-| **策略组** | **57** | **36** | **38** |
-| **规则数** | **48** | **42** | **43** |
+| **策略组** | **36** | **57** | **38** |
+| **规则数** | **42** | **48** | **43** |
 
 ## 📄 配置详情
-
-#### 📝 clash-all-fallback-smart.yaml
-- **路径**: `clash-all-fallback-smart.yaml` | **大小**: 18.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/liandu2024/clash-all-fallback-smart.yaml)
-- **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
-<details>
-<summary>🔍 策略组 (57个)</summary>
-
-| 名称 | 类型 |
-| :--- | :--- |
-| 👆 ChatGPT | `select` |
-| 👆 Gemini | `select` |
-| 👆 Copilot | `select` |
-| 👆 Perplexity | `select` |
-| 👆 Claude | `select` |
-| 👆 Meta AI | `select` |
-| 👆 GitHub | `select` |
-| 👆 Reddit | `select` |
-| 👆 Telegram | `select` |
-| 👆 WhatsApp | `select` |
-| 👆 Facebook | `select` |
-| 👆 YouTube | `select` |
-| 👆 TikTok | `select` |
-| 👆 Netflix | `select` |
-| 👆 HBO | `select` |
-| 👆 Disney | `select` |
-| 👆 Amazon | `select` |
-| 👆 Crunchyroll | `select` |
-| 👆 Spotify | `select` |
-| 👆 Nvidia | `select` |
-| ... | 还有 37 个 |
-</details>
 
 #### 📝 clash-fallback-smart-std.yaml
 - **路径**: `clash-fallback-smart-std.yaml` | **大小**: 17.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/liandu2024/clash-fallback-smart-std.yaml)
@@ -78,6 +47,37 @@
 | 🔧 香港-故转 | `fallback` |
 | 👆 香港-手选 | `select` |
 | ... | 还有 16 个 |
+</details>
+
+#### 📝 clash-all-fallback-smart.yaml
+- **路径**: `clash-all-fallback-smart.yaml` | **大小**: 18.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/liandu2024/clash-all-fallback-smart.yaml)
+- **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
+<details>
+<summary>🔍 策略组 (57个)</summary>
+
+| 名称 | 类型 |
+| :--- | :--- |
+| 👆 ChatGPT | `select` |
+| 👆 Gemini | `select` |
+| 👆 Copilot | `select` |
+| 👆 Perplexity | `select` |
+| 👆 Claude | `select` |
+| 👆 Meta AI | `select` |
+| 👆 GitHub | `select` |
+| 👆 Reddit | `select` |
+| 👆 Telegram | `select` |
+| 👆 WhatsApp | `select` |
+| 👆 Facebook | `select` |
+| 👆 YouTube | `select` |
+| 👆 TikTok | `select` |
+| 👆 Netflix | `select` |
+| 👆 HBO | `select` |
+| 👆 Disney | `select` |
+| 👆 Amazon | `select` |
+| 👆 Crunchyroll | `select` |
+| 👆 Spotify | `select` |
+| 👆 Nvidia | `select` |
+| ... | 还有 37 个 |
 </details>
 
 #### 📝 clash-all-smart.yaml

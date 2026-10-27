@@ -6,48 +6,17 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `region-dual-provider.yaml` | `service-single-provider.yaml` | `region-single-provider.yaml` |
+| 特性 | `service-single-provider.yaml` | `region-dual-provider.yaml` | `region-single-provider.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 20.9 KB | 25.9 KB | 15.1 KB |
+| **大小** | 25.9 KB | 20.9 KB | 15.1 KB |
 | **混合端口** | 7890 | 7890 | 7890 |
 | **面板地址** | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule | rule |
 | **TUN** | ✅ | ✅ | ✅ |
 | **策略组** | **33** | **33** | **14** |
-| **规则数** | **74** | **192** | **74** |
+| **规则数** | **192** | **74** | **74** |
 
 ## 📄 配置详情
-
-#### 📝 region-dual-provider.yaml
-- **路径**: `region-dual-provider.yaml` | **大小**: 20.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/region-dual-provider.yaml)
-- **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
-<details>
-<summary>🔍 策略组 (33个)</summary>
-
-| 名称 | 类型 |
-| :--- | :--- |
-| 👆 PROXY-Gate | `select` |
-| 🔧 Apple Push | `fallback` |
-| 👆 🔘 Primary-Manual | `select` |
-| 👆 🔘 Backup-Manual | `select` |
-| 👆 🌍 Other-Manual | `select` |
-| 🔧 🇺🇸 US-Fallback | `fallback` |
-| 🔧 🇸🇬 SG-Fallback | `fallback` |
-| 🔧 🇭🇰 HK-Fallback | `fallback` |
-| 🔧 🇯🇵 JP-Fallback | `fallback` |
-| 🔧 🇹🇼 TW-Fallback | `fallback` |
-| 🔧 🇬🇧 UK-Fallback | `fallback` |
-| 🔧 🇩🇪 DE-Fallback | `fallback` |
-| 🔧 🇫🇷 FR-Fallback | `fallback` |
-| 🔧 🇳🇱 NL-Fallback | `fallback` |
-| 🔧 APNs-Fallback | `fallback` |
-| ♻️ ⚙️ 🇺🇸 Primary-US-Auto | `url-test` |
-| ♻️ ⚙️ 🇺🇸 Backup-US-Auto | `url-test` |
-| ♻️ ⚙️ 🇸🇬 Primary-SG-Auto | `url-test` |
-| ♻️ ⚙️ 🇸🇬 Backup-SG-Auto | `url-test` |
-| ♻️ ⚙️ 🇭🇰 Primary-HK-Auto | `url-test` |
-| ... | 还有 13 个 |
-</details>
 
 #### 📝 service-single-provider.yaml
 - **路径**: `service-single-provider.yaml` | **大小**: 25.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/service-single-provider.yaml)
@@ -77,6 +46,37 @@
 | 👆 Facebook | `select` |
 | 👆 Instagram | `select` |
 | 👆 WhatsApp | `select` |
+| ... | 还有 13 个 |
+</details>
+
+#### 📝 region-dual-provider.yaml
+- **路径**: `region-dual-provider.yaml` | **大小**: 20.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/From_clash_by_hako/region-dual-provider.yaml)
+- **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
+<details>
+<summary>🔍 策略组 (33个)</summary>
+
+| 名称 | 类型 |
+| :--- | :--- |
+| 👆 PROXY-Gate | `select` |
+| 🔧 Apple Push | `fallback` |
+| 👆 🔘 Primary-Manual | `select` |
+| 👆 🔘 Backup-Manual | `select` |
+| 👆 🌍 Other-Manual | `select` |
+| 🔧 🇺🇸 US-Fallback | `fallback` |
+| 🔧 🇸🇬 SG-Fallback | `fallback` |
+| 🔧 🇭🇰 HK-Fallback | `fallback` |
+| 🔧 🇯🇵 JP-Fallback | `fallback` |
+| 🔧 🇹🇼 TW-Fallback | `fallback` |
+| 🔧 🇬🇧 UK-Fallback | `fallback` |
+| 🔧 🇩🇪 DE-Fallback | `fallback` |
+| 🔧 🇫🇷 FR-Fallback | `fallback` |
+| 🔧 🇳🇱 NL-Fallback | `fallback` |
+| 🔧 APNs-Fallback | `fallback` |
+| ♻️ ⚙️ 🇺🇸 Primary-US-Auto | `url-test` |
+| ♻️ ⚙️ 🇺🇸 Backup-US-Auto | `url-test` |
+| ♻️ ⚙️ 🇸🇬 Primary-SG-Auto | `url-test` |
+| ♻️ ⚙️ 🇸🇬 Backup-SG-Auto | `url-test` |
+| ♻️ ⚙️ 🇭🇰 Primary-HK-Auto | `url-test` |
 | ... | 还有 13 个 |
 </details>
 

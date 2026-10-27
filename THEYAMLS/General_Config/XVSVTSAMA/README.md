@@ -7,10 +7,10 @@
 ## 📄 配置详情
 
 #### 📝 mihomo.yaml
-- **路径**: `mihomo.yaml` | **大小**: 32.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
+- **路径**: `mihomo.yaml` | **大小**: 37.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (20个)</summary>
+<summary>🔍 策略组 (25个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -33,5 +33,6 @@
 | 👆 🎬 Emby | `select` |
 | 👆 💬 Discord | `select` |
 | 👆 👽 Reddit | `select` |
-| 👆 FCM | `select` |
+| 👆 🎥 Netflix | `select` |
+| ... | 还有 5 个 |
 </details>
