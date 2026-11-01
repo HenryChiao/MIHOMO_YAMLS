@@ -1,5 +1,5 @@
 pr: &pr {type: select, proxies: [香港, 新加坡, 日本, 美国, 其他]}
-p: &p {type: http, interval: 86400, proxy: DIRECT, header: {User-Agent: ["clash-verge/v2.5.2"]}, health-check: {enable: true, url: "https://www.apple.com/library/test/success.html", interval: 600, timeout: 3000, lazy: false}}
+p: &p {type: http, interval: 86400, proxy: DIRECT, header: {User-Agent: ["clash-verge/v2.5.8"]}, health-check: {enable: true, url: "https://www.apple.com/library/test/success.html", interval: 600, timeout: 3000, lazy: false}}
 check: &check {url: "https://www.apple.com/library/test/success.html", interval: 600, timeout: 3000, lazy: false}
 
 proxy-providers:
@@ -26,7 +26,7 @@ profile:
 
 tun:
   enable: true
-  stack: mips  # 如有问题可使用gvisor
+  stack: mips
   dns-hijack:
     - "udp://any:53"
     - "tcp://any:53"
@@ -49,7 +49,7 @@ dns:
   proxy-server-nameserver:
     - https://dns.alidns.com/dns-query
   nameserver:
-    - 223.5.5.5
+    - https://dns.alidns.com/dns-query
   nameserver-policy:
     "www.gstatic.com": ["system", "119.29.29.29"]
     "*": ["system"]

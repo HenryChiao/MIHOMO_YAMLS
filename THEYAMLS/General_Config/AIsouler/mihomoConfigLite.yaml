@@ -153,6 +153,11 @@ rule-providers:
     url: 'https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/category-games@cn.mrs'
     path: './ruleset/category-games@cn.mrs'
     path-in-bundle: 'geo/geosite/category-games@cn.mrs'
+  synology:
+    <<: *rule_providers_domain
+    url: 'https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/synology.mrs'
+    path: './ruleset/synology.mrs'
+    path-in-bundle: 'geo/geosite/synology.mrs'
   apple_cn:
     <<: *rule_providers_domain
     url: 'https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs'
@@ -292,6 +297,7 @@ proxies_common:
           '台湾',
           '低倍率节点',
           '高倍率节点',
+          '家宽节点',
           '其他节点',
         ],
     }
@@ -311,6 +317,7 @@ proxies_common:
           '台湾',
           '低倍率节点',
           '高倍率节点',
+          '家宽节点',
           '其他节点',
         ],
     }
@@ -335,6 +342,7 @@ group_filter:
     &high_filter {
       filter: '(?i)(?:[*×✕✖⨯⨉x](?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?)|(?:(?<![\d.])(?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?(?:倍|[*×✕✖⨯⨉x]))',
     }
+  home_filter: &home_filter { filter: '(?i)(家宽|住宅|原生\s*IP|家庭宽带|\bISP\b|\bRES\b|residential)' }
   exclude_filter:
     &exclude_filter {
       exclude-filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states|🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore|🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)',
@@ -344,7 +352,20 @@ group_filter:
 proxy-groups:
   - name: '默认代理'
     <<: *group_common_select
-    proxies: ['香港', '日本', '美国', '新加坡', '台湾', '低倍率节点', '高倍率节点', '手动选择', '自动选择', '其他节点']
+    proxies:
+      [
+        '香港',
+        '日本',
+        '美国',
+        '新加坡',
+        '台湾',
+        '低倍率节点',
+        '高倍率节点',
+        '家宽节点',
+        '手动选择',
+        '自动选择',
+        '其他节点',
+      ]
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Proxy.svg'
 
   - name: '手动选择'
@@ -444,6 +465,14 @@ proxy-groups:
   - name: '高倍率节点-自动选择'
     <<: [*group_common_auto, *high_filter]
 
+  - name: '家宽节点'
+    <<: [*group_common_select, *home_filter]
+    include-all: true
+    proxies: ['家宽节点-自动选择']
+    icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Home.svg'
+  - name: '家宽节点-自动选择'
+    <<: [*group_common_auto, *home_filter]
+
   - name: '其他节点'
     <<: [*group_common_select, *exclude_filter]
     include-all: true
@@ -465,6 +494,7 @@ rules:
   # 国内直连
   - RULE-SET,geolocation-cn,直连
   - RULE-SET,games_cn,直连 # 已包含 steam 下载域名
+  - RULE-SET,synology,直连
   - RULE-SET,apple_cn,直连
   - RULE-SET,microsoft_cn,直连
   - DOMAIN,fsend.cn,直连
@@ -481,6 +511,9 @@ rules:
   - RULE-SET,google,Google
   - RULE-SET,google_ip,Google,no-resolve
   - RULE-SET,ai,AI
+  - DOMAIN,cdn.usefathom.com,AI
+  - DOMAIN-SUFFIX,intercom.io,AI
+  - DOMAIN-SUFFIX,intercomcdn.com,AI
   - RULE-SET,telegram,Telegram
   - RULE-SET,telegram_ip,Telegram,no-resolve
   - RULE-SET,steam,Steam

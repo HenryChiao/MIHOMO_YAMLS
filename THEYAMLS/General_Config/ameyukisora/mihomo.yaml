@@ -43,27 +43,22 @@ unified-delay: true
 dns:
   enable: true
   cache-algorithm: arc
+  ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 22.0.0.1/8
   fake-ip-filter:
-    - "rule-set:fakeip-filter"
+    - rule-set:fakeip-filter
   default-nameserver:
     - 223.5.5.5
     - 119.29.29.29
-  proxy-server-nameserver: 
-    - https://dns.alidns.com/dns-query
+  proxy-server-nameserver:
     - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query#h3=true
   nameserver:
-    - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query#h3=true
   direct-nameserver:
-    - 119.29.29.29
-
-# ==> TUN 配置
-tun:
-  device: mihomo
-  stack: mips
-  congestion-controller: bbr3
+    - system
 
 # ==> 代理策略组 (Proxy Groups)
 proxy-groups:

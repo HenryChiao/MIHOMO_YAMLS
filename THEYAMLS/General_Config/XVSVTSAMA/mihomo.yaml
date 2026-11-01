@@ -109,13 +109,12 @@ sniffer:
     - '+.sunlogin.net'
   skip-dst-address:
     - 'rule-set:echs_direct_ip'
-    - 'rule-set:cncidr'
     - 'rule-set:lancidr'
     - 'rule-set:microsoft_ip'
     - 'rule-set:apple_ip'
     - 'rule-set:telegramcidr'
     - 'rule-set:twitter-x-ip'
-    - 'rule-set:twitter-x-blackmatrix7-No_Resolve'
+    - 'rule-set:twitter-x-aggregate'
     - 'rule-set:steam_ip'
     - 160.79.104.0/21
     - 2607:6bc0::/48
@@ -189,13 +188,15 @@ dns:
   # - https://doh.dns.sb/dns-query              # DNS.SB 公共 DNS   # 185.222.222.222     45.11.45.11
   # - https://dns.twnic.tw/dns-query            # Quad101 公共 DNS  # 101.101.101.10      101.102.103.10
   nameserver-policy:
+    '+.ts.net':
+    - 100.100.100.100
     'rule-set:douyin':
     - system
     - 180.184.1.1
     - 180.184.2.2
     'rule-set:private':
     - system
-    'rule-set:proxy@direct,cn,echs_direct':
+    'rule-set:proxy@direct,geolocation-cn,cn-additional,apple-cn,microsoft-cn,games-cn':
     - https://dns.alidns.com/dns-query#DIRECT
     - https://doh.pub/dns-query#DIRECT
   prefer-h3: false
@@ -207,8 +208,11 @@ dns:
   fake-ip-filter: 
     - rule-set:fakeip-filter_domain
     - rule-set:private
-    - rule-set:cn
-    - rule-set:echs_direct
+    - rule-set:geolocation-cn
+    - rule-set:cn-additional
+    - rule-set:apple-cn
+    - rule-set:microsoft-cn
+    - rule-set:games-cn
     - rule-set:googlefcm
     - yacd.haishan.me
     - +.alipayeshop.com
@@ -264,15 +268,6 @@ proxy-groups:
         - ♻️ 自动选择
         - 🔄 负载均衡
         - DIRECT
-  - name: 🔄 负载均衡
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-clash-verge-rev-balance.svg"
-    type: load-balance
-    include-all: true
-    url: 'https://g.cn/generate_204'
-    interval: 300
-    lazy: true
-    max-failed-times: 1
-    strategy: sticky-sessions
   - name: 👉 手动切换
     icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-select.png"
     type: select
@@ -294,6 +289,148 @@ proxy-groups:
   #     - REJECT
   #     - REJECT-DROP
   #     - PASS
+  - name: 🔄 负载均衡
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-clash-verge-rev-balance.svg"
+    type: select
+    proxies:
+      - consistent-hashing
+      - sticky-sessions
+      - round-robin
+  - name: consistent-hashing
+    type: load-balance
+    include-all: true
+    url: 'https://g.cn/generate_204'
+    interval: 300
+    lazy: true
+    max-failed-times: 1
+    strategy: consistent-hashing
+    hidden: true
+  - name: sticky-sessions
+    type: load-balance
+    include-all: true
+    url: 'https://g.cn/generate_204'
+    interval: 300
+    lazy: true
+    max-failed-times: 1
+    strategy: sticky-sessions
+    hidden: true
+  - name: round-robin
+    type: load-balance
+    include-all: true
+    url: 'https://g.cn/generate_204'
+    interval: 300
+    lazy: true
+    max-failed-times: 1
+    strategy: round-robin
+    hidden: true
+  - name: 🔎 Google
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-google.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: ♾️ Meta
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-meta.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 🤖 AI大模型
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-ai.png"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 📲 Telegram
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-telegram.png"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: ✖️ Twitter
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-clash-verge-rev-twitter.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 💬 Discord
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-discord.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 👽 Reddit
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-reddit.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 💬 LINE
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-line.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 🎵 TikTok
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-tiktok.png"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 🎥 Netflix
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-netflix.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 🎧 Spotify
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-spotify.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
+  - name: 🎬 Emby
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-emby.svg"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - ♻️ 自动选择
+      - 🔄 负载均衡
+      - DIRECT
+    include-all: true
   - name: 🍎 海外苹果
     icon: https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-AIsouler-MyClash-Apple.svg
     type: select
@@ -322,15 +459,6 @@ proxy-groups:
       - ♻️ 自动选择
       - 🔄 负载均衡
     include-all: true
-  - name: 📲 Telegram
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-telegram.png"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
   # Telegram DC 地区组为可选配置；启用时，需同时取消注释下方 rule-providers 与 rules 对应段落。
   # - name: 📲 Telegram-DC1-DC3-Miami
   #   icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-Koolson-Qure-United_States.png"
@@ -358,98 +486,8 @@ proxy-groups:
       - 🎮 Steam平台（非下载/CDN）
     include-all: true
 
-  - name: ✖️ Twitter
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-clash-verge-rev-twitter.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🤖 AI大模型
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-ai.png"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🎵 TikTok
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-DustinWin-ruleset_geodata-tiktok.png"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
   - name: 💳 金融支付
     icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-bitcoin.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🔎 Google
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-google.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: ♾️ Meta
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-meta.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🎧 Spotify
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-spotify.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🎬 Emby
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-emby.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 💬 Discord
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-discord.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 👽 Reddit
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-reddit.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
-  - name: 🎥 Netflix
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-netflix.svg"
     type: select
     proxies:
       - 👉 手动切换
@@ -484,19 +522,18 @@ proxy-groups:
       - 🔄 负载均衡
       - DIRECT
     include-all: true
-  - name: 💬 LINE
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-line.svg"
-    type: select
-    proxies:
-      - 👉 手动切换
-      - ♻️ 自动选择
-      - 🔄 负载均衡
-      - DIRECT
-    include-all: true
   # FCM：Google FCM 域名分流目标，由 FCM直连 开关控制本组的 proxies。
   # 开启时使用 DIRECT，关闭时使用 👉 手动切换；开关图标取自本组的 icon 字段。
   - name: FCM
     icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-MiToverG422-Qure-fcm.png"
+    type: select
+    proxies:
+      - 👉 手动切换
+      - DIRECT
+  # Tailscale：MagicDNS 域名（ts.net）分流目标，由 Tailscale直连 开关控制本组的 proxies。
+  # 开启时使用 DIRECT，关闭时使用 👉 手动切换；开关图标取自本组的 icon 字段。
+  - name: Tailscale
+    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-tailscale.svg"
     type: select
     proxies:
       - 👉 手动切换
@@ -524,11 +561,13 @@ rule-providers:
   apple: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geosite/apple.mrs', path: ./ruleset/apple.mrs }
   apple_ip: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geoip/apple.mrs', path: ./ruleset/apple_ip.mrs }
   category-cryptocurrency: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-cryptocurrency.mrs', path: ./ruleset/category-cryptocurrency.mrs }
-  cn: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cn.mrs', path: ./ruleset/cn.mrs }
-  cncidr: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/cnip.mrs', path: ./ruleset/cncidr.mrs }
   discord: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/discord.mrs', path: ./ruleset/discord.mrs }
   douyin: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geosite/douyin.mrs', path: ./ruleset/douyin.mrs }
-  echs_direct: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/echs-top/proxy/main/mrs/domain/direct.mrs', path: ./ruleset/echs_direct.mrs }
+  geolocation-cn: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geosite/geolocation-cn.mrs', path: ./ruleset/geolocation-cn.mrs }
+  cn-additional: { <<: *domain_mrs, url: 'https://static-file-global.353355.xyz/rules/cn-additional-list.mrs', path: ./ruleset/cn-additional.mrs }
+  apple-cn: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/apple-cn.mrs', path: ./ruleset/apple-cn.mrs }
+  microsoft-cn: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/microsoft-cn.mrs', path: ./ruleset/microsoft-cn.mrs }
+  games-cn: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/games-cn.mrs', path: ./ruleset/games-cn.mrs }
   echs_direct_ip: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/echs-top/proxy/main/mrs/ip/direct.mrs', path: ./ruleset/echs_direct_ip.mrs }
   ehentai: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/ehentai.mrs', path: ./ruleset/ehentai.mrs }
   fakeip-filter_domain: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://github.com/DustinWin/ruleset_geodata/releases/download/mihomo-ruleset/fakeip-filter.mrs', path: ./ruleset/fakeip-filter_domain.mrs }
@@ -590,7 +629,7 @@ rule-providers:
   stripe: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/stripe.mrs', path: ./ruleset/stripe.mrs }
   telegram_domain: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs', path: ./rules/telegram_domain.mrs }
   telegramcidr: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/reddishJade/private_proxy/main/Mihomo/Provider/telegram%40ip.mrs', path: ./ruleset/telegramcidr.mrs }
-  twitter-x-blackmatrix7-No_Resolve: { <<: *classical_yaml, format: yaml, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/refs/heads/master/rule/Clash/Twitter/Twitter_No_Resolve.yaml', path: ./ruleset/twitter-x-blackmartix7-noreslove.mrs }
+  twitter-x-aggregate: { <<: *classical_yaml, format: yaml, url: 'https://magicrule.pages.dev/data/_shared/artifacts/Twitter_classical_d405159ccf6c8682.yaml', path: ./ruleset/twitter-x-aggregate.yaml }
   twitter-x-domain: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs', path: ./ruleset/twitter/x-domain.mrs }
   twitter-x-ip: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs', path: ./ruleset/twitter/x-ip.mrs }
   visa: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/visa.mrs', path: ./ruleset/visa.mrs }
@@ -645,7 +684,7 @@ sub-rules:
 
     - MATCH,DIRECT                                           
 rules:
-  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,cncidr))),(NOT,((RULE-SET,cn))),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,echs_direct)))),REJECT
+  - AND,((NETWORK,UDP),(DST-PORT,3478-3479/5349-5350/19302-19309),(NOT,((RULE-SET,games))),(NOT,((RULE-SET,geolocation-cn))),(NOT,((RULE-SET,cn-additional))),(NOT,((RULE-SET,apple-cn))),(NOT,((RULE-SET,microsoft-cn))),(NOT,((RULE-SET,games-cn)))),REJECT
   - RULE-SET,HijackingPlus,REJECT
   # SKK 广告拦截规则：启用时取消注释，并同时启用上方 proxy-groups 与 rule-providers 对应段落。
   # - RULE-SET,skk_reject_drop,REJECT-DROP
@@ -653,39 +692,33 @@ rules:
   # - RULE-SET,skk_reject_non_ip,🛑 广告拦截
   # - RULE-SET,skk_reject_ip,REJECT,no-resolve
   - SUB-RULE,(PROCESS-NAME,com.dragon.read.oversea.gp),fanqie
-  - DOMAIN,mirrors.tuna.tsinghua.edu.cn,DIRECT
-  - DOMAIN,mirrors.ustc.edu.cn,DIRECT
-  - DOMAIN,mirrors.bfsu.edu.cn,DIRECT
-  - DOMAIN,mirror.nju.edu.cn,DIRECT
-  - DOMAIN,mirrors.hit.edu.cn,DIRECT
-  - DOMAIN,mirror.lzu.edu.cn,DIRECT
-  - DOMAIN,mirrors.aliyun.com,DIRECT
-  - DOMAIN,mirrors.cloud.tencent.com,DIRECT
-  - DOMAIN,mirrors.tencent.com,DIRECT
-  - DOMAIN,mirrors.huaweicloud.com,DIRECT
-  - DOMAIN,repo.huaweicloud.com,DIRECT
-  - DOMAIN,mirrors.163.com,DIRECT
   - DOMAIN,gh-proxy.com,DIRECT
   - DOMAIN-SUFFIX,alipayeshop.com,DIRECT
   - RULE-SET,echs_direct_ip,DIRECT,no-resolve
-  - RULE-SET,echs_direct,DIRECT
-  - RULE-SET,cncidr,DIRECT,no-resolve
-  - RULE-SET,cn,DIRECT
+  # 国内直连域名：geolocation-cn + cn-additional + 三个平台国内集，均为显式域名，不含 +.cn 通配。
+  - RULE-SET,geolocation-cn,DIRECT
+  - RULE-SET,cn-additional,DIRECT
+  - RULE-SET,apple-cn,DIRECT
+  - RULE-SET,microsoft-cn,DIRECT
+  - RULE-SET,games-cn,DIRECT
+  # 教育与科研补充直连：.ac.cn（中科院各所）与常用教育类商业域。
+  - DOMAIN-SUFFIX,ac.cn,DIRECT
+  - DOMAIN-SUFFIX,xdf.cn,DIRECT
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
   - PROCESS-NAME,svchost.exe,DIRECT
+  # Tailscale MagicDNS：交给 Tailscale 组，由 Tailscale直连 开关决定直连或代理；须早于 private。
+  - DOMAIN-SUFFIX,ts.net,Tailscale
   - RULE-SET,private,DIRECT,no-resolve    
   - RULE-SET,lancidr,DIRECT,no-resolve
   - DOMAIN-WILDCARD,*.deepseek.com,DIRECT
   - DOMAIN-WILDCARD,*.portal101.cn,DIRECT
-  - DOMAIN-SUFFIX,cdnhwcqwg14.com,DIRECT
-  - DOMAIN-SUFFIX,cdnhwcxcy07.com,DIRECT
-  - DOMAIN-SUFFIX,cdngslb.com,DIRECT
   - DOMAIN-SUFFIX,edgekey.net,DIRECT
   - DOMAIN-KEYWORD,ikuuu,🌍 PROXY
   - DOMAIN,lumina.lumina00001.com,DIRECT
   - DOMAIN,gfwsb.yiku.xyz,DIRECT
   - DOMAIN,bsub.douyincdns.com,DIRECT
+  - DOMAIN,sub.rinkitotokiku.online,DIRECT
   # Verified Android package IDs for apps that officially support Emby.
   - PROCESS-NAME,com.mountains.hills,🎬 Emby
   - PROCESS-NAME,com.hamhub.app,🎬 Emby
@@ -694,10 +727,7 @@ rules:
   - PROCESS-NAME,com.attempt.afusekt,🎬 Emby
   - PROCESS-NAME,com.hush.yamby,🎬 Emby
   - PROCESS-NAME,com.railux.mobile,🎬 Emby
-  - DOMAIN,d3r7nsslvs6aaf.cloudfront.net,💳 金融支付
-  - DOMAIN-SUFFIX,cloudfront.net,DIRECT
   - RULE-SET,googlefcm,FCM
-  - DOMAIN,bybit-exchange.github.io,💳 金融支付
   - RULE-SET,microsoft_ip,💠 海外微软,no-resolve
   - RULE-SET,microsoft,💠 海外微软
   - RULE-SET,apple_ip,🍎 海外苹果,no-resolve
@@ -711,18 +741,24 @@ rules:
   - "PROCESS-NAME-REGEX,.*telegram.*,📲 Telegram"
   - RULE-SET,telegramcidr,📲 Telegram,no-resolve
   - RULE-SET,telegram_domain,📲 Telegram
+  # 🔎 Google 提前到 AI 组之前：Google 域名先由本组接管，Gemini 规则集也指向本组。
+  - RULE-SET,google,🔎 Google
+  - RULE-SET,google-cn,🔎 Google
+  - RULE-SET,Gemini_Domain,🔎 Google
+  # ♾️ Meta 提前到 AI 组之前：Meta 域名与 Meta AI 规则统一由本组接管。
+  - RULE-SET,meta,♾️ Meta
+  - DOMAIN-SUFFIX,muse.ai,♾️ Meta
+  - DOMAIN,hatch-api.meta.ai,♾️ Meta
+  - DOMAIN,api.meta.ai,♾️ Meta
+  - DOMAIN,agent.meta.ai,♾️ Meta
+  - DOMAIN-SUFFIX,metaaivm.com,♾️ Meta
+  - DOMAIN,auth.meta.com,♾️ Meta
+  - DOMAIN,meta.graph.meta.com,♾️ Meta
+  - DOMAIN,edge-metaclaw-http.c10r.facebook.com,♾️ Meta
+  - DOMAIN,shortwave.facebook.com,♾️ Meta
+  - DOMAIN,node.hatch.one,♾️ Meta
+  - PROCESS-NAME,com.facebook.aura,♾️ Meta
   - PROCESS-NAME-REGEX,(?i).*(manus|tech\.butterfly\.app).*,🤖 AI大模型
-  - DOMAIN-SUFFIX,muse.ai,🤖 AI大模型
-  - DOMAIN,hatch-api.meta.ai,🤖 AI大模型
-  - DOMAIN,api.meta.ai,🤖 AI大模型
-  - DOMAIN,agent.meta.ai,🤖 AI大模型
-  - DOMAIN-SUFFIX,metaaivm.com,🤖 AI大模型
-  - DOMAIN,auth.meta.com,🤖 AI大模型
-  - DOMAIN,meta.graph.meta.com,🤖 AI大模型
-  - DOMAIN,edge-metaclaw-http.c10r.facebook.com,🤖 AI大模型
-  - DOMAIN,shortwave.facebook.com,🤖 AI大模型
-  - DOMAIN,node.hatch.one,🤖 AI大模型
-  - PROCESS-NAME,com.facebook.aura,🤖 AI大模型
   - PROCESS-NAME-REGEX,(?i).*claude.*,🤖 AI大模型
   - PROCESS-NAME-REGEX,(?i).*anthropic.*,🤖 AI大模型
   - DOMAIN,api.anthropic.com,🤖 AI大模型
@@ -751,25 +787,19 @@ rules:
   - DOMAIN-SUFFIX,claude.com,🤖 AI大模型
   - DOMAIN-SUFFIX,claudeusercontent.com,🤖 AI大模型
   - DOMAIN-SUFFIX,clau.de,🤖 AI大模型
-  - DOMAIN-SUFFIX,frame.claudeusercontent.com,🤖 AI大模型
   - DOMAIN-SUFFIX,modelcontextprotocol.io,🤖 AI大模型
   - IP-CIDR,160.79.104.0/21,🤖 AI大模型,no-resolve
   - IP-CIDR6,2607:6bc0::/48,🤖 AI大模型,no-resolve
   - IP-CIDR,17.253.4.0/23,🤖 AI大模型,no-resolve
-  - RULE-SET,Gemini_Domain,🤖 AI大模型
   - RULE-SET,Grok_Domain,🤖 AI大模型
   - DOMAIN,anthropic.com.cdn.cloudflare.net,🤖 AI大模型
   - DOMAIN,anthropic-com.ghost.io,🤖 AI大模型
   - DOMAIN-SUFFIX,sentry.io,🤖 AI大模型
   - DOMAIN-SUFFIX,statsigapi.net,🤖 AI大模型
-  - DOMAIN,browser-intake-us5-datadoghq.com,🤖 AI大模型
   - DOMAIN-KEYWORD,datadog,🤖 AI大模型
   - DOMAIN-KEYWORD,sift,🤖 AI大模型
   - RULE-SET,ai-1,🤖 AI大模型
   - RULE-SET,ai-2,🤖 AI大模型
-  - RULE-SET,google,🔎 Google
-  - RULE-SET,google-cn,🔎 Google
-  - RULE-SET,meta,♾️ Meta
   - RULE-SET,spotify,🎧 Spotify
   - RULE-SET,discord,💬 Discord
   - RULE-SET,reddit,👽 Reddit
@@ -778,6 +808,8 @@ rules:
   - RULE-SET,ehentai,📚 EHentai
   - RULE-SET,pikpak,☁️ PikPak
   - RULE-SET,line,💬 LINE
+  # 该 CloudFront 分发域跟随金融支付组；其余 cloudfront.net 域名按默认链路走（最终指向代理）。
+  - DOMAIN,d3r7nsslvs6aaf.cloudfront.net,💳 金融支付
   - RULE-SET,category-cryptocurrency,💳 金融支付
   - RULE-SET,paypal,💳 金融支付
   - RULE-SET,stripe,💳 金融支付
@@ -811,7 +843,7 @@ rules:
   - PROCESS-NAME-REGEX,.*twitter.*,✖️ Twitter
   - RULE-SET,twitter-x-ip,✖️ Twitter,no-resolve
   - RULE-SET,twitter-x-domain,✖️ Twitter
-  - RULE-SET,twitter-x-blackmatrix7-No_Resolve,✖️ Twitter
+  - RULE-SET,twitter-x-aggregate,✖️ Twitter
   - RULE-SET,steam_ip,🎮 Steam平台（非下载/CDN）,no-resolve
   - RULE-SET,steam,🎮 Steam平台（非下载/CDN）
   - PROCESS-NAME,bf6.exe,🎮 Games-Global
