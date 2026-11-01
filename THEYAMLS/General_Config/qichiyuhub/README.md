@@ -6,11 +6,11 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `proxychain.yaml` | `config.yaml` | `fuxie.yaml` |
+| 特性 | `config.yaml` | `proxychain.yaml` | `fuxie.yaml` |
 | :--- | :--- | :--- | :--- |
-| **大小** | 14.9 KB | 13.9 KB | 13.2 KB |
+| **大小** | 13.9 KB | 14.9 KB | 13.2 KB |
 | **混合端口** | 7890 | 7890 | 7890 |
-| **面板地址** | - | 0.0.0.0:9090 | - |
+| **面板地址** | 0.0.0.0:9090 | - | - |
 | **运行模式** | rule | rule | rule |
 | **TUN** | ✅ | ✅ | ✅ |
 | **策略组** | **28** | **28** | **28** |
@@ -18,8 +18,8 @@
 
 ## 📄 配置详情
 
-#### 📝 proxychain.yaml
-- **路径**: `proxychain.yaml` | **大小**: 14.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/qichiyuhub/proxychain.yaml)
+#### 📝 config.yaml
+- **路径**: `config.yaml` | **大小**: 13.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/qichiyuhub/config.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (28个)</summary>
@@ -49,8 +49,8 @@
 | ... | 还有 8 个 |
 </details>
 
-#### 📝 config.yaml
-- **路径**: `config.yaml` | **大小**: 13.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/qichiyuhub/config.yaml)
+#### 📝 proxychain.yaml
+- **路径**: `proxychain.yaml` | **大小**: 14.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/qichiyuhub/proxychain.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
 <details>
 <summary>🔍 策略组 (28个)</summary>
