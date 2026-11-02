@@ -10,7 +10,7 @@ https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/S
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/SMART/MihomoSmartAIO.yaml|THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartAIO.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/SMART/MihomoSmartProMax.yaml|THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartProMax.yaml
 https://raw.githubusercontent.com/HenryChiao/MIHOMO_AIO/refs/heads/main/CONFIG/Test_Final/mihomo-final-v6.yaml|THEYAMLS/Smart_Mode/HenryChiao/THESmart.yaml
-https://raw.githubusercontent.com/EdisonLe12/MIHOMO_YAMLS/refs/heads/main/OneSmartProMCX.yaml|THEYAMLS/Smart_Mode/edison/OneSmartProMCX.yaml
+https://raw.githubusercontent.com/EdisonLe12/PROXY_YAMLS/refs/heads/main/OneSmartProMCX.yaml|THEYAMLS/Smart_Mode/edison/OneSmartProMCX.yaml
 https://raw.githubusercontent.com/liandu2024/little/refs/heads/main/yaml/clash-fallback-smart-std.yaml|THEYAMLS/Smart_Mode/liandu2024/clash-fallback-smart-std.yaml
 https://raw.githubusercontent.com/liandu2024/little/refs/heads/main/yaml/clash-all-smart.yaml|THEYAMLS/Smart_Mode/liandu2024/clash-all-smart.yaml
 https://raw.githubusercontent.com/liandu2024/little/refs/heads/main/yaml/clash-all-fallback-smart.yaml|THEYAMLS/Smart_Mode/liandu2024/clash-all-fallback-smart.yaml
