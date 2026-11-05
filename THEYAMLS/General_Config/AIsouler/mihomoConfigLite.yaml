@@ -86,13 +86,13 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/15
   fake-ip-range6: 2001:2::1/48
-  fake-ip-filter: ['rule-set:private', 'rule-set:fakeip_filter', 'rule-set:geolocation-cn']
+  fake-ip-filter: ['rule-set:private', 'rule-set:fakeip_filter', 'rule-set:cn']
   default-nameserver: *defaultDNS
   proxy-server-nameserver: *proxyServerDNS
   nameserver: *foreignDNS
   nameserver-policy:
     'rule-set:private': 'system'
-    'rule-set:douyin': ['system', '180.184.1.1', '180.184.2.2']
+    'rule-set:douyin': ['180.184.1.1', '180.184.2.2']
     'rule-set:cn': *chinaDNS
   direct-nameserver: *chinaDNS
   direct-nameserver-follow-policy: true
@@ -234,11 +234,6 @@ rule-providers:
     url: 'https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/fakeip-filter.mrs'
     path: './ruleset/fakeip-filter.mrs'
     path-in-bundle: 'geo/geosite/fakeip-filter.mrs'
-  cn_additional:
-    <<: *rule_providers_domain
-    url: 'https://static-file-global.353355.xyz/rules/cn-additional-list.mrs'
-    path: './ruleset/cn-additional-list.mrs'
-    path-in-bundle: 'geo/geosite/cn.mrs'
   cn:
     <<: *rule_providers_domain
     url: 'https://cdn.jsdmirror.com/gh/appshubcc/bett-rules@meta/geo/geosite/cn.mrs'
@@ -399,8 +394,7 @@ proxy-groups:
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/AdBlock.svg'
 
   - name: '漏网之鱼'
-    <<: *group_common_select
-    proxies: ['默认代理', '直连']
+    <<: [*group_common_select, *proxies_direct]
     icon: 'https://cdn.jsdmirror.com/gh/AIsouler/MyClash@main/Icons/svg/Stack.svg'
 
   - name: '直连'
@@ -501,26 +495,28 @@ rules:
   - DOMAIN,international-gfe.download.nvidia.com,直连
   - DOMAIN-SUFFIX,ctaiot.com,直连
 
-  # 禁用国外 QUIC 流量
-  - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn_additional),(RULE-SET,cn_ip,no-resolve)))))),REJECT
+  # 禁用国外 QUIC 流量（默认不启用，如果想启用请删除前面的#号注释）
+  # - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn),(RULE-SET,cn_ip,no-resolve)))))),REJECT
 
   # 广告拦截
   - RULE-SET,category-ads,AdBlock
 
-  # 代理规则
+  # 代理规则（非IP类）
   - RULE-SET,google,Google
-  - RULE-SET,google_ip,Google,no-resolve
   - RULE-SET,ai,AI
   - DOMAIN,cdn.usefathom.com,AI
   - DOMAIN-SUFFIX,intercom.io,AI
   - DOMAIN-SUFFIX,intercomcdn.com,AI
   - RULE-SET,telegram,Telegram
-  - RULE-SET,telegram_ip,Telegram,no-resolve
   - RULE-SET,steam,Steam
-  - RULE-SET,steam_ip,Steam,no-resolve
+  - RULE-SET,geolocation-!cn,默认代理
+
+  # 代理（IP类）
+  - RULE-SET,google_ip,Google
+  - RULE-SET,telegram_ip,Telegram
+  - RULE-SET,steam_ip,Steam
 
   # 兜底规则
-  - RULE-SET,geolocation-!cn,默认代理
   - RULE-SET,cn_ip,直连
   - RULE-SET,private_ip,直连
   - MATCH,漏网之鱼
