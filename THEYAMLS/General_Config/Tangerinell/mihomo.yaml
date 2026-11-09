@@ -1,6 +1,6 @@
 # Clash.Meta(mihomo)
 # Version: v1.19.33
-# Updated: 2026-10-22 11:30:00
+# Updated: 2026-11-07 03:13:00
 
 JNTM: &JNTM
     interval: 43200
@@ -58,6 +58,7 @@ proxy-providers:
     filter: "^(?!.*(114514))"
 
   # Node-3: 
+  # ... 
 
   LandNode:
     type: file
@@ -145,29 +146,34 @@ dns:
     - https://[2606:4700:4700::1111]/dns-query
     - https://8.8.8.8/dns-query
     - https://[2001:4860:4860::8888]/dns-query
+    # CN DNS
     - https://223.5.5.5/dns-query
     - https://[2400:3200::1]/dns-query
     
   proxy-server-nameserver:
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
+    # CN DNS
     - https://dns.alidns.com/dns-query
     
   nameserver-policy:
-    'rule-set:CN_geosite': 
-    - https://cloudflare-dns.com/dns-query
-    - https://dns.google/dns-query
-    - https://dns.alidns.com/dns-query
-    
     'rule-set:private_geosite': 
     - system
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
+    # CN DNS
     - https://dns.alidns.com/dns-query
 
+    'rule-set:CN_geosite': 
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+    # CN DNS
+    - https://dns.alidns.com/dns-query
+    
     # 'subscription domain': 
     # - https://cloudflare-dns.com/dns-query
     # - https://dns.google/dns-query
+    # # CN DNS
     # - https://dns.alidns.com/dns-query
 
   nameserver:
