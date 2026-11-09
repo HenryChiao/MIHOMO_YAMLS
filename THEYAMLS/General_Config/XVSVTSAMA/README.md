@@ -7,7 +7,7 @@
 ## 📄 配置详情
 
 #### 📝 mihomo.yaml
-- **路径**: `mihomo.yaml` | **大小**: 51.5 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
+- **路径**: `mihomo.yaml` | **大小**: 54.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (29个)</summary>
@@ -15,7 +15,7 @@
 | 名称 | 类型 |
 | :--- | :--- |
 | 👆 🌍 PROXY | `select` |
-| 👆 👉 手动切换 | `select` |
+| 👆 👉 手动选择 | `select` |
 | ♻️ ♻️ 自动选择 | `url-test` |
 | 👆 🔄 负载均衡 | `select` |
 | ⚖️ consistent-hashing | `load-balance` |
