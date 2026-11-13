@@ -4,7 +4,7 @@ allow-lan: true
 mode: rule
 bind-address: "0.0.0.0"
 mixed-port: 7890
-ipv6: false
+ipv6: true
 unified-delay: true
 log-level: warning
 find-process-mode: strict
@@ -27,24 +27,23 @@ external-ui-url: https://github.com/Zephyruso/zashboard/releases/latest/download
 # 订阅基础配置 [每天更新一次订阅节点，每 300 秒一次健康检查]
 NodeParam: &NodeParam {type: http, interval: 86400, proxy: DIRECT, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 300}}
 
+proxies:
+  - {name: 直连, type: direct}
+  - {name: 内网代理, type: http, server: 10.22.96.29, port: 8080, interface-name: "以太网"}
+
 proxy-providers:
 
-  # liangxin:
-  #   <<: *NodeParam        # 引用锚点
-  #   url: '---'
-  #   path: './proxy-providers/providers-1.yaml'
-    # override:
-    #   additional-prefix: "1. "
-
-  500G_LongTerm:
+  xsus:
     <<: *NodeParam
     url: '---'
-    path: './proxy-providers/providers-2.yaml'
+    path: './proxy-providers/providers-1.yaml'
 
-  # ikuuu:
+  # 500G_LongTerm:
   #   <<: *NodeParam
   #   url: '---'
-  #   path: './proxy-providers/providers-3.yaml'
+  #   path: './proxy-providers/providers-2.yaml'
+    # override:
+    #   additional-prefix: "2. "
 
 # 入站
 tun:
@@ -63,12 +62,13 @@ dns:
   enable: true
   cache-algorithm: arc
   listen: ":1053"
-  ipv6: false
+  ipv6: true  # [修复] 返回 fake IPv6 应答, 避免 Windows DNS 客户端收到空 AAAA 应答后遍历所有 DNS 服务器重试导致解析卡 11 秒
   respect-rules: true
   use-hosts: true
   use-system-hosts: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  fake-ip-range6: fd00::/8  # [修复] 配套 ipv6:true, 为 AAAA 查询分配 fake IPv6 (非空应答)
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - rule-set:fakeipfilter
@@ -111,9 +111,6 @@ sniffer:
     - 2001:b28:f23f::/48
     - 2a0a:f280:203::/48
 
-proxies:
-  - {name: 直连, type: direct}
-
 # 节点筛选
 # 按地区筛选
 FilterUS: &FilterUS '(?i)(United States|America|\bUS\b|硅谷|家宽|洛杉矶|西雅图|纽约|芝加哥|拉斯维加斯|美帝|美国)'
@@ -121,7 +118,7 @@ FilterJP: &FilterJP '(?i)(Japan|\bJP\b|东京|大阪|埼玉|川日|泉日|日区
 FilterSG: &FilterSG '(?i)(Singapore|\bSG\b|新加坡|狮城|狮)'
 FilterTW: &FilterTW '(?i)(Taiwan|\bTW\b|\bTai(?:wan)?\b|台湾|台北|台中|台南|高雄|新竹)'
 FilterHK: &FilterHK '(?i)(\bHK\b|Hong.?Kong|香港|深港|广港|港区)'
-FilterExclude: &FilterExclude '(?i)(GB\s*[\|丨]\s*GB|Traffic|Reset|Days|Left|Expire|Date|Direct|回国|过期|官网|网址|订阅|机场|客服|校园|本土|免费|下载专用|直连|套餐|流量|重置|剩余|到期|时间|频道|英国|阿根廷|俄罗斯|土耳其|韩国|印度|德国|加拿大|澳大利亚|法国|乌克兰|Korea|Canada|France|Germany|Philippines|Netherlands|Turkey|Vietnam|Malaysia|Thailand|Britain)'
+FilterExclude: &FilterExclude '(?i)(GB\s*[\|丨]\s*GB|Traffic|Reset|Days|Left|Expire|Date|Direct|回国|过期|官网|网址|订阅|机场|客服|校园|本土|免费|下载专用|直连|内网代理|套餐|流量|重置|剩余|到期|时间|频道|英国|阿根廷|俄罗斯|土耳其|韩国|印度|德国|加拿大|澳大利亚|马来西亚|泰国|越南|菲律宾|柬埔寨|印尼|意大利|瑞士|冰岛|挪威|巴西|墨西哥|尼日利亚|澳门|法国|乌克兰|Korea|Canada|France|Germany|Philippines|Netherlands|Turkey|Vietnam|Malaysia|Thailand|Britain)'
 
 ### 策略组基础配置
 # 手动选择
@@ -151,6 +148,8 @@ pg_Direct: &pg_Direct [
 ]
 
 proxy-groups:
+  # - {name: hyb-hk05, type: select, use: [xsus], filter: '^🇭🇰 香港 05$'}
+  # - {name: hyb-hk05, type: select, use: [500G_LongTerm], filter: '🇭 🇰  Hong Kong丨01'}
   # --- 默认节点 ---
   - {name: ♻️ 自动选择, <<: *UrlTest, exclude-filter: *FilterExclude}
   - {name: 🌐 全部节点, <<: *Select}
@@ -202,6 +201,7 @@ rules:
   # ============================================
   # 第二层：自定义规则（优先级最高）
   # ============================================
+  # - DOMAIN-SUFFIX,hybgzs.com,hyb-hk05
   - RULE-SET,custom_proxy,🚀 默认代理
   - RULE-SET,custom_direct,直连
 
@@ -356,4 +356,3 @@ rule-providers:
     <<: *RuleSet_ipcidr_mrs
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo-lite/geoip/telegram.mrs"
     path: ./rule-providers/telegram_ip.mrs
-

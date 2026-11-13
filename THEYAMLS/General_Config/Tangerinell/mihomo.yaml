@@ -1,6 +1,6 @@
 # Clash.Meta(mihomo)
 # Version: v1.19.33
-# Updated: 2026-11-07 03:13:00
+# Updated: 2026-11-12 16:13:00
 
 JNTM: &JNTM
     interval: 43200
@@ -146,14 +146,14 @@ dns:
     - https://[2606:4700:4700::1111]/dns-query
     - https://8.8.8.8/dns-query
     - https://[2001:4860:4860::8888]/dns-query
-    # CN DNS
+    # China DNS
     - https://223.5.5.5/dns-query
     - https://[2400:3200::1]/dns-query
     
   proxy-server-nameserver:
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
-    # CN DNS
+    # China DNS
     - https://dns.alidns.com/dns-query
     
   nameserver-policy:
@@ -161,19 +161,19 @@ dns:
     - system
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
-    # CN DNS
+    # China DNS
     - https://dns.alidns.com/dns-query
 
     'rule-set:CN_geosite': 
     - https://cloudflare-dns.com/dns-query
     - https://dns.google/dns-query
-    # CN DNS
+    # China DNS
     - https://dns.alidns.com/dns-query
     
     # 'subscription domain': 
     # - https://cloudflare-dns.com/dns-query
     # - https://dns.google/dns-query
-    # # CN DNS
+    # # China DNS
     # - https://dns.alidns.com/dns-query
 
   nameserver:
@@ -312,7 +312,8 @@ Route: &Route
 
             🎯默认, 🌐其他,
             🔗链式代理, 
-            ⛔阻断, ↩️绕过, 
+            ⛔阻断, ⛔静默阻断, 
+            ↩️绕过, ↩️单条绕过, 
 
             Pornhub, 
             PikPak, 
@@ -385,7 +386,8 @@ Select_Main: &Select_Main
             🧩手动其他, 📋手动全部, 
 
             🔗链式代理, ➡️直连, 
-            ⛔阻断, ↩️绕过, 
+            ⛔阻断, ⛔静默阻断, 
+            ↩️绕过, ↩️单条绕过, 
 
             🇸🇬手动选择, 🇺🇸手动选择, 
             🇭🇰手动选择, 🇹🇼手动选择, 
@@ -431,7 +433,8 @@ Dialer: &Dialer
             🔶自动选择, 🔷自动选择, 
             🧩手动其他, 📋手动全部, 
 
-            ➡️直连, ⛔阻断, 
+            ➡️直连, 
+            ⛔阻断, ⛔静默阻断, 
 
             🇸🇬手动选择, 🇺🇸手动选择, 
             🇭🇰手动选择, 🇹🇼手动选择, 
@@ -480,7 +483,8 @@ Select_General: &Select_General
 
             🎯默认, 🌐其他,
             🔗链式代理, ➡️直连, 
-            ⛔阻断, ↩️绕过, 
+            ⛔阻断, ⛔静默阻断, 
+            ↩️绕过, ↩️单条绕过, 
 
             🇸🇬手动选择, 🇺🇸手动选择, 
             🇭🇰手动选择, 🇹🇼手动选择, 
@@ -515,6 +519,7 @@ Select_General: &Select_General
             ]
 
 
+# China
 China: &China
   type: select
   disable-udp: false
@@ -531,7 +536,8 @@ China: &China
 
             🎯默认, 🌐其他,
             🔗链式代理, ➡️直连, 
-            ⛔阻断, ↩️绕过, 
+            ⛔阻断, ⛔静默阻断, 
+            ↩️绕过, ↩️单条绕过, 
 
             🇸🇬手动选择, 🇺🇸手动选择, 
             🇭🇰手动选择, 🇹🇼手动选择, 
@@ -578,7 +584,8 @@ Global: &Global
 
             🎯默认, 🌐其他, 
             🔗链式代理, ➡️直连, 
-            ⛔阻断, ↩️绕过, 
+            ⛔阻断, ⛔静默阻断, 
+            ↩️绕过, ↩️单条绕过, 
 
             🟨手动选择, 🟦手动选择, 
             🟢故障转移, 🟣故障转移, 
@@ -702,9 +709,19 @@ proxy-groups:
     proxies: [PASS]
     hidden: true
 
+  - name: ↩️单条绕过
+    type: select
+    proxies: [PASS-RULE]
+    hidden: true
+
   - name: ⛔阻断
     type: select
     proxies: [REJECT]
+    hidden: true
+
+  - name: ⛔静默阻断
+    type: select
+    proxies: [REJECT-DROP]
     hidden: true
 
   - name: 🔗链式代理

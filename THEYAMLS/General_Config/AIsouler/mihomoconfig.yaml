@@ -92,7 +92,7 @@ dns:
   nameserver: *foreignDNS
   nameserver-policy:
     'rule-set:private': 'system'
-    'rule-set:douyin': ['180.184.1.1', '180.184.2.2']
+    'rule-set:douyin': ['180.184.1.1#DIRECT', '180.184.2.2#DIRECT']
     'rule-set:cn': *chinaDNS
   direct-nameserver: *chinaDNS
   direct-nameserver-follow-policy: true
@@ -377,19 +377,17 @@ group_common:
   group_common_select:
     &group_common_select {
       type: select,
-      interval: 600,
-      timeout: 3000,
+      timeout: 5000,
       max-failed-times: 3,
       empty-fallback: REJECT,
       url: 'https://www.apple.com/library/test/success.html',
-      lazy: true,
     }
 
   group_common_auto:
     &group_common_auto {
       type: url-test,
       interval: 600,
-      timeout: 3000,
+      timeout: 5000,
       max-failed-times: 3,
       empty-fallback: REJECT,
       url: 'https://www.apple.com/library/test/success.html',
@@ -405,7 +403,7 @@ group_common:
     &group_common_load {
       type: load-balance,
       interval: 600,
-      timeout: 3000,
+      timeout: 5000,
       max-failed-times: 3,
       empty-fallback: REJECT,
       url: 'https://www.apple.com/library/test/success.html',
@@ -700,6 +698,9 @@ proxy-groups:
 # --- 路由规则 (Rules) ---
 
 rules:
+  # 广告拦截
+  - RULE-SET,category-ads,AdBlock
+
   # 私有网络直连
   - RULE-SET,private,直连
 
@@ -716,9 +717,6 @@ rules:
 
   # 禁用国外 QUIC 流量（默认不启用，如果想启用请删除前面的#号注释）
   # - AND,((NETWORK,UDP),(DST-PORT,443),(NOT,((OR,((RULE-SET,cn),(RULE-SET,cn_ip,no-resolve)))))),REJECT
-
-  # 广告拦截
-  - RULE-SET,category-ads,AdBlock
 
   # 代理规则（非IP类）
   - RULE-SET,googlefcm,FCM
@@ -750,7 +748,11 @@ rules:
   - RULE-SET,ehentai,EHentai
   - RULE-SET,geolocation-!cn,默认代理
 
-  # 代理（IP类）
+  # IP规则（直连）
+  - RULE-SET,cn_ip,直连
+  - RULE-SET,private_ip,直连
+
+  # IP规则（代理）
   - RULE-SET,google_ip,Google
   - RULE-SET,microsoft_ip,Microsoft
   - RULE-SET,apple_ip,Apple
@@ -761,8 +763,4 @@ rules:
   - RULE-SET,facebook_ip,Meta
   - RULE-SET,netflix_ip,Netflix
   - RULE-SET,spotify_ip,Spotify
-
-  # 兜底规则
-  - RULE-SET,cn_ip,直连
-  - RULE-SET,private_ip,直连
   - MATCH,漏网之鱼

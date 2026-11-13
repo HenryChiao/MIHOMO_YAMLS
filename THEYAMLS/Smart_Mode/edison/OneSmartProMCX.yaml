@@ -30,6 +30,7 @@ BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallba
 # 策略组代理列表锚点
 SelectAL: &SelectAL { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 家宽-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
 SelectLD: &SelectLD { type: select, proxies: [国内直连,  香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 家宽-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选] } # 全部节点组
+SelectJK: &SelectJK { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 冷门节点-手选, 全部节点-手选] } # 链式代理组
 SelectLR: &SelectLR { type: select, proxies: [国内直连, 低倍率-故转, 全部节点-手选] } # 低倍率节点组
 SelectHR: &SelectHR { type: select, proxies: [国内直连, 高倍率-手选, 全部节点-手选] } # 高倍率节点组
 
@@ -212,7 +213,7 @@ dns:
 proxy-groups:
   # 应用策略层 - Select手动选择，支持多场景应用优化，使用时默认，也可修改
   - {name: Proxy,         <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Proxy.png}
-  - {name: 链式代理,       type: select,  empty-fallback: "REJECT", proxies: [香港-故转, 日本-故转, 狮城-故转, 台湾-故转, 美国-故转, 冷门节点-手选, 全部节点-手选], icon: https://img.icons8.com/fluency/256/workflow.png}
+  - {name: 链式代理,        <<: *SelectJK, icon: https://img.icons8.com/fluency/256/workflow.png}
   - {name: AI,            <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/AI.png}
   - {name: ProxyGame,     <<: *SelectAL, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Game.png}
   - {name: Streaming,     <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/DomesticMedia.png}
@@ -229,7 +230,7 @@ proxy-groups:
   - {name: Apple,         <<: *SelectLD, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Apple.png}
   - {name: Tracker,       <<: *SelectLR, icon: https://raw.githubusercontent.com/Koolson/Qure/refs/heads/master/IconSet/Color/Download.png}
   - {name: 漏网之鱼,        <<: *SelectAL, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/Final.png}
-  - {name: 国内直连,        type: select,  proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
+  - {name: 国内直连,        <<: *SelectLD, proxies: [DIRECT], hidden: true, icon: https://github.com/Koolson/Qure/raw/master/IconSet/Color/China.png}
 
   # 线路特性层 - Fallback故障转移，（适合不想节点总是被切换或者对固定IP有要求，若手动选择节点飘红 会自动切到智能策略组，保证节点可用性）,（不需要该策略可以在组名上添加 # 注释）
   - { name: 香港-故转,     <<: *BaseFB, proxies: [香港-手选, 香港-智能], icon: 'https://github.com/Koolson/Qure/raw/master/IconSet/Color/Hong_Kong.png' }
