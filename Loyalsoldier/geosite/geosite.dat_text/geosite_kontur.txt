@@ -1,0 +1,7 @@
+kontur-inc.com
+kontur.host
+kontur.ru
+ktalk.host
+ktalk.ru
+full:metrika.kontur.ru
+full:sentry.kontur.host
