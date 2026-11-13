@@ -8,13 +8,13 @@
 
 | 特性 | `config.yaml` | `Clash.yaml` | `mihomo.yaml` | `clash-fallback-std.yaml` | `clash-all-fallback.yaml` | `clash-fallback-dialer.yaml` | `clash-fallback-all.yaml` | `clash-fallback.yaml` | `ConfigForClash.yaml` | `AIB.yaml` | `AIO.yaml` | `MihomoPro_Config.yaml` | `Mini_en.yaml` | `OneTouch_Config.yaml` | `Pro_en.yaml` | `Lite_en.yaml` | `mihomo.yaml` | `config.yaml` | `config_lite.yaml` | `2-subscription-clash-rule-set.yaml` | `base-clash-ruleset.yaml` | `3-subscription-clash-rule-set.yaml` | `[Mobile]-WhiteList-03-Non.AntiAD.yaml` | `[通用模版]-WhiteList-03-Non.AntiAD.yaml` | `BlackList-03-Non.AntiAD.yaml` | `[Desktop]-WhiteList-03-Non.AntiAD.yaml` | `BlackList-02-Min.AntiAD.yaml` | `[通用模版]-WhiteList-01.yaml` | `[Mobile]-WhiteList-01.yaml` | `[Mobile]-WhiteList-02-Min.AntiAD.yaml` | `BlackList-01.yaml` | `[Desktop]-WhiteList-01.yaml` | `[通用模版]-WhiteList-02-Min.AntiAD.yaml` | `[Desktop]-WhiteList-02-Min.AntiAD.yaml` | `mihomo.yaml` | `Ayanami0_config_geo-lite.yaml` | `Ayanami0_config.yaml` | `mihomoconfig.yaml` | `mihomoConfigLite.yaml` | `config.yaml` | `mihomo.yaml` | `Seven1_fallback_Geo.yaml` | `Seven1_fallback_Rule-Set.yaml` | `configfull_lite.yaml` | `configfull.yaml` | `configfull_NoAd.yaml` | `config.yaml` | `proxychain.yaml` | `fuxie.yaml` | `config.yaml` | `config.yaml` | `mihomo.yaml` | `Clashmi.yaml` | `Clashmi-fx.yaml` | `mihomo_multi.yaml` | `mihomo_single.yaml` | `mihomo.yaml` | `us_la.yaml` | `Clash-Airport.yaml` | `mihomo.yaml` | `Clash_Sample.yaml` | `backup.yaml` | `mihomo.yaml` | `mihomo.yaml` | `region-single-provider.yaml` | `service-single-provider.yaml` | `region-dual-provider.yaml` | `MihomoProPlus.yaml` | `MihomoAIO.yaml` | `MihomoProMax.yaml` | `Proxy-override.yaml` |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **大小** | 24.6 KB | 27.3 KB | 14.6 KB | 17.3 KB | 17.2 KB | 16.3 KB | 18.6 KB | 15.9 KB | 49.3 KB | 11.0 KB | 10.8 KB | 22.2 KB | 4.7 KB | 12.1 KB | 15.4 KB | 11.0 KB | 3.1 KB | 8.0 KB | 2.9 KB | 24.1 KB | 23.5 KB | 24.6 KB | 697.4 KB | 2054.2 KB | 697.2 KB | 697.4 KB | 697.2 KB | 2054.2 KB | 697.4 KB | 697.4 KB | 697.2 KB | 697.4 KB | 2054.2 KB | 697.4 KB | 15.1 KB | 3.9 KB | 12.6 KB | 27.9 KB | 18.5 KB | 18.7 KB | 54.9 KB | 22.1 KB | 24.7 KB | 18.6 KB | 35.4 KB | 34.9 KB | 13.9 KB | 14.9 KB | 13.2 KB | 13.8 KB | 28.5 KB | 6.4 KB | 20.3 KB | 19.6 KB | 12.7 KB | 12.4 KB | 30.4 KB | 18.5 KB | 17.5 KB | 45.2 KB | 8.4 KB | 12.5 KB | 23.1 KB | 6.2 KB | 15.1 KB | 25.9 KB | 20.9 KB | 26.2 KB | 28.3 KB | 25.7 KB | 32.6 KB |
+| **大小** | 24.6 KB | 27.3 KB | 14.6 KB | 17.3 KB | 17.2 KB | 16.3 KB | 18.6 KB | 15.9 KB | 49.3 KB | 11.0 KB | 10.8 KB | 22.2 KB | 4.7 KB | 12.1 KB | 15.4 KB | 11.0 KB | 3.1 KB | 8.0 KB | 2.9 KB | 24.1 KB | 23.5 KB | 24.6 KB | 697.4 KB | 2054.2 KB | 697.2 KB | 697.4 KB | 697.2 KB | 2054.2 KB | 697.4 KB | 697.4 KB | 697.2 KB | 697.4 KB | 2054.2 KB | 697.4 KB | 15.7 KB | 3.9 KB | 12.6 KB | 27.8 KB | 18.5 KB | 18.7 KB | 54.9 KB | 22.1 KB | 24.7 KB | 18.6 KB | 35.4 KB | 34.9 KB | 13.9 KB | 14.9 KB | 13.2 KB | 13.8 KB | 28.5 KB | 6.4 KB | 20.3 KB | 19.6 KB | 12.7 KB | 12.4 KB | 30.4 KB | 18.5 KB | 17.5 KB | 45.7 KB | 8.4 KB | 12.5 KB | 23.1 KB | 6.2 KB | 15.1 KB | 25.9 KB | 20.9 KB | 26.2 KB | 28.3 KB | 25.7 KB | 32.6 KB |
 | **混合端口** | 7890 | 7890 | 0 | 7893 | 7893 | 7893 | 7893 | 7893 | 7892 | 7890 | 7890 | 7893 | 7893 | 7893 | 7893 | 7893 | 7893 | 7893 | 7893 | - | - | - | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7892 | 7254 | 7893 | 7893 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7890 | 7893 | 8899 | 7893 | 7893 | 7897 | 7897 | 7890 | - | - | 7890 | 7892 | 7892 | 1080 | 7890 | 7890 | 7890 | 7890 | 7893 | 7893 | 7893 | 7890 |
 | **面板地址** | 0.0.0.0:9090 | :9090 | - | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | - | - | - | - | - | - | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 0.0.0.0:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | - | - | :9090 | 127.0.0.1:9090 | - | 127.0.0.1:9092 | 127.0.0.1:9092 | - | - | 0.0.0.0:7891 | 127.0.0.1:9092 | 127.0.0.1:9092 | 0.0.0.0:9090 | 0.0.0.0:9090 | 0.0.0.0:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | Rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | Rule | Rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule | rule |
 | **TUN** | ✅ | 🚫 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🚫 | ✅ | ✅ | 🚫 | 🚫 | 🚫 | 🚫 | 🚫 | ✅ | ✅ | ✅ | 🚫 | 🚫 | 🚫 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🚫 | 🚫 | ✅ | ✅ | 🚫 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🚫 | ✅ | 🚫 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | 🚫 | ✅ | ✅ | ✅ | ✅ | 🚫 | 🚫 | 🚫 | 🚫 |
-| **策略组** | **49** | **27** | **35** | **36** | **53** | **35** | **61** | **34** | **62** | **24** | **23** | **51** | **3** | **14** | **37** | **18** | **5** | **17** | **1** | **40** | **31** | **41** | **153** | **175** | **143** | **154** | **144** | **177** | **155** | **154** | **145** | **156** | **176** | **155** | **19** | **1** | **21** | **46** | **28** | **13** | **29** | **41** | **41** | **47** | **62** | **59** | **28** | **28** | **28** | **29** | **25** | **10** | **31** | **31** | **33** | **33** | **80** | **15** | **23** | **96** | **15** | **22** | **59** | **8** | **14** | **33** | **33** | **54** | **61** | **54** | **16** |
-| **规则数** | **33** | **68** | **17** | **43** | **42** | **43** | **53** | **43** | **62** | **34** | **34** | **39** | **7** | **22** | **29** | **20** | **12** | **24** | **16** | **53** | **53** | **53** | **226** | **226** | **181** | **228** | **182** | **233** | **233** | **227** | **188** | **235** | **227** | **229** | **27** | **11** | **30** | **52** | **24** | **37** | **152** | **28** | **28** | **38** | **96** | **95** | **28** | **28** | **28** | **33** | **35** | **13** | **34** | **34** | **22** | **22** | **59** | **34** | **36** | **1** | **11** | **25** | **35** | **17** | **74** | **192** | **74** | **44** | **52** | **45** | **173** |
+| **策略组** | **49** | **27** | **35** | **36** | **53** | **35** | **61** | **34** | **62** | **24** | **23** | **51** | **3** | **14** | **37** | **18** | **5** | **17** | **1** | **40** | **31** | **41** | **153** | **175** | **143** | **154** | **144** | **177** | **155** | **154** | **145** | **156** | **176** | **155** | **19** | **1** | **21** | **46** | **28** | **13** | **29** | **41** | **41** | **47** | **62** | **59** | **28** | **28** | **28** | **29** | **25** | **10** | **31** | **31** | **33** | **33** | **80** | **15** | **23** | **98** | **15** | **22** | **59** | **8** | **14** | **33** | **33** | **54** | **61** | **54** | **16** |
+| **规则数** | **33** | **68** | **17** | **43** | **42** | **43** | **53** | **43** | **62** | **34** | **34** | **39** | **7** | **22** | **29** | **20** | **12** | **24** | **16** | **53** | **53** | **53** | **226** | **226** | **181** | **228** | **182** | **233** | **233** | **227** | **188** | **235** | **227** | **229** | **27** | **11** | **30** | **52** | **24** | **37** | **154** | **28** | **28** | **38** | **96** | **95** | **28** | **28** | **28** | **33** | **35** | **13** | **34** | **34** | **22** | **22** | **59** | **34** | **36** | **1** | **11** | **25** | **35** | **17** | **74** | **192** | **74** | **44** | **52** | **45** | **173** |
 
 ## 📄 配置详情
 
@@ -151,7 +151,7 @@
 ### 👤 AIsouler
 
 #### 📝 mihomoconfig.yaml
-- **路径**: `AIsouler/mihomoconfig.yaml` | **大小**: 27.9 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
+- **路径**: `AIsouler/mihomoconfig.yaml` | **大小**: 27.8 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/AIsouler/mihomoconfig.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (46个)</summary>
@@ -1381,10 +1381,10 @@
 ### 👤 Tangerinell
 
 #### 📝 mihomo.yaml
-- **路径**: `Tangerinell/mihomo.yaml` | **大小**: 45.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Tangerinell/mihomo.yaml)
+- **路径**: `Tangerinell/mihomo.yaml` | **大小**: 45.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Tangerinell/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (96个)</summary>
+<summary>🔍 策略组 (98个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -1396,7 +1396,9 @@
 | 👆 落地 | `select` |
 | 👆 ➡️直连 | `select` |
 | 👆 ↩️绕过 | `select` |
+| 👆 ↩️单条绕过 | `select` |
 | 👆 ⛔阻断 | `select` |
+| 👆 ⛔静默阻断 | `select` |
 | 👆 🔗链式代理 | `select` |
 | 👆 🟨手动选择 | `select` |
 | 👆 🟦手动选择 | `select` |
@@ -1406,9 +1408,7 @@
 | 👆 🔷自动选择 | `select` |
 | 👆 🧩手动其他 | `select` |
 | 👆 📋手动全部 | `select` |
-| 👆 Pornhub | `select` |
-| 👆 TikTok | `select` |
-| ... | 还有 76 个 |
+| ... | 还有 78 个 |
 </details>
 
 ---
@@ -1911,8 +1911,8 @@
 ### 👤 lvbibir
 
 #### 📝 mihomo.yaml
-- **路径**: `lvbibir/mihomo.yaml` | **大小**: 15.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/lvbibir/mihomo.yaml)
-- **模式**: rule | **TUN**: ✅ | **IPv6**: 🚫
+- **路径**: `lvbibir/mihomo.yaml` | **大小**: 15.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/lvbibir/mihomo.yaml)
+- **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (19个)</summary>
 

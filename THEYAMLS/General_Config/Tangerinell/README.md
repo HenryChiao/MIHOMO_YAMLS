@@ -7,10 +7,10 @@
 ## 📄 配置详情
 
 #### 📝 mihomo.yaml
-- **路径**: `mihomo.yaml` | **大小**: 45.2 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Tangerinell/mihomo.yaml)
+- **路径**: `mihomo.yaml` | **大小**: 45.7 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/Tangerinell/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (96个)</summary>
+<summary>🔍 策略组 (98个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -22,7 +22,9 @@
 | 👆 落地 | `select` |
 | 👆 ➡️直连 | `select` |
 | 👆 ↩️绕过 | `select` |
+| 👆 ↩️单条绕过 | `select` |
 | 👆 ⛔阻断 | `select` |
+| 👆 ⛔静默阻断 | `select` |
 | 👆 🔗链式代理 | `select` |
 | 👆 🟨手动选择 | `select` |
 | 👆 🟦手动选择 | `select` |
@@ -32,7 +34,5 @@
 | 👆 🔷自动选择 | `select` |
 | 👆 🧩手动其他 | `select` |
 | 👆 📋手动全部 | `select` |
-| 👆 Pornhub | `select` |
-| 👆 TikTok | `select` |
-| ... | 还有 76 个 |
+| ... | 还有 78 个 |
 </details>
