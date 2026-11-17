@@ -1,6 +1,6 @@
 # 地址: https://github.com/Wans-OS/my-backup
 # 作者: Wans
-# 更新: 2026-10-06 06:30:18
+# 更新: 2026-11月14日 22:43:18
 # 描述: 在proxy-providers加入您的机场订阅链接 (代理提供者)
 
 # 订阅锚点，排除了一些节点，例如 包含剩余, 官网, 到期, 也可以在exclude-filter添加你需要排除的节点
@@ -61,7 +61,7 @@ etag-support: true
 
 # 入站
 tun:
-  enable: true
+  enable: false
   stack: mips
   auto-route: true
   strict-route: true
@@ -81,21 +81,19 @@ dns:
   ipv6: false
   prefer-h3: true
   use-hosts: true
-  use-system-hosts: true
+  listen: 0.0.0.0:53
   respect-rules: false
+  use-system-hosts: true
   enhanced-mode: "fake-ip"
   fake-ip-range: "198.18.0.1/16"
   fake-ip-range6: "fdfe:dcba:9876::/64"
   fake-ip-filter-mode: "blacklist"
-  fake-ip-ttl: 1
   fake-ip-filter:
     - "RULE-SET:Lan"
   fallback:
     - "https://dns.cloudflare.com/dns-query"
     - "https://dns.google/dns-query"
   fallback-filter:
-    geoip: false
-    geoip-code: CN
     ipcidr:
       - 240.0.0.0/4
   direct-nameserver:
@@ -113,6 +111,8 @@ dns:
       - "https://doh.pub/dns-query"
     +.qinyues4.cc:
       - "https://dns.alidns.com/dns-query"
+    "+.ts.net":
+      - ts://tailscale
   proxy-server-nameserver:  # 代理节点域名解析服务器，仅用于解析代理节点的域名，如果不填则遵循 nameserver-policy、nameserver 和 fallback 的配置
     - "https://dns.alidns.com/dns-query"
     - "https://doh.pub/dns-query"
@@ -154,6 +154,10 @@ sniffer:
   skip-domain:
      - "Mijia Cloud"
      - "+.push.apple.com"
+     - "+.baidu.com"
+     - "+.push.apple.com"
+     - "+.tailscale.com"
+     - "+.ts.net"
 
 # 实验性功能
 experimental:
@@ -169,13 +173,15 @@ external-controller: '0.0.0.0:9090'
 
 # 代理节点: 可以将自己的节点放在这里
 # proxies:
-#   - name: "[SS] domain"
-#     type: ss
-#     server: abaosd.jasidofnbasdfij.com
-#     port: 443
-#     cipher: chacha20-ietf-poly1305
-#     password: 4nggcF
+#   - name: Tailscale
+#     type: tailscale
+#     auth-key: tskey-auth-
+#     hostname: mihomo-node
 #     udp: true
+#     accept-routes: true
+#     exit-node: auto:any
+#     exit-node-allow-lan-access: true
+
 
 # 节点筛选锚点
 FilterHK: &FilterHK "(?i)(?=.*(🇭🇰|香港|港|hk|hkg|hong ?kong))"
@@ -186,20 +192,22 @@ FilterKR: &FilterKR "(?i)(?=.*(🇰🇷|韩国|韩|KR|KOR|korea|seoul))"
 FilterUS: &FilterUS "(?i)(?=.*(🇺🇸|美国|美|US|USA|united ?states|america|los angeles|san jose|silicon valley))"
 FilterUK: &FilterUK "(?i)(?=.*(🇬🇧|英国|英|GBR|UK|united ?kingdom|london))"
 FilterHM: &FilterHM "(?i)(?=.*(家宽))"
+# 其他节点: 排除以上所有地区/家宽节点，以及本地代理 Yakit抓包/tailscale (这两个在手动选择里可直接选)
+FilterOther: &FilterOther "(?i)(🇭🇰|香港|港|hk|hkg|hong ?kong|🇹🇼|台湾|台|TW|TWN|taiwan|taipei|🇸🇬|新加坡|狮城|新|SG|SGP|singapore|🇯🇵|日本|日|JP|JPN|japan|tokyo|osaka|🇰🇷|韩国|韩|KR|KOR|korea|seoul|🇺🇸|美国|美|US|USA|united ?states|america|los angeles|san jose|silicon valley|🇬🇧|英国|英|GBR|UK|united ?kingdom|london|家宽|Yakit抓包|tailscale)"
 
 # 代理组地区配置锚点 hidden: true 是为了隐藏地区分组，有需要显示出来的佬友可以删除
-BaseUT: &BaseUT { interval: 600, url: *UrlTest, hidden: true, include-all: true, type: url-test }
-BaseFB: &BaseFB { interval: 600, url: *UrlTest, hidden: true, include-all: true, type: fallback }
-BaseCR: &BaseCR { interval: 600, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: round-robin }
-BaseCH: &BaseCH { interval: 600, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: consistent-hashing }
+BaseUT: &BaseUT { interval: 600, tolerance: 50, url: *UrlTest, hidden: true, include-all: true, type: url-test }
+BaseFB: &BaseFB { interval: 600, tolerance: 50, url: *UrlTest, hidden: true, include-all: true, type: fallback }
+BaseCR: &BaseCR { interval: 600, tolerance: 50, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: round-robin }
+BaseCH: &BaseCH { interval: 600, tolerance: 50, url: *UrlTest, hidden: true, include-all: true, type: load-balance, strategy: consistent-hashing }
 
 # 代理组锚点
-SelectUL: &SelectUL { type: select, include-all: true, proxies: [ 香港自动, 家宽选择, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 英国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectTW: &SelectTW { type: select, include-all: true, proxies: [ 台湾自动, 手动选择, 香港自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectUS: &SelectUS { type: select, include-all: true, proxies: [ 美国自动, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectSG: &SelectSG { type: select, include-all: true, proxies: [ 狮城自动, 手动选择, 香港自动, 台湾自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, DIRECT, REJECT ] }
-SelectDR: &SelectDR { type: select, include-all: true, proxies: [ DIRECT, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, REJECT ] }
+SelectUL: &SelectUL { type: select, include-all: true, proxies: [ 香港自动, 家宽选择, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 英国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, DIRECT, REJECT ] }
+SelectTW: &SelectTW { type: select, include-all: true, proxies: [ 台湾自动, 手动选择, 香港自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, DIRECT, REJECT ] }
+SelectUS: &SelectUS { type: select, include-all: true, proxies: [ 美国自动, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, DIRECT, REJECT ] }
+SelectSG: &SelectSG { type: select, include-all: true, proxies: [ 狮城自动, 手动选择, 香港自动, 台湾自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, DIRECT, REJECT ] }
+SelectSL: &SelectSL { type: select, include-all: true, proxies: [ 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, DIRECT, REJECT ] }
+SelectDR: &SelectDR { type: select, include-all: true, proxies: [ DIRECT, 手动选择, 香港自动, 台湾自动, 狮城自动, 日本自动, 韩国自动, 美国自动, 香港-回退, 香港均衡-散列, 香港均衡-轮询, 台湾-回退, 台湾均衡-散列, 台湾均衡-轮询, 狮城-回退, 狮城均衡-散列, 狮城均衡-轮询, 日本-回退, 日本均衡-散列, 日本均衡-轮询, 韩国-回退, 韩国均衡-散列, 韩国均衡-轮询, 美国-回退, 美国均衡-散列, 美国均衡-轮询, 英国-回退, 英国均衡-散列, 英国均衡-轮询, 其他节点, REJECT ] }
 # 代理组
 proxy-groups:
   - { name: 手动选择,     <<: *SelectUL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Rocket.png }
@@ -208,28 +216,29 @@ proxy-groups:
 
   # ===================== AI大模型 =====================
   - { name: Claude,     <<: *SelectTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/claude-color.png }
-  - { name: Gemini,     <<: *SelectSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/gemini-color.png, url: "https://www.google.com/generate_204" }
+  - { name: Gemini,     <<: *SelectSG, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/gemini-color.png }
   - { name: OpenAI,     <<: *SelectUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/openai.png }
 
   # ===================== 媒体 & 娱乐 =====================
-  - { name: Apple,      <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Apple.png, url: "https://www.apple.com/library/test/success.html" }
+  - { name: Apple,      <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Apple.png }
   - { name: Disney,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Disney.png }
   - { name: Netflix,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Netflix.png }
   - { name: Spotify,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Spotify.png }
   - { name: TikTok,     <<: *SelectTW, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/TikTok.png }
-  - { name: YouTube,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/YouTube.png, url: "https://www.youtube.com/generate_204" }
+  - { name: YouTube,    <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/YouTube.png }
 
   # ===================== 生产力 & 常用 =====================
   - { name: Emby,       <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Emby.png }
   - { name: Github,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/GitHub.png }
-  - { name: Google,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Google_Search.png, url: "https://www.google.com/generate_204" }
-  - { name: Microsoft,  <<: *SelectDR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Microsoft.png, url: "http://www.msftconnecttest.com/connecttest.txt" }
+  - { name: Google,     <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Google_Search.png }
+  - { name: Microsoft,  <<: *SelectDR, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Microsoft.png }
   - { name: OneDrive,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/OneDrive.png }
 
-  # ===================== 社交 & 即时通讯 ===================== https://macosicons.com/#/
+  # ===================== 社交 & 即时通讯 & AI ===================== https://macosicons.com/#/
   - { name: Twitter(X), <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Twitter(X).png }
   - { name: Telegram,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Telegram.png }
   - { name: WhatsApp,   <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/WhatsApp.png }
+  - { name: Meta,    		<<: *SelectUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/lobehub/lobe-icons/master/packages/static-png/light/meta-color.png }
 
   # ===================== 游戏 & 下载 =====================
   - { name: Steam,      <<: *SelectSL, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Steam.png }
@@ -270,6 +279,9 @@ proxy-groups:
   - { name: 美国均衡-轮询,       <<: *BaseCR, filter: *FilterUS, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_States.png }
   - { name: 英国均衡-轮询,       <<: *BaseCR, filter: *FilterUK, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/United_Kingdom.png }
 
+  # ===================== 其他节点 (排除以上地区/家宽) =====================
+  - { name: 其他节点,       <<: *BaseUT, exclude-filter: *FilterOther, hidden: false, icon: https://gh-proxy.org/https://raw.githubusercontent.com/0xWans/Qure/master/IconSet/Color/Global.png }
+
 # 规则锚点
 rule-anchor:
   # 规则集锚点
@@ -301,7 +313,7 @@ rule-providers:
   Twitter:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/x.mrs }
   Telegram:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs }
   YouTube:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/youtube.mrs }
-  DNSLeak:          { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/DNSLeak.mrs }
+  Meta:							{ <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/meta.mrs }
 
   # IP规则集
   ChinaIP:          { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs }
@@ -311,23 +323,41 @@ rule-providers:
   TwitterIP:        { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/twitter.mrs }
   TelegramIP:       { <<: *BehaviorIP, url: https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/telegram.mrs }
 
-  # 应用规则集
-  ChinaAPP:       { <<: *BehaviorCL, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Process/ChinaAPP.yaml }
-  Direct:         { <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Direct.mrs }
+  # 自定义规则
+  ChinaAPP:       	{ <<: *BehaviorCL, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Process/ChinaAPP.yaml }
+  Direct:         	{ <<: *BehaviorDN, url: https://cdn.jsdelivr.net/gh/0xWans/my-backup@main/clash/rules/Direct.mrs }
 
 # 官方配置文档: https://wiki.metacubex.one/config/rules/
 rules:
+  # Tailscale
+  # Tailscale 路由规则（必须放在 private_ip 之前，因为 private_ip 包含 100.64.0.0/10）
+  # 1. Tailscale 控制平面与打洞服务器直连（防环路）
+  - DOMAIN-SUFFIX,tailscale.com,DIRECT
+  - DOMAIN-SUFFIX,tailscale.io,DIRECT
+  # 2. Tailscale 虚拟内网 IP、MagicDNS 域名以及你家里的子网路由走 Tailscale 策略组
+  - IP-CIDR,100.64.0.0/10,Tailscale,no-resolve
+  - IP-CIDR6,fd7a:115c:a1e0::/48,Tailscale,no-resolve
+  - DOMAIN-SUFFIX,ts.net,Tailscale
+
   # 自定义规则集
   - RULE-SET,Direct,DIRECT
-  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((RULE-SET,ChinaIP))),(NOT,((RULE-SET,China)))),REJECT  # 阻止海外 QUIC 流量泄漏
 
-  # 应用规则集
-  - RULE-SET,ChinaAPP,DIRECT
+  # 阻止海外 QUIC 流量泄漏
+  - AND,((DST-PORT,443),(NETWORK,UDP),(NOT,((RULE-SET,ChinaIP))),(NOT,((RULE-SET,China)))),REJECT
 
   # 自定义域名规则
+  # 公益站
   - DOMAIN-SUFFIX,hybgzs.com,DIRECT
   - DOMAIN-SUFFIX,air-outer.com,DIRECT
   - DOMAIN-SUFFIX,zzzcoding.org,DIRECT
+  - DOMAIN-SUFFIX,404-found.uk,DIRECT
+
+  # 小米应用安装检测（可关闭）
+  - DOMAIN-SUFFIX,api.installer.xiaomi.com,REJECT
+  - DOMAIN-SUFFIX,virus-engine.sec.miui.com,REJECT
+
+  # 应用规则集
+  - RULE-SET,ChinaAPP,DIRECT
 
   # 域名规则集-按照优先级顺序排列
   - RULE-SET,category-ads-all,REJECT
@@ -344,6 +374,7 @@ rules:
   - RULE-SET,TikTok,TikTok
   - RULE-SET,WhatsApp,WhatsApp
   - RULE-SET,OneDrive,OneDrive
+  - RULE-SET,Meta,Meta
   - RULE-SET,Microsoft,Microsoft
   - RULE-SET,Netflix,Netflix
   - RULE-SET,Disney,Disney

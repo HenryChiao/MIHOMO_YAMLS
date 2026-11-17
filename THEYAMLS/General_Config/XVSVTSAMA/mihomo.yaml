@@ -542,19 +542,19 @@ proxy-groups:
     proxies: *proxy_default_choices
     include-all: true
   # Telegram DC 地区组为可选配置；启用时，需同时取消注释下方 rule-providers 与 rules 对应段落。
-  # - name: 📲 Telegram-DC1-DC3-Miami
+  # - name: 📲 DC1-MIA
   #   icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-Qure-Style-SVG-United_States.svg"
   #   type: select
   #   filter: '(?i)🇺🇸|美国|迈阿密|miami|\bMIA\b|\bUSA\b|united\s*states'
   #   include-all: true
   #   empty-fallback: COMPATIBLE
-  # - name: 📲 Telegram-DC2-DC4-Amsterdam
+  # - name: 📲 DC24-AMS
   #   icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-Qure-Style-SVG-Netherlands.svg"
   #   type: select
   #   filter: '(?i)🇳🇱|荷兰|阿姆斯特丹|amsterdam|\bAMS\b|\bNL\b|netherlands'
   #   include-all: true
   #   empty-fallback: COMPATIBLE
-  # - name: 📲 Telegram-DC5-SG
+  # - name: 📲 DC5-SIN
   #   icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-Qure-Style-SVG-Singapore.svg"
   #   type: select
   #   filter: '(?i)🇸🇬|🇭🇰|新加坡|狮城|香港|singapore|hong\s*kong|\bSG\b|\bSGP\b|\bHK\b|\bHKG\b'
@@ -781,7 +781,7 @@ rules:
   - DOMAIN,gfwsb.yiku.xyz,DIRECT
   - DOMAIN,bsub.douyincdns.com,DIRECT
   - DOMAIN,sub.rinkitotokiku.online,DIRECT
-  # 支持 Emby 的 Android 应用包名。
+  # Emby 播放器进程分流：Android 应用包名与 Windows 进程名。
   - PROCESS-NAME,com.mountains.hills,🎬 Emby
   - PROCESS-NAME,com.hamhub.app,🎬 Emby
   - PROCESS-NAME,com.oumi.utility.media.hub,🎬 Emby
@@ -789,6 +789,9 @@ rules:
   - PROCESS-NAME,com.attempt.afusekt,🎬 Emby
   - PROCESS-NAME,com.hush.yamby,🎬 Emby
   - PROCESS-NAME,com.railux.mobile,🎬 Emby
+  - PROCESS-NAME,com.yumilo.player,🎬 Emby
+  - PROCESS-NAME,HillsLite.exe,🎬 Emby
+  - PROCESS-NAME,HillsPlayer.exe,🎬 Emby
   - RULE-SET,googlefcm,FCM
   - RULE-SET,microsoft_ip,💠 海外微软,no-resolve
   - RULE-SET,microsoft,💠 海外微软
@@ -796,9 +799,9 @@ rules:
   - RULE-SET,apple,🍎 海外苹果
   - RULE-SET,proxy@direct,🌍 PROXY
   # Telegram DC 地区规则：启用地区分流时取消注释，并同时启用对应策略组与 rule-providers。
-  # - RULE-SET,telegram_dc1_dc3_miami,📲 Telegram-DC1-DC3-Miami,no-resolve
-  # - RULE-SET,telegram_dc2_dc4_amsterdam,📲 Telegram-DC2-DC4-Amsterdam,no-resolve
-  # - RULE-SET,telegram_dc5_sg,📲 Telegram-DC5-SG,no-resolve
+  # - RULE-SET,telegram_dc1_dc3_miami,📲 DC1-MIA,no-resolve
+  # - RULE-SET,telegram_dc2_dc4_amsterdam,📲 DC24-AMS,no-resolve
+  # - RULE-SET,telegram_dc5_sg,📲 DC5-SIN,no-resolve
   - PROCESS-NAME-REGEX,.*nagram.*,📲 Telegram
   - "PROCESS-NAME-REGEX,.*telegram.*,📲 Telegram"
   - RULE-SET,telegramcidr,📲 Telegram,no-resolve

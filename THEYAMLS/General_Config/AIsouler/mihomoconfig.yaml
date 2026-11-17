@@ -70,12 +70,10 @@ profile:
   store-fake-ip: true
 
 # 国内外 DNS 定义
-dns_common:
-  chinaDNS: &chinaDNS ['223.5.5.5#DIRECT', '119.29.29.29#DIRECT']
-  foreignDNS: &foreignDNS ['https://cloudflare-dns.com/dns-query#默认代理', 'https://dns.google/dns-query#默认代理']
-  defaultDNS: &defaultDNS ['114.114.114.114#DIRECT', 'tls://223.5.5.5#DIRECT', 'https://1.12.12.12/dns-query#DIRECT']
-  proxyServerDNS:
-    &proxyServerDNS ['114.114.114.114#DIRECT', 'tls://223.5.5.5#DIRECT', 'https://doh.pub/dns-query#DIRECT']
+chinaDNS: &chinaDNS ['223.5.5.5#DIRECT', '119.29.29.29#DIRECT']
+foreignDNS: &foreignDNS ['https://cloudflare-dns.com/dns-query#默认代理', 'https://dns.google/dns-query#默认代理']
+defaultDNS: &defaultDNS ['114.114.114.114#DIRECT', 'tls://223.5.5.5#DIRECT', 'https://1.12.12.12/dns-query#DIRECT']
+proxyServerDNS: &proxyServerDNS ['114.114.114.114#DIRECT', 'tls://223.5.5.5#DIRECT', 'https://doh.pub/dns-query#DIRECT']
 
 dns:
   enable: true
@@ -130,9 +128,8 @@ tun:
 # --- 规则集 ---
 
 # Rule Provider 通用配置
-rule_providers_common:
-  rule_providers_domain: &rule_providers_domain { type: http, format: mrs, interval: 86400, behavior: domain }
-  rule_providers_ip: &rule_providers_ip { type: http, format: mrs, interval: 86400, behavior: ipcidr }
+rule_providers_domain: &rule_providers_domain { type: http, format: mrs, interval: 86400, behavior: domain }
+rule_providers_ip: &rule_providers_ip { type: http, format: mrs, interval: 86400, behavior: ipcidr }
 
 # 定义 Rule Providers
 rule-providers:
@@ -373,116 +370,113 @@ rule-providers:
 # --- 策略组 (Proxy Groups) ---
 
 # 策略组通用配置
-group_common:
-  group_common_select:
-    &group_common_select {
-      type: select,
-      timeout: 5000,
-      max-failed-times: 3,
-      empty-fallback: REJECT,
-      url: 'https://www.apple.com/library/test/success.html',
-    }
+group_common_select:
+  &group_common_select {
+    type: select,
+    timeout: 5000,
+    max-failed-times: 3,
+    empty-fallback: REJECT,
+    url: 'https://www.apple.com/library/test/success.html',
+  }
 
-  group_common_auto:
-    &group_common_auto {
-      type: url-test,
-      interval: 600,
-      timeout: 5000,
-      max-failed-times: 3,
-      empty-fallback: REJECT,
-      url: 'https://www.apple.com/library/test/success.html',
-      lazy: true,
-      tolerance: 50,
-      include-all: true,
-      exclude-type: 'DIRECT',
-      icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/Auto.svg',
-      hidden: true,
-    }
+group_common_auto:
+  &group_common_auto {
+    type: url-test,
+    interval: 600,
+    timeout: 5000,
+    max-failed-times: 3,
+    empty-fallback: REJECT,
+    url: 'https://www.apple.com/library/test/success.html',
+    lazy: true,
+    tolerance: 50,
+    include-all: true,
+    exclude-type: 'DIRECT',
+    icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/Auto.svg',
+    hidden: true,
+  }
 
-  group_common_load:
-    &group_common_load {
-      type: load-balance,
-      interval: 600,
-      timeout: 5000,
-      max-failed-times: 3,
-      empty-fallback: REJECT,
-      url: 'https://www.apple.com/library/test/success.html',
-      lazy: true,
-      strategy: 'sticky-sessions',
-      include-all: true,
-      exclude-type: 'DIRECT',
-      icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/RoundRobin.svg',
-      hidden: true,
-    }
+group_common_load:
+  &group_common_load {
+    type: load-balance,
+    interval: 600,
+    timeout: 5000,
+    max-failed-times: 3,
+    empty-fallback: REJECT,
+    url: 'https://www.apple.com/library/test/success.html',
+    lazy: true,
+    strategy: 'sticky-sessions',
+    include-all: true,
+    exclude-type: 'DIRECT',
+    icon: 'https://fastly.jsdelivr.net/gh/AIsouler/MyClash@main/Icons/svg/RoundRobin.svg',
+    hidden: true,
+  }
 
 # 通用代理节点组
-proxies_common:
-  proxies_default:
-    &proxies_default {
-      proxies:
-        [
-          '默认代理',
-          '手动选择',
-          '自动选择',
-          '负载均衡',
-          '香港',
-          '日本',
-          '美国',
-          '新加坡',
-          '台湾',
-          '低倍率节点',
-          '高倍率节点',
-          '家宽节点',
-          '其他节点',
-        ],
-    }
+proxies_default:
+  &proxies_default {
+    proxies:
+      [
+        '默认代理',
+        '手动选择',
+        '自动选择',
+        '负载均衡',
+        '香港',
+        '日本',
+        '美国',
+        '新加坡',
+        '台湾',
+        '低倍率节点',
+        '高倍率节点',
+        '家宽节点',
+        '其他节点',
+      ],
+  }
 
-  proxies_direct:
-    &proxies_direct {
-      proxies:
-        [
-          '默认代理',
-          '手动选择',
-          '自动选择',
-          '负载均衡',
-          '直连',
-          '香港',
-          '日本',
-          '美国',
-          '新加坡',
-          '台湾',
-          '低倍率节点',
-          '高倍率节点',
-          '家宽节点',
-          '其他节点',
-        ],
-    }
+proxies_direct:
+  &proxies_direct {
+    proxies:
+      [
+        '默认代理',
+        '手动选择',
+        '自动选择',
+        '负载均衡',
+        '直连',
+        '香港',
+        '日本',
+        '美国',
+        '新加坡',
+        '台湾',
+        '低倍率节点',
+        '高倍率节点',
+        '家宽节点',
+        '其他节点',
+      ],
+  }
 
-  proxies_reject: &proxies_reject { proxies: ['REJECT', 'REJECT-DROP', 'PASS'] }
+proxies_reject: &proxies_reject { proxies: ['REJECT', 'REJECT-DROP', 'PASS'] }
 
 # 地区过滤器正则表达式定义
-group_filter:
-  HK_filter: &HK_filter { filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong)' }
-  JP_filter: &JP_filter { filter: '(?i)(🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan)' }
-  US_filter:
-    &US_filter {
-      filter: '(?i)(🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states)',
-    }
-  SG_filter: &SG_filter { filter: '(?i)(🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore)' }
-  TW_filter: &TW_filter { filter: '(?i)(🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)' }
-  low_filter:
-    &low_filter {
-      filter: '(?i)(^(?!.*(?:剩|期)).*(?:(?<![\d.])0(\.[0-5]|[*×✕✖⨯⨉x倍]))|(?:[*×✕✖⨯⨉x]0)|^(?!.*(?:客户端|软件)).*下载|低倍|免费|(?<![A-Za-z])free(?![A-Za-z]))',
-    }
-  high_filter:
-    &high_filter {
-      filter: '(?i)(?:[*×✕✖⨯⨉x](?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?)|(?:(?<![\d.])(?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?(?:倍|[*×✕✖⨯⨉x]))',
-    }
-  home_filter: &home_filter { filter: '(?i)(家宽|住宅|原生\s*IP|家庭宽带|\bISP\b|\bRES\b|residential)' }
-  exclude_filter:
-    &exclude_filter {
-      exclude-filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states|🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore|🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)',
-    }
+HK_filter: &HK_filter { filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong)' }
+JP_filter: &JP_filter { filter: '(?i)(🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan)' }
+US_filter:
+  &US_filter {
+    filter: '(?i)(🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states)',
+  }
+SG_filter: &SG_filter { filter: '(?i)(🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore)' }
+TW_filter: &TW_filter { filter: '(?i)(🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)' }
+low_filter:
+  &low_filter {
+    filter: '(?i)(^(?!.*(?:剩|期)).*(?:(?<![\d.])0(\.[0-5]|[*×✕✖⨯⨉x倍]))|(?:[*×✕✖⨯⨉x]0)|^(?!.*(?:客户端|软件)).*下载|低倍|免费|(?<![A-Za-z])free(?![A-Za-z]))',
+  }
+high_filter:
+  &high_filter {
+    filter: '(?i)(?:[*×✕✖⨯⨉x](?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?)|(?:(?<![\d.])(?:[2-9]\d*|[1-9]\d+)(?:\.\d+)?(?:倍|[*×✕✖⨯⨉x]))',
+  }
+home_filter: &home_filter { filter: '(?i)(家宽|住宅|原生\s*IP|家庭宽带|\bISP\b|\bRES\b|residential)' }
+exclude_filter:
+  &exclude_filter {
+    exclude-filter: '(?i)(🇭🇰|香港|(?<![A-Za-z])HKG?(?![A-Za-z])|hong\s*kong|🇯🇵|日本|东京|大阪|京都|(?<![A-Za-z])JPN?(?![A-Za-z])|japan|🇺🇸|美国|纽约|洛杉矶|旧金山|芝加哥|休斯顿|迈阿密|西雅图|波士顿|华盛顿|拉斯维加斯|圣何塞|(?<![A-Za-z])USA?(?![A-Za-z])|america|united\s*states|🇸🇬|新加坡|狮城|(?<![A-Za-z])SGP?(?![A-Za-z])|singapore|🇹🇼|台湾|台北|高雄|(?<![A-Za-z])TWN?(?![A-Za-z])|taiwan)',
+  }
 
 # 定义分流策略组
 proxy-groups:
@@ -737,9 +731,6 @@ rules:
   - RULE-SET,line,Line
   - RULE-SET,netflix,Netflix
   - RULE-SET,emby,Emby
-  - DOMAIN-SUFFIX,mb3admin.com,Emby
-  - DOMAIN-SUFFIX,nubebelle.com,Emby
-  - DOMAIN-KEYWORD,emby,Emby
   - RULE-SET,pikpak,PikPak
   - RULE-SET,spotify,Spotify
   - RULE-SET,cryptocurrency,Crypto
