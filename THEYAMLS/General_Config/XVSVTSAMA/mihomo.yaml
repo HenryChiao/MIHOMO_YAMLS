@@ -6,6 +6,7 @@
 #   https://github.com/XVSVTsama/XVSVT-Clash-Config
 #   作者：
 #   https://github.com/XVSVTsama
+#   版本：上一提交 bcddb43bb3a57b770b1ca44944dfe3cba6b3edde，本提交时间 2026-11-20 22:17:48 +0800
 
 .templates:
   # proxy-groups 共享片段
@@ -271,9 +272,9 @@ dns:
   # - https://doh.dns.sb/dns-query              # DNS.SB 公共 DNS   # 185.222.222.222     45.11.45.11
   # - https://dns.twnic.tw/dns-query            # Quad101 公共 DNS  # 101.101.101.10      101.102.103.10
   nameserver-policy:
-    # 本节按 rules 中对应规则的先后顺序排列；Tailscale、douyin 等特例条目保留原位。
-    '+.ts.net':
-    - 100.100.100.100
+    # 本节按 rules 中对应规则的先后顺序排列；douyin 等特例条目保留原位。
+    # '+.ts.net':
+    # - 100.100.100.100
     'rule-set:douyin':
     - system
     - 180.184.1.1
@@ -596,14 +597,6 @@ proxy-groups:
     proxies:
       - 👉 手动选择
       - DIRECT
-  # Tailscale：MagicDNS 域名（ts.net）分流目标，由 关闭Tailscale直连 开关控制本组的 proxies。
-  # 默认关闭时使用 DIRECT，开启后使用 👉 手动选择；开关图标取自本组的 icon 字段。
-  - name: Tailscale
-    icon: "https://gh-proxy.com/https://raw.githubusercontent.com/XVSVTsama/XVSVT-Clash-Config/main/assets/icons/upstream-simple-icons-tailscale.svg"
-    type: select
-    proxies:
-      - 👉 手动选择
-      - DIRECT
 
 rule-providers:
   # SKK 广告拦截规则集为可选配置；启用时，需同时取消注释上方 proxy-groups 与下方 rules 对应段落。
@@ -652,29 +645,31 @@ rule-providers:
   steam_ip: { <<: *ipcidr_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geoip/steam.mrs', path: ./ruleset/steam_ip.mrs, path-in-bundle: 'geo/geoip/steam.mrs' }
   steam: { <<: *domain_mrs, url: 'https://gh-proxy.com/https://raw.githubusercontent.com/appshubcc/bett-rules/meta/geo/geosite/steam.mrs', path: ./ruleset/steam.mrs, path-in-bundle: 'geo/geosite/steam.mrs' }
   # Telegram DC 地区 CIDR 规则集：启用地区分流时取消注释本段。
-  # telegram_dc1_dc3_miami:
+  # dc1_mia:
   #   type: inline
   #   behavior: classical
   #   payload:
   #     - IP-CIDR,91.108.12.0/22,no-resolve
   #     - IP-CIDR,149.154.172.0/22,no-resolve
   #     - IP-CIDR6,2001:b28:f23d::/48,no-resolve
-  # telegram_dc2_dc4_amsterdam:
+  # dc24_ams:
   #   type: inline
   #   behavior: classical
   #   payload:
   #     - IP-CIDR,91.108.58.0/23,no-resolve
   #     - IP-CIDR,91.108.4.0/22,no-resolve
   #     - IP-CIDR,91.108.8.0/22,no-resolve
+  #     - IP-CIDR,91.108.20.0/22,no-resolve
   #     - IP-CIDR,149.154.160.0/21,no-resolve
   #     - IP-CIDR,95.161.64.0/20,no-resolve
   #     - IP-CIDR,91.105.192.0/23,no-resolve
   #     - IP-CIDR,185.76.151.0/24,no-resolve
+  #     - IP-CIDR,194.221.250.50/32,no-resolve
   #     - IP-CIDR,5.28.192.0/18,no-resolve
   #     - IP-CIDR,109.239.140.0/24,no-resolve
   #     - IP-CIDR6,2001:67c:4e8::/48,no-resolve
   #     - IP-CIDR6,2a0a:f280:203::/48,no-resolve
-  # telegram_dc5_sg:
+  # dc5_sin:
   #   type: inline
   #   behavior: classical
   #   payload:
@@ -771,7 +766,6 @@ rules:
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
   - PROCESS-NAME,svchost.exe,DIRECT
-  - DOMAIN-SUFFIX,ts.net,Tailscale
   - RULE-SET,private,DIRECT,no-resolve    
   - DOMAIN-WILDCARD,*.deepseek.com,DIRECT
   - DOMAIN-WILDCARD,*.portal101.cn,DIRECT
@@ -799,9 +793,9 @@ rules:
   - RULE-SET,apple,🍎 海外苹果
   - RULE-SET,proxy@direct,🌍 PROXY
   # Telegram DC 地区规则：启用地区分流时取消注释，并同时启用对应策略组与 rule-providers。
-  # - RULE-SET,telegram_dc1_dc3_miami,📲 DC1-MIA,no-resolve
-  # - RULE-SET,telegram_dc2_dc4_amsterdam,📲 DC24-AMS,no-resolve
-  # - RULE-SET,telegram_dc5_sg,📲 DC5-SIN,no-resolve
+  # - RULE-SET,dc1_mia,📲 DC1-MIA,no-resolve
+  # - RULE-SET,dc24_ams,📲 DC24-AMS,no-resolve
+  # - RULE-SET,dc5_sin,📲 DC5-SIN,no-resolve
   - PROCESS-NAME-REGEX,.*nagram.*,📲 Telegram
   - "PROCESS-NAME-REGEX,.*telegram.*,📲 Telegram"
   - RULE-SET,telegramcidr,📲 Telegram,no-resolve

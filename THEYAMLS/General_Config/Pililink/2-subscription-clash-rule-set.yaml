@@ -72,13 +72,13 @@ proxy-groups:
   - {
       name: 🤖 人工智能,
       type: select,
-      proxies: [🛫 AI出口节点, A全线路自选, B全线路自选, 🚀 节点选择],
+      proxies: [🛫 AI出口节点, A机场常用, A全线路自选, B机场常用, B全线路自选, 🚀 节点选择],
     }
   # 🧠 Claude：从 🤖 人工智能 中单独细分，候选与 🤖 人工智能 相同，可独立选择线路。
   - {
       name: 🧠 Claude,
       type: select,
-      proxies: [🛫 AI出口节点, A全线路自选, B全线路自选, 🚀 节点选择],
+      proxies: [🛫 AI出口节点, A机场常用, A全线路自选, B机场常用, B全线路自选, 🚀 节点选择],
     }
   # 🛫 AI出口节点：节点来自 AI出口 订阅并经 🔗 AI前置节点 链式出站；未填订阅时组内为 COMPATIBLE（等同直连），
   # 放在 🤖 人工智能 / 🧠 Claude 首位作为默认；未填 AI出口 订阅时请改选其他线路。
@@ -403,13 +403,6 @@ rule-providers:
     url: "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google_No_Resolve.yaml"
     interval: 86400
 
-  ai:
-    type: http
-    behavior: classical
-    format: yaml
-    path: ./rule_provider/acl4ssr-ai.yaml
-    url: "https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Providers/Ruleset/AI.yaml"
-    interval: 7200
 
   telegram:
     type: http
@@ -628,18 +621,28 @@ rules:
   # 100.64.0.0/10 已覆盖 100.65.0.0/24。
   - IP-CIDR,100.64.0.0/10,🏠 家庭网络,no-resolve
   # 本仓库维护的覆盖规则必须优先于所有第三方规则集：Mihomo 从上到下首次命中即停止。
-  # ignore 为明确直连覆盖，claude 为 Claude 细分覆盖（须先于 ai），ai 为人工智能服务覆盖，proxy 为明确代理覆盖。
+  # ignore 为明确直连覆盖，claude 为 Claude 细分覆盖（须先于 ai），proxy 为明确代理/排除覆盖，
+  # ai 为人工智能服务覆盖。proxy 必须早于 ai：模型下载站（HF / Ollama / Replicate）与全网共用
+  # SaaS 依赖明确禁止进入 🤖 人工智能，这里靠顺序强制，而不是靠 ai.list “碰巧没写”。
   - RULE-SET,myignore,DIRECT
   - RULE-SET,myclaude,🧠 Claude
-  - RULE-SET,myai,🤖 人工智能
   - RULE-SET,myproxy,🪜 代理域名
+  - RULE-SET,myai,🤖 人工智能
   - RULE-SET,private,🔒 私有网络
   # PT tracker / announce 直连，避免 Fake-IP 或代理影响私有站汇报与 IPv6 announce
   - RULE-SET,private-tracker,🎯 全球直连
   # Google Antigravity / Cloud Code API 必须在 UnBan、GoogleCN 等直连规则之前命中 AI 组；
   # 服务端按真实出口 IP 校验地区，切换为服务支持地区的节点后请在 Clash Verge 中选择该节点。
+  # 只收 cloudcode 沙箱家族（收窄自原 DOMAIN-SUFFIX,sandbox.googleapis.com：那是 Google
+  # 通用沙箱域，会把非 AI 的沙箱 API 一并拉进 AI 出口）。与 clash/ruleset/ai.list 同源，
+  # 此处仅作 provider 拉取失败时的兜底。
+  - DOMAIN,cloudcode-pa.sandbox.googleapis.com,🤖 人工智能
   - DOMAIN,daily-cloudcode-pa.sandbox.googleapis.com,🤖 人工智能
-  - DOMAIN-SUFFIX,sandbox.googleapis.com,🤖 人工智能
+  - DOMAIN-WILDCARD,*-cloudcode-pa.sandbox.googleapis.com,🤖 人工智能
+  # 非沙箱前缀变体：DOMAIN-SUFFIX 是点锚定，盖不住 daily-cloudcode-pa.googleapis.com
+  # （Antigravity 实际调用的 API 主机），漏掉会落到 🇬 谷歌服务导致出口地区不一致。
+  - DOMAIN,daily-cloudcode-pa.googleapis.com,🤖 人工智能
+  - DOMAIN-WILDCARD,*-cloudcode-pa.googleapis.com,🤖 人工智能
   - DOMAIN-SUFFIX,cloudcode-pa.googleapis.com,🤖 人工智能
   # Google OAuth 登录依赖:ssl.gstatic.com 被 ACL4SSR UnBan 误直连、recaptcha.net 被 google-cn 直连,
   # 与 accounts.google.com 出口 IP 不一致导致登录点击无反应(XTLS/Xray-core#1618),统一走谷歌服务
@@ -657,7 +660,8 @@ rules:
   # 必须前置到 ChinaDomain 之前：cn 规则集内含 playstation.* / sony.com 等，命中即直连。
   - RULE-SET,mypsn,🕹️ PSN 服务
   - RULE-SET,cn,🇨🇳 直连域名
-  - RULE-SET,ai,🤖 人工智能
+  # ACL4SSR AI.yaml 曾在此处命中：其 47 条中 42 条已被本仓库更靠前的规则遮蔽，净生效仅 4 条，
+  # 且上游自 2025-12 未更新；provider 已删除，4 条（Copilot / Azure AI / grazie.aws）已并入 ai.list。
   # blackmatrix7 Microsoft 含 xbox.com / xboxlive.com 等，Xbox 需先于微软服务命中游戏服务。
   - RULE-SET,game-xbox,🎮 游戏服务
   - RULE-SET,microsoft,🪟 微软服务

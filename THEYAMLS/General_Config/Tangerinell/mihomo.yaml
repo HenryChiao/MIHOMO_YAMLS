@@ -1,6 +1,6 @@
 # Clash.Meta(mihomo)
 # Minimum Core Version: v1.19.33
-# Updated: 2026-11-16 01:21:00
+# Updated: 2026-11-19 22:08:00
 
 JNTM: &JNTM
     interval: 43200
@@ -314,7 +314,7 @@ Route: &Route
             Steam,
             Telegram,
             Spotify,
-            Instagram,
+            Meta,
             GitHub,
             PikPak,
             Discord,
@@ -586,7 +586,7 @@ Global: &Global
             Steam,
             Telegram,
             Spotify,
-            Instagram,
+            Meta,
             GitHub,
             PikPak,
             Discord,
@@ -821,10 +821,10 @@ proxy-groups:
     filter: *FilterAll
     icon: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/icon/Spotify.png"
 
-  - name: Instagram
+  - name: Meta
     <<: *Select_General
     filter: *FilterAll
-    icon: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/icon/Instagram.png"
+    icon: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/icon/Meta.png"
 
   - name: GitHub
     <<: *Select_General
@@ -1228,15 +1228,15 @@ rule-providers:
     url: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/rules/Spotify_geosite.mrs"
     path: "./rule_set/Spotify_geosite.mrs"
 
-  Instagram_geosite:
+  Meta_geosite:
     type: http
     behavior: domain
     format: mrs
     interval: 43200
     proxy: 🎯默认
-    path-in-bundle: "Instagram_geosite.mrs"
-    url: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/rules/Instagram_geosite.mrs"
-    path: "./rule_set/Instagram_geosite.mrs"
+    path-in-bundle: "Meta_geosite.mrs"
+    url: "https://raw.githubusercontent.com/Tangerinell/mihomo_rules_profile/master/rules/Meta_geosite.mrs"
+    path: "./rule_set/Meta_geosite.mrs"
 
   GitHub_geosite:
     type: http
@@ -1472,8 +1472,8 @@ sub-rules:
     # Spotify
     - RULE-SET,Spotify_geosite,Spotify
 
-    # Instagram
-    - RULE-SET,Instagram_geosite,Instagram
+    # Meta
+    - RULE-SET,Meta_geosite,Meta
 
     # GitHub
     - RULE-SET,GitHub_geosite,GitHub
