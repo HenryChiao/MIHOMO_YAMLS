@@ -7,10 +7,10 @@
 ## 📄 配置详情
 
 #### 📝 mihomo.yaml
-- **路径**: `mihomo.yaml` | **大小**: 55.0 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
+- **路径**: `mihomo.yaml` | **大小**: 54.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/General_Config/XVSVTSAMA/mihomo.yaml)
 - **模式**: rule | **TUN**: ✅ | **IPv6**: ✅
 <details>
-<summary>🔍 策略组 (29个)</summary>
+<summary>🔍 策略组 (28个)</summary>
 
 | 名称 | 类型 |
 | :--- | :--- |
@@ -34,5 +34,5 @@
 | 👆 🎧 Spotify | `select` |
 | 👆 🎬 Emby | `select` |
 | 👆 🍎 海外苹果 | `select` |
-| ... | 还有 9 个 |
+| ... | 还有 8 个 |
 </details>

@@ -6,15 +6,15 @@
 
 ## ⚔️ 配置横向对比
 
-| 特性 | `THESmart.yaml` | `MihomoSmartAIO.yaml` | `MihomoSmartProPlus.yaml` | `MihomoSmartProMax.yaml` |
+| 特性 | `THESmart.yaml` | `MihomoSmartAIO.yaml` | `MihomoSmartProMax.yaml` | `MihomoSmartProPlus.yaml` |
 | :--- | :--- | :--- | :--- | :--- |
-| **大小** | 37.3 KB | 30.2 KB | 24.1 KB | 23.6 KB |
+| **大小** | 37.3 KB | 30.2 KB | 23.6 KB | 24.1 KB |
 | **混合端口** | 7893 | 7893 | 7893 | 7893 |
 | **面板地址** | 0.0.0.0:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 | 127.0.0.1:9090 |
 | **运行模式** | rule | rule | rule | rule |
 | **TUN** | ✅ | 🚫 | 🚫 | 🚫 |
 | **策略组** | **66** | **69** | **41** | **41** |
-| **规则数** | **49** | **52** | **44** | **45** |
+| **规则数** | **49** | **52** | **45** | **44** |
 
 ## 📄 配置详情
 
@@ -80,8 +80,8 @@
 | ... | 还有 49 个 |
 </details>
 
-#### 📝 MihomoSmartProPlus.yaml
-- **路径**: `MihomoSmartProPlus.yaml` | **大小**: 24.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartProPlus.yaml)
+#### 📝 MihomoSmartProMax.yaml
+- **路径**: `MihomoSmartProMax.yaml` | **大小**: 23.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartProMax.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (41个)</summary>
@@ -111,8 +111,8 @@
 | ... | 还有 21 个 |
 </details>
 
-#### 📝 MihomoSmartProMax.yaml
-- **路径**: `MihomoSmartProMax.yaml` | **大小**: 23.6 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartProMax.yaml)
+#### 📝 MihomoSmartProPlus.yaml
+- **路径**: `MihomoSmartProPlus.yaml` | **大小**: 24.1 KB | [查看源码](https://github.com/HenryChiao/MIHOMO_YAMLS/blob/main/THEYAMLS/Smart_Mode/HenryChiao/MihomoSmartProPlus.yaml)
 - **模式**: rule | **TUN**: 🚫 | **IPv6**: ✅
 <details>
 <summary>🔍 策略组 (41个)</summary>
