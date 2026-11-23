@@ -6,7 +6,7 @@
 #   https://github.com/XVSVTsama/XVSVT-Clash-Config
 #   作者：
 #   https://github.com/XVSVTsama
-#   版本：上一提交 bcddb43bb3a57b770b1ca44944dfe3cba6b3edde，本提交时间 2026-11-20 22:17:48 +0800
+#   版本：上一提交 e4530a88dfb1bab7760a40a4e41e07093fc10602，本提交时间 2026-11-22 19:33:22 +0800
 
 .templates:
   # proxy-groups 共享片段
@@ -34,12 +34,29 @@ find-process-mode: strict
 mixed-port: 7254
 port: 7249
 socks-port: 7346
+allow-lan: true
+bind-address: "*"
+lan-allowed-ips:
+  - 0.0.0.0/0
+  - ::/0
+authentication:
+  - "xvsvt:132e6671f6c386a7"
+skip-auth-prefixes:
+  - 127.0.0.1/8
+  - ::1/128
 etag-support: true
 global-ua: clash.meta
 ipv6: true
 log-level: info
-external-controller: 127.0.0.1:9090
+external-controller: 0.0.0.0:9090
+external-controller-cors:
+  allow-origins:
+    - '*'
+  allow-private-network: true
+secret: "318a2fbc9f4836b114c0ada7e6d5f36e"
 external-ui: dashboard
+external-ui-name: metacubexd
+external-ui-url: "https://github.com/MetaCubeX/metacubexd/archive/refs/heads/gh-pages.zip"
 unified-delay: true
 tcp-concurrent: true
 keep-alive-idle: 600
@@ -50,6 +67,10 @@ profile:
 tun:                                                    
   enable: true 
   device: XVSVT
+  mtu: 1500
+  endpoint-independent-nat: false
+  inet6-address:
+    - "fdfe:dcba:9876::1/126"
   auto-detect-interface: true
   auto-route: true 
   auto-redirect: true
@@ -108,6 +129,8 @@ tun:
   - "196.0.0.0/6"
   - "200.0.0.0/5"
   - "208.0.0.0/4"
+  - "::/1"
+  - "8000::/1"
   
 ntp:
   enable: true              
