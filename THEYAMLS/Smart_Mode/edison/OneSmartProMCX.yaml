@@ -18,14 +18,14 @@
 
 # === 锚点配置 ====
 # 节点筛选正则表达式 - 基于地理位置和关键词过滤
-BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'https://www.gstatic.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.22']}, override: {skip-cert-verify: true, udp: true},
+BaseProvider: &BaseProvider { type: http, interval: 86400, proxy: 国内直连, health-check: {enable: true, url: 'http://cp.cloudflare.com/generate_204', interval: 180}, header: {User-Agent: ['clash.meta', 'mihomo/1.9.34']}, override: {skip-cert-verify: true, udp: true},
  exclude-filter: '(?i)(群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author|剩余|重置|套餐|距离)' }
 
 # 策略组基础配置模板
-BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, timeout: 3000, max-failed-times: 2, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204', hidden: true }
-BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, timeout: 3000, max-failed-times: 2, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204', hidden: true, uselightgbm: true }
-BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204' }
-BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallback: "REJECT", url: 'https://www.gstatic.com/generate_204' }
+BaseFB:   &BaseFB   { type: fallback,     interval: 60, lazy: true, timeout: 3000, max-failed-times: 2, empty-fallback: "REJECT", url: 'http://cp.cloudflare.com/generate_204', hidden: true }
+BaseST:   &BaseST   { type: smart,        interval: 60, lazy: true, timeout: 3000, max-failed-times: 2, empty-fallback: "REJECT", url: 'http://cp.cloudflare.com/generate_204', hidden: true, uselightgbm: true }
+BaseSL:   &BaseSL   { type: select,       interval: 60, lazy: true, empty-fallback: "REJECT", url: 'http://cp.cloudflare.com/generate_204' }
+BaseLB:   &BaseLB   { type: load-balance, interval: 60, lazy: true, empty-fallback: "REJECT", url: 'http://cp.cloudflare.com/generate_204' }
 
 # 策略组代理列表锚点
 SelectAL: &SelectAL { type: select, proxies: [香港-故转, 日本-故转, 狮城-故转, 美国-故转, 台湾-故转, 家宽-故转, 低倍率-故转, 高倍率-手选, 冷门节点-手选, 全部节点-手选, 国内直连] } # 全部节点组
