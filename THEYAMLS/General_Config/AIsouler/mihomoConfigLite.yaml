@@ -150,11 +150,21 @@ rule-providers:
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/category-games@cn.mrs'
     path: './ruleset/category-games@cn.mrs'
     path-in-bundle: 'geo/geosite/category-games@cn.mrs'
+  games_download_cn:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/category-game-platforms-download@cn.mrs'
+    path: './ruleset/category-game-platforms-download@cn.mrs'
+    path-in-bundle: 'geo/geosite/category-game-platforms-download@cn.mrs'
   synology:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/synology.mrs'
     path: './ruleset/synology.mrs'
     path-in-bundle: 'geo/geosite/synology.mrs'
+  nvidia_cn:
+    <<: *rule_providers_domain
+    url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/nvidia@cn.mrs'
+    path: './ruleset/nvidia@cn.mrs'
+    path-in-bundle: 'geo/geosite/nvidia@cn.mrs'
   apple_cn:
     <<: *rule_providers_domain
     url: 'https://fastly.jsdelivr.net/gh/appshubcc/bett-rules@meta/geo/geosite/apple@cn.mrs'
@@ -476,11 +486,14 @@ rules:
 
   # 私有网络直连
   - RULE-SET,private,直连
+  - RULE-SET,private_ip,直连,no-resolve
 
   # 国内直连
   - RULE-SET,geolocation-cn,直连
   - RULE-SET,games_cn,直连 # 已包含 steam 下载域名
+  - RULE-SET,games_download_cn,直连
   - RULE-SET,synology,直连
+  - RULE-SET,nvidia_cn,直连
   - RULE-SET,apple_cn,直连
   - RULE-SET,microsoft_cn,直连
   - DOMAIN,fsend.cn,直连
@@ -509,3 +522,4 @@ rules:
   - RULE-SET,telegram_ip,Telegram
   - RULE-SET,steam_ip,Steam
   - MATCH,漏网之鱼
+  - NETWORK,UDP,REJECT

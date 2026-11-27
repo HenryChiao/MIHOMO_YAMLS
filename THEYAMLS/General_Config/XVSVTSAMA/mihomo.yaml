@@ -6,7 +6,7 @@
 #   https://github.com/XVSVTsama/XVSVT-Clash-Config
 #   作者：
 #   https://github.com/XVSVTsama
-#   版本：上一提交 e4530a88dfb1bab7760a40a4e41e07093fc10602，本提交时间 2026-11-22 19:33:22 +0800
+#   版本：上一提交 5307103b16dfed5b2eb3fedc8599752482a2c4b5，本提交时间 2026-11-27 03:44:00 +0800
 
 .templates:
   # proxy-groups 共享片段
@@ -48,11 +48,13 @@ etag-support: true
 global-ua: clash.meta
 ipv6: true
 log-level: info
+# 安全警告：管理 API 绑定所有网络接口，且 CORS 允许任意来源；请仅在可信网络使用，并通过防火墙限制访问。
 external-controller: 0.0.0.0:9090
 external-controller-cors:
   allow-origins:
     - '*'
   allow-private-network: true
+# 安全警告：此固定值随公开模板发布；部署前请替换为自己的独有强随机密钥。
 secret: "318a2fbc9f4836b114c0ada7e6d5f36e"
 external-ui: dashboard
 external-ui-name: metacubexd
@@ -907,3 +909,6 @@ rules:
   # - RULE-SET,proxy,🌍 PROXY
   # - RULE-SET,gfw,🌍 PROXY
   - MATCH,🌍 PROXY
+  # 如请求为 udp，而代理节点没有 udp 支持 (例如ss节点没写udp: true),则会继续向下匹配
+  # 为防止泄露故reject
+  - NETWORK,UDP,REJECT

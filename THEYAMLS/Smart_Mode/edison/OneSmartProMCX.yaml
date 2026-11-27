@@ -171,10 +171,12 @@ tun:
   auto-detect-interface: true              # 自动检测网络接口
   auto-redirect: true                      # 自动配置 iptables 重定向
   endpoint-independent-nat: true           # 独立 NAT (Full Cone)，优化游戏/P2P
-  route-exclude-address-set:               # 绕过大陆 匹配大陆IP-CIDR（流量不进入代理） 
-    - Private-IP                           # 绕过局域网内网流量
-    - Trackers-IP                          # 绕过 BT/PT 下载服务器 IP
-    - China-IP                             # 绕过CN IP
+  route-exclude-address-set:               # 绕过大陆 匹配大陆IP-CIDR（流量不进入内核） 
+    - Apple-CN
+    - MicrosoftCN
+    - GameDownload
+    - Trackers-IP
+    - China-IP
 
 hosts:
   services.googleapis.cn: services.googleapis.com  # 谷歌商店  解决无法下载的问题
